@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://accessibility-notebook.pages.dev/sitemap-index.xml
+Sitemap: https://accessibilitynotebook.com/sitemap-index.xml
