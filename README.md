@@ -41,7 +41,7 @@ The website of [Accessibility Notebook](https://buttondown.com/accessibility-not
 
 - [x] About Me text (`src/content/site/about.md`)
 - [x] AI policy text (`src/content/site/ai-policy.md`)
-- [x] Custom domain: https://accessibilitynotebook.com (Cloudflare Registrar, connected to the Pages project; www and pages.dev redirect via Cloudflare rules)
+- [x] Custom domain: https://accessibilitynotebook.com (Cloudflare Registrar, connected to the Pages project; www redirects to the root domain via a Cloudflare redirect rule; canonical tags point pages.dev visitors to the domain)
 - [ ] Add the Cloudflare Web Analytics token to `src/consts.js` (`CF_ANALYTICS_TOKEN`)
 - [x] LinkedIn profile URL in `AUTHOR.url`
 
