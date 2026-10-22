@@ -8,7 +8,7 @@ const H = `h${headingLevel}`;
 
 const albums = getIssues()
   .filter((i) => i.album?.title)
-  .map((i) => ({ n: i.number, artist: i.album.artist, title: i.album.title, url: i.album.url, issue: i.url }));
+  .map((i) => ({ n: i.number, date: i.date, dateText: new Date(`${i.date}T12:00:00Z`).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }), artist: i.album.artist, title: i.album.title, url: i.album.url, issue: i.url }));
 ---
 <section class="spin" aria-labelledby="spin-title" data-albums={JSON.stringify(albums)}>
   <H id="spin-title">Read while listening</H>
@@ -33,7 +33,7 @@ const albums = getIssues()
 <script>
   const root = document.querySelector<HTMLElement>('.spin');
   if (root) {
-    const albums: { n: number; artist: string; title: string; url: string; issue: string }[] = JSON.parse(root.dataset.albums || '[]');
+    const albums: { n: number; date: string; dateText: string; artist: string; title: string; url: string; issue: string }[] = JSON.parse(root.dataset.albums || '[]');
     const button = root.querySelector<HTMLButtonElement>('.pick')!;
     const result = root.querySelector<HTMLElement>('.result')!;
     const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
@@ -49,7 +49,7 @@ const albums = getIssues()
         `<div class="card">` +
           `<div class="sleeve" aria-hidden="true"><div class="disc"></div><div class="cover"><span><small>NOTES</small># ${a.n}</span></div></div>` +
           `<div class="text">` +
-            `<p class="over">From Notes # ${a.n}</p>` +
+            `<p class="over">From Notes # ${a.n} on <time datetime="${esc(a.date)}">${esc(a.dateText)}</time></p>` +
             `<p class="album">${esc(a.title)}</p>` +
             `<p class="artist">by ${esc(a.artist)}</p>` +
             `<p class="links"><a href="${esc(a.url)}">Listen on Spotify<span class="visually-hidden">: ${esc(a.title)}</span></a>` +

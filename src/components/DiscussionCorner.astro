@@ -7,7 +7,7 @@ const { headingLevel = 2 } = Astro.props;
 const H = `h${headingLevel}`;
 
 const questions = getIssues().flatMap((i) =>
-  (i.discussion || []).map((d) => ({ n: i.number, issue: i.url, linkedin: i.linkedinUrl, context: d.context, question: d.question }))
+  (i.discussion || []).map((d) => ({ n: i.number, date: i.date, dateText: new Date(`${i.date}T12:00:00Z`).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }), issue: i.url, linkedin: i.linkedinUrl, context: d.context, question: d.question }))
 );
 // Without JavaScript, readers see the latest issue's question.
 const first = questions[0];
@@ -20,7 +20,7 @@ const first = questions[0];
     <div class="q">
       <span class="mark" aria-hidden="true">?</span>
       <div class="q-body">
-        <p class="over">From Notes # {first.n}</p>
+        <p class="over">From Notes # {first.n} on <time datetime={first.date}>{first.dateText}</time></p>
         <p class="context">{first.context}</p>
         <p class="ask">{first.question}</p>
         <p class="links">
@@ -35,7 +35,7 @@ const first = questions[0];
 )}
 
 <script>
-  type Q = { n: number; issue: string; linkedin: string; context: string; question: string };
+  type Q = { n: number; date: string; dateText: string; issue: string; linkedin: string; context: string; question: string };
   const root = document.querySelector<HTMLElement>('.dc');
   if (root) {
     const all: Q[] = JSON.parse(root.dataset.questions || '[]');
@@ -60,7 +60,7 @@ const first = questions[0];
     };
     const show = (q: Q) => {
       body.innerHTML =
-        `<p class="over">From Notes # ${q.n}</p>` +
+        `<p class="over">From Notes # ${q.n} on <time datetime="${esc(q.date)}">${esc(q.dateText)}</time></p>` +
         `<p class="context">${esc(q.context)}</p>` +
         `<p class="ask">${esc(q.question)}</p>` +
         `<p class="links"><a href="${esc(q.linkedin)}">Share your view on LinkedIn<span class="visually-hidden"> (Notes # ${q.n} post)</span></a>` +
