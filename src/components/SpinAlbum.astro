@@ -1,0 +1,172 @@
+---
+// "Spin for an album": a random pick from the "Created While Listening" line of every issue.
+// The wheel is decorative; the button, the result text and the full album list carry the content.
+import { getIssues } from '../lib/issues.js';
+
+const { headingLevel = 2 } = Astro.props;
+const H = `h${headingLevel}`;
+
+const albums = getIssues()
+  .filter((i) => i.album?.title)
+  .map((i) => ({ n: i.number, artist: i.album.artist, title: i.album.title, url: i.album.url, issue: i.url }))
+  .sort((a, b) => a.n - b.n);
+
+// Wheel geometry (SVG units)
+const C = 150;
+const R = 140;
+const step = 360 / albums.length;
+const fills = ['#2d0a72', '#f1ecfb', '#5b3aa6', '#ffd84d'];
+const textFill = ['#ffffff', '#1c1530', '#ffffff', '#1c1530'];
+const pt = (deg, r) => {
+  const a = ((deg - 90) * Math.PI) / 180;
+  return [C + r * Math.cos(a), C + r * Math.sin(a)];
+};
+const segments = albums.map((al, i) => {
+  const a0 = i * step;
+  const a1 = (i + 1) * step;
+  const [x0, y0] = pt(a0, R);
+  const [x1, y1] = pt(a1, R);
+  const mid = a0 + step / 2;
+  const [tx, ty] = pt(mid, R - 20);
+  const c = i % fills.length;
+  return {
+    d: `M${C},${C} L${x0.toFixed(2)},${y0.toFixed(2)} A${R},${R} 0 0 1 ${x1.toFixed(2)},${y1.toFixed(2)} Z`,
+    fill: fills[c],
+    text: textFill[c],
+    tx: tx.toFixed(2),
+    ty: ty.toFixed(2),
+    rot: mid.toFixed(2),
+    n: al.n,
+  };
+});
+---
+<section class="spin" aria-labelledby="spin-title" data-albums={JSON.stringify(albums)}>
+  <H id="spin-title">Spin for an album</H>
+  <p class="intro">Every issue of Accessibility Notebook is written while listening to an album. These are the albums from the "Created While Listening" line of each issue. Spin the wheel and find your next one.</p>
+
+  <div class="stage">
+    <div class="wheel-box" aria-hidden="true">
+      <svg class="pointer" viewBox="0 0 40 34" width="40" height="34" focusable="false"><path d="M4 2 H36 L20 32 Z" fill="#1c1530" stroke="#fcfbff" stroke-width="3" stroke-linejoin="round" /></svg>
+      <svg class="wheel" viewBox="0 0 300 300" focusable="false">
+        <g class="rotor">
+          {segments.map((s) => (
+            <g>
+              <path d={s.d} fill={s.fill} stroke="#fcfbff" stroke-width="1.5" />
+              <text x={s.tx} y={s.ty} fill={s.text} transform={`rotate(${s.rot} ${s.tx} ${s.ty})`} text-anchor="middle" dominant-baseline="central">{s.n}</text>
+            </g>
+          ))}
+          <circle cx="150" cy="150" r="32" fill="#1c1530" stroke="#fcfbff" stroke-width="3" />
+          <circle cx="150" cy="150" r="24" fill="none" stroke="#4a4160" stroke-width="1" />
+          <circle cx="150" cy="150" r="12" fill="#ffd84d" />
+          <circle cx="150" cy="150" r="3" fill="#1c1530" />
+        </g>
+      </svg>
+    </div>
+
+    <div class="controls">
+      <button type="button" class="spin-button" hidden>Spin the wheel</button>
+      <div class="result" aria-live="polite"></div>
+    </div>
+  </div>
+
+  <details class="all">
+    <summary>See all {albums.length} albums</summary>
+    <ul>
+      {[...albums].reverse().map((a) => (
+        <li>
+          <span class="t">{a.title}</span> by {a.artist}.
+          <span class="links"><a href={a.url}>Listen on Spotify<span class="visually-hidden">: {a.title}</span></a> · <a href={a.issue}>Notes # {a.n}</a></span>
+        </li>
+      ))}
+    </ul>
+  </details>
+</section>
+
+<script>
+  const root = document.querySelector<HTMLElement>('.spin');
+  if (root) {
+    const albums: { n: number; artist: string; title: string; url: string; issue: string }[] = JSON.parse(root.dataset.albums || '[]');
+    const button = root.querySelector<HTMLButtonElement>('.spin-button')!;
+    const result = root.querySelector<HTMLElement>('.result')!;
+    const rotor = root.querySelector<SVGGElement>('.rotor')!;
+    const step = 360 / albums.length;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let angle = 0;
+    let last = -1;
+    let busy = false;
+
+    const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
+
+    const show = (i: number) => {
+      const a = albums[i];
+      result.innerHTML =
+        `<p class="label">Your album</p>` +
+        `<p class="album"><strong>${esc(a.title)}</strong> by ${esc(a.artist)}</p>` +
+        `<p class="from">From Notes # ${a.n}</p>` +
+        `<p class="links"><a href="${esc(a.url)}">Listen on Spotify<span class="visually-hidden">: ${esc(a.title)}</span></a>` +
+        `<a href="${esc(a.issue)}">Read Notes # ${a.n}</a></p>`;
+      button.textContent = 'Spin again';
+      button.removeAttribute('aria-disabled');
+      busy = false;
+    };
+
+    button.hidden = false;
+    button.addEventListener('click', () => {
+      if (busy) return;
+      let i = Math.floor(Math.random() * albums.length);
+      if (albums.length > 1 && i === last) i = (i + 1 + Math.floor(Math.random() * (albums.length - 1))) % albums.length;
+      last = i;
+
+      // Land the middle of segment i (plus a little jitter) under the pointer at the top.
+      const jitter = (Math.random() - 0.5) * step * 0.6;
+      const target = 360 - (i * step + step / 2 + jitter);
+      const current = ((angle % 360) + 360) % 360;
+      angle += 360 * 5 + ((target - current + 360) % 360);
+
+      if (reduce.matches) {
+        rotor.style.transition = 'none';
+        rotor.style.transform = `rotate(${angle}deg)`;
+        show(i);
+        return;
+      }
+      busy = true;
+      button.setAttribute('aria-disabled', 'true');
+      result.textContent = '';
+      rotor.style.transition = 'transform 3.2s cubic-bezier(0.15, 0.85, 0.2, 1)';
+      rotor.style.transform = `rotate(${angle}deg)`;
+      let done = false;
+      const finish = () => { if (!done) { done = true; show(i); } };
+      rotor.addEventListener('transitionend', finish, { once: true });
+      setTimeout(finish, 3600);
+    });
+  }
+</script>
+
+<style>
+  .spin { margin-top: 4rem; }
+  .spin h2, .spin h3 { font-size: var(--step-1); margin: 0 0 0.5rem; }
+  .intro { max-width: 60ch; }
+  .stage { display: grid; gap: 1.5rem 2.5rem; align-items: center; grid-template-columns: minmax(0, 20rem) minmax(0, 1fr); margin: 1.5rem 0; }
+  @media (max-width: 44rem) { .stage { grid-template-columns: minmax(0, 1fr); } .wheel-box { margin-inline: auto; } }
+  .wheel-box { position: relative; width: min(100%, 20rem); padding-top: 18px; }
+  .pointer { position: absolute; top: 0; left: 50%; transform: translateX(-50%); z-index: 1; }
+  .wheel { display: block; width: 100%; height: auto; }
+  .rotor { transform-origin: 150px 150px; transform-box: view-box; }
+  .wheel text { font-size: 12px; font-weight: 700; font-family: inherit; }
+  .spin-button { font: inherit; font-weight: 800; padding: 0.7rem 1.6rem; min-height: 48px; border: 2px solid var(--notebook); background: var(--notebook); color: #fff; border-radius: 6px; cursor: pointer; }
+  .spin-button:hover { background: #fff; color: var(--notebook); }
+  .spin-button[aria-disabled='true'] { opacity: 0.75; cursor: progress; }
+  .result { margin-top: 1.25rem; }
+  .result:empty { display: none; }
+  .result :global(p) { margin: 0 0 0.4rem; }
+  .result :global(.label) { font-size: var(--step--1); color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.06em; font-weight: 700; }
+  .result :global(.album) { font-size: var(--step-1); line-height: 1.3; }
+  .result :global(.from) { color: var(--ink-soft); }
+  .result :global(.links) { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; margin-top: 0.8rem; }
+  .result :global(.links a) { display: inline-flex; align-items: center; min-height: 44px; font-weight: 700; }
+  .all summary { cursor: pointer; font-weight: 700; color: var(--notebook); min-height: 44px; display: flex; align-items: center; width: fit-content; }
+  .all ul { padding-left: 1.5rem; columns: 2 22rem; column-gap: 2.5rem; margin-top: 0.75rem; }
+  .all li { break-inside: avoid; margin: 0 0 0.6rem; }
+  .all .t { font-weight: 700; }
+  .all .links { display: block; font-size: var(--step--1); line-height: 2; }
+</style>
