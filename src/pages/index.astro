@@ -17,12 +17,12 @@ const previous = rest.slice(0, 3);
     <p class="lead">Weekly notes on digital accessibility by Utku Demiryakan: news, inspirations, original articles and the album I listened to while writing.</p>
 
     <section aria-labelledby="latest-title">
-      <h2 id="latest-title" class="section-title">Latest issue</h2>
+      <h2 id="latest-title" class="section-title">Latest Issue</h2>
       <IssueCard issue={latest} size="large" headingLevel={3} />
     </section>
 
     <section aria-labelledby="previous-title">
-      <h2 id="previous-title" class="section-title">Previous issues</h2>
+      <h2 id="previous-title" class="section-title">Previous Issues</h2>
       <ul class="previous">
         {previous.map((i) => <li><IssueCard issue={i} headingLevel={3} /></li>)}
       </ul>

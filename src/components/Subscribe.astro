@@ -4,7 +4,7 @@ const { headingLevel = 2 } = Astro.props;
 const H = `h${headingLevel}`;
 ---
 <section class="subscribe" aria-labelledby="subscribe-title">
-  <H id="subscribe-title">Get each issue by email</H>
+  <H id="subscribe-title">Get Each Issue By Email</H>
   <p>New notes, news and an album recommendation, straight to your inbox. Free, and you can unsubscribe anytime.</p>
   <form action={`https://buttondown.com/api/emails/embed-subscribe/${BUTTONDOWN_USER}`} method="post">
     <label for="subscribe-email">Email address</label>
