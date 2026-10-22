@@ -1,0 +1,33 @@
+---
+import Base from '../../layouts/Base.astro';
+import Subscribe from '../../components/Subscribe.astro';
+import { getInDetail, render, formatDate, plainText } from '../../lib/issues.js';
+import { articleLd } from '../../lib/ld.js';
+
+export function getStaticPaths() {
+  return getInDetail().map((a) => ({ params: { slug: a.slug }, props: { a } }));
+}
+const { a } = Astro.props;
+const description = plainText(a.markdown, 155);
+---
+<Base title={a.title} description={description} image={a.issue.cover} type="article"
+      published={`${a.issue.date}T09:00:00+03:00`}
+      jsonLd={articleLd({ title: a.title, description, url: a.url, image: a.issue.cover, date: a.issue.date })}>
+  <article class="wrap page">
+    <div class="reading">
+      <p class="kind">In Detail</p>
+      <h1>{a.title}</h1>
+      <p class="meta">
+        <time datetime={a.issue.date}>{formatDate(a.issue.date)}</time>, from <a href={a.issue.url}>Notes # {a.issue.number}</a>
+      </p>
+      <div class="prose" set:html={render(a.markdown)} />
+      <p class="discuss"><a href={a.issue.linkedinUrl}>Discuss this article on LinkedIn</a></p>
+      <Subscribe />
+    </div>
+  </article>
+</Base>
+<style>
+  .page { padding-top: 2.5rem; }
+  .kind { margin: 0 0 0.5rem; color: var(--notebook); font-weight: 700; }
+  .discuss { margin: 3rem 0; padding-top: 1.5rem; border-top: 2px solid var(--rule); font-weight: 700; }
+</style>

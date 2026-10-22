@@ -1,0 +1,62 @@
+---
+import Base from '../../layouts/Base.astro';
+import Subscribe from '../../components/Subscribe.astro';
+import { getIssues, render, formatDate } from '../../lib/issues.js';
+import { articleLd } from '../../lib/ld.js';
+
+export function getStaticPaths() {
+  const all = getIssues();
+  return all.map((issue, idx) => ({
+    params: { n: String(issue.number) },
+    props: { issue, newer: all[idx - 1] ?? null, older: all[idx + 1] ?? null },
+  }));
+}
+const { issue, newer, older } = Astro.props;
+const ORDER = ['personal-notes', 'news', 'inspirations', 'in-detail', 'article-from-me'];
+const sections = ORDER.filter((k) => issue.sections[k]).map((k) => ({ key: k, ...issue.sections[k] }));
+---
+<Base title={issue.title} description={issue.description} image={issue.cover} type="article"
+      published={`${issue.date}T09:00:00+03:00`}
+      jsonLd={articleLd({ title: issue.title, description: issue.description, url: issue.url, image: issue.cover, date: issue.date })}>
+  <article class="wrap issue">
+    <header class="reading">
+      <h1>{issue.title}</h1>
+      <p class="meta"><time datetime={issue.date}>{formatDate(issue.date)}</time></p>
+    </header>
+    <img class="cover" src={issue.cover} alt="" width="1280" height="720" />
+    <div class="reading prose">
+      {issue.album && (
+        <p class="album">Created while listening: <a href={issue.album.url}>{issue.album.artist} – {issue.album.title}</a></p>
+      )}
+      {issue.intro && <Fragment set:html={render(issue.intro)} />}
+      {sections.map((s) => (
+        <section aria-labelledby={s.key}>
+          <h2 id={s.key}>{s.heading}</h2>
+          {s.key === 'in-detail' && issue.inDetailSlug && (
+            <p class="standalone"><a href={`/in-detail/${issue.inDetailSlug}/`}>Read this article on its own page</a></p>
+          )}
+          <Fragment set:html={render(s.markdown)} />
+        </section>
+      ))}
+      <p class="discuss"><a href={issue.linkedinUrl}>Discuss this issue on LinkedIn</a></p>
+    </div>
+    <nav class="reading pager" aria-label="More issues">
+      {older && <a rel="prev" href={older.url}><span>Previous issue</span>{older.title}</a>}
+      {newer && <a rel="next" href={newer.url}><span>Next issue</span>{newer.title}</a>}
+    </nav>
+    <div class="reading"><Subscribe /></div>
+  </article>
+</Base>
+
+<style>
+  .issue { padding-top: 2.5rem; }
+  .cover { display: block; width: min(100%, 52rem); border-radius: 10px; border: 1px solid var(--rule); margin: 0.5rem 0 2rem; }
+  .album { color: var(--ink-soft); }
+  .standalone { font-size: var(--step--1); }
+  .discuss { margin-top: 3rem; padding-top: 1.5rem; border-top: 2px solid var(--rule); font-weight: 700; }
+  .pager { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); margin: 2rem 0 3rem; }
+  .pager a { display: block; padding: 1rem 1.2rem; border: 2px solid var(--rule); border-radius: 8px; text-decoration: none; color: var(--ink); font-weight: 700; }
+  .pager a:hover { border-color: var(--notebook); }
+  .pager span { display: block; font-weight: 400; color: var(--ink-soft); font-size: var(--step--1); }
+  .issue :global(.prose h2) { scroll-margin-top: 1rem; }
+</style>

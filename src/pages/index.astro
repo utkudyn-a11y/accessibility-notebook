@@ -1,0 +1,49 @@
+---
+import Base from '../layouts/Base.astro';
+import IssueCard from '../components/IssueCard.astro';
+import Subscribe from '../components/Subscribe.astro';
+import { getIssues, render } from '../lib/issues.js';
+import aiPolicy from '../content/site/ai-policy.md?raw';
+
+const issues = getIssues();
+const [latest, ...rest] = issues;
+const previous = rest.slice(0, 3);
+---
+<Base>
+  <div class="wrap home">
+    <h1 class="visually-hidden">Accessibility Notebook</h1>
+    <p class="lead">Weekly notes on digital accessibility by Utku Demiryakan: news, inspirations, original articles and the album I listened to while writing.</p>
+
+    <section aria-labelledby="latest-title">
+      <h2 id="latest-title" class="section-title">Latest issue</h2>
+      <IssueCard issue={latest} size="large" headingLevel={3} />
+    </section>
+
+    <section aria-labelledby="previous-title">
+      <h2 id="previous-title" class="section-title">Previous issues</h2>
+      <ul class="previous">
+        {previous.map((i) => <li><IssueCard issue={i} headingLevel={3} /></li>)}
+      </ul>
+      <p><a href="/notes/">All issues</a></p>
+    </section>
+
+    <Subscribe />
+
+    <section aria-labelledby="ai-title" class="ai-policy reading">
+      <h2 id="ai-title">How I write Accessibility Notebook</h2>
+      <div class="prose" set:html={render(aiPolicy)} />
+    </section>
+  </div>
+</Base>
+
+<style>
+  .home { padding-top: 2rem; }
+  .lead { font-size: var(--step-1); line-height: 1.45; max-width: 46ch; margin: 0 0 2rem; color: var(--ink); }
+  .section-title { font-size: var(--step-1); margin: 3rem 0 1rem; }
+  section:first-of-type .section-title { margin-top: 0; }
+  .previous { list-style: none; padding: 0; margin: 0 0 1rem; display: grid; gap: 2rem 1.5rem; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); }
+  .previous li + li { margin-top: 0; }
+  :global(.subscribe) { margin-top: 4rem; }
+  .ai-policy { margin-top: 3rem; }
+  .ai-policy h2 { font-size: var(--step-1); }
+</style>

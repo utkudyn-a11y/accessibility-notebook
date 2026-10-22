@@ -1,0 +1,24 @@
+---
+import { LINKEDIN_NEWSLETTER, BUTTONDOWN_USER } from '../consts.js';
+const year = new Date().getFullYear();
+---
+<footer class="site-footer">
+  <div class="wrap inner">
+    <p><strong>Accessibility Notebook</strong> by Utku Demiryakan</p>
+    <ul>
+      <li><a href={`https://buttondown.com/${BUTTONDOWN_USER}`}>Subscribe by email</a></li>
+      <li><a href={LINKEDIN_NEWSLETTER}>Follow on LinkedIn</a></li>
+      <li><a href="/rss.xml">RSS feed</a></li>
+    </ul>
+    <p class="copy">© {year} Utku Demiryakan</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer { margin-top: 5rem; border-top: 2px solid var(--rule); background: var(--tint); }
+  .inner { padding-block: 2rem; display: flex; flex-wrap: wrap; gap: 0.5rem 2rem; align-items: baseline; justify-content: space-between; }
+  .inner p { margin: 0; }
+  ul { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; list-style: none; margin: 0; padding: 0; }
+  li + li { margin-top: 0; }
+  .copy { color: var(--ink-soft); font-size: var(--step--1); }
+</style>

@@ -1,0 +1,12 @@
+---
+import Base from '../layouts/Base.astro';
+import { render } from '../lib/issues.js';
+import about from '../content/site/about.md?raw';
+---
+<Base title="About Me" description="About Utku Demiryakan, the author of Accessibility Notebook.">
+  <div class="wrap page reading">
+    <h1>About Me</h1>
+    <div class="prose" set:html={render(about)} />
+  </div>
+</Base>
+<style>.page { padding-top: 2.5rem; }</style>

@@ -1,0 +1,32 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getIssues, formatDate } from '../../lib/issues.js';
+const issues = getIssues();
+---
+<Base title="Full Issues" description="Every issue of Accessibility Notebook, newest first.">
+  <div class="wrap page">
+    <h1>Full Issues</h1>
+    <p class="lead reading">Every issue of Accessibility Notebook, newest first. Each one has personal notes, accessibility news, inspirations and usually an in-depth article.</p>
+    <ol class="issues reading" reversed>
+      {issues.map((i) => (
+        <li>
+          <h2><a href={i.url}>{i.title}</a></h2>
+          <p class="meta"><time datetime={i.date}>{formatDate(i.date)}</time></p>
+          <p>{i.description}</p>
+        </li>
+      ))}
+    </ol>
+  </div>
+</Base>
+<style>
+  .page { padding-top: 2.5rem; }
+  .lead { font-size: var(--step-1); line-height: 1.45; }
+  .issues { list-style: none; padding: 0; margin: 2rem 0 0; }
+  .issues li { padding: 1.5rem 0; border-top: 2px solid var(--rule); }
+  .issues li + li { margin-top: 0; }
+  .issues h2 { font-size: var(--step-1); margin: 0 0 0.3rem; }
+  .issues h2 a { color: var(--ink); }
+  .issues h2 a:hover { color: var(--notebook); }
+  .issues .meta { margin-bottom: 0.5rem; }
+  .issues p:last-child { margin: 0; }
+</style>

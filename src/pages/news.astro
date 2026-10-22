@@ -1,0 +1,16 @@
+---
+import Base from '../layouts/Base.astro';
+import ItemFeed from '../components/ItemFeed.astro';
+import { getIssues } from '../lib/issues.js';
+---
+<Base title="Digital Accessibility News" description="Digital accessibility news from around the world, collected and commented on by Utku Demiryakan, newest first.">
+  <div class="wrap page reading">
+    <h1>Digital Accessibility News</h1>
+    <p class="lead">News I found and commented on each week: laws, enforcement, research and products from around the world. Newest first.</p>
+    <ItemFeed issues={getIssues()} field="news" />
+  </div>
+</Base>
+<style>
+  .page { padding-top: 2.5rem; }
+  .lead { font-size: var(--step-1); line-height: 1.45; }
+</style>
