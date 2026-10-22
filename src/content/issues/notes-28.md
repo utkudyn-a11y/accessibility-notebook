@@ -9,6 +9,7 @@ linkedinUrl: "https://www.linkedin.com/pulse/notes-28-accessible-pos-a11y-ai-agn
 personalNoteTitle: "The \"Accessible\" POS That Announced My PIN"
 inDetailTitle: "What Did We Focus On For Alt Texts At Turkish Airlines?"
 inDetailSlug: "what-did-we-focus-on-for-alt-texts-at-turkish-airlines"
+discussion: [{"context": "The European Disability Forum and other organisations say Belgium is making digital channels the only way to reach some essential public services, and they're asking for non-digital alternatives to stay.", "question": "If a digital service is fully accessible, is a non-digital option still necessary?"}, {"context": "On an \"accessible\" POS device in Chester, Utku had to swipe in a different direction than on his phone's screen reader, and the machine read his PIN out loud: \"You pressed 5.\"", "question": "Should accessible hardware copy the gestures people already know from their phones? And how should it handle private information like a PIN?"}, {"context": "Nicolas Steenhout argues that it's time to retire the idea of \"decorative images,\" because most images add context and mood even when they carry no information.", "question": "Is \"decorative\" a real category, or often just an excuse to skip alt text?"}]
 ---
 
 <!-- section:personal-notes -->

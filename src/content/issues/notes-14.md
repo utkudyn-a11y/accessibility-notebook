@@ -9,6 +9,7 @@ linkedinUrl: "https://www.linkedin.com/pulse/notes-14-fifa-world-cup-2026-easy-l
 personalNoteTitle: "Racing for a Bus Ticket on a Low-Contrast Seat Map"
 inDetailTitle: "Common Accessibility Failures In The Seat Maps"
 inDetailSlug: "common-accessibility-failures-in-the-seat-maps"
+discussion: [{"context": "In Turkish bus seat maps, seats taken by women and men are shown in different colors, because passengers of different genders can only sit side by side if they book together. Utku calls this the biggest design problem in these maps.", "question": "How would you show this information without relying on color?"}]
 ---
 
 <!-- section:personal-notes -->

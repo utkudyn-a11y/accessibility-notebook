@@ -7,6 +7,7 @@ cover: "/images/notes-25-cover.jpg"
 album: {"artist": "Ladrones", "title": "Arriba La L", "url": "https://open.spotify.com/intl-tr/album/1XKtSl05ezH6lWTmVgTLUL"}
 linkedinUrl: "https://www.linkedin.com/pulse/notes-25-how-select-meaningful-sample-accessibility-utku-demiryakan-bdbif/"
 personalNoteTitle: "Finalists at Travel For Every Body: An Aviation Sign Language Dictionary"
+discussion: [{"context": "Some auditors argue that page count isn't what matters in an accessibility audit; component architecture and root causes matter more.", "question": "When you audit a product, would you test as many pages as possible, or a small, well-chosen sample?"}]
 ---
 
 <!-- section:personal-notes -->

@@ -3,6 +3,7 @@ import Base from '../layouts/Base.astro';
 import IssueCard from '../components/IssueCard.astro';
 import Subscribe from '../components/Subscribe.astro';
 import SpinAlbum from '../components/SpinAlbum.astro';
+import DiscussionCorner from '../components/DiscussionCorner.astro';
 import { getIssues, render } from '../lib/issues.js';
 import aiPolicy from '../content/site/ai-policy.md?raw';
 
@@ -29,6 +30,8 @@ const previous = rest.slice(0, 3);
     </section>
 
     <SpinAlbum />
+
+    <DiscussionCorner />
 
     <Subscribe />
 

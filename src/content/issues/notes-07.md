@@ -9,6 +9,7 @@ linkedinUrl: "https://www.linkedin.com/pulse/notes-7-webaim-million-eaa-netherla
 personalNoteTitle: "When a Self-Service Kiosk Takes Over Your Lunch Order"
 inDetailTitle: "Takeaways From WebAIM Million"
 inDetailSlug: "takeaways-from-webaim-million"
+discussion: [{"context": "The Dutch regulator ACM found that testers with disabilities couldn't place an order at all in 61% of the cases it tested. Still, companies are being given \"considerable time\" to comply.", "question": "Should regulators give companies time, or start enforcing right away?"}]
 ---
 
 <!-- section:personal-notes -->

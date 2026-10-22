@@ -12,6 +12,9 @@ The website of [Accessibility Notebook](https://buttondown.com/accessibility-not
    - `linkedinUrl`: the LinkedIn article address
    - `personalNoteTitle`: a title for the Personal Notes section
    - `inDetailTitle` and `inDetailSlug`: the In Detail title and its web address (lowercase, words joined with `-`)
+   - `discussion`: one or more Discussion Corner questions, each with a short `context` and the `question` itself, for example
+     `discussion: [{"context": "Some background.", "question": "What do you think?"}]`.
+     The home page shows one question at a time, at random; there is no page that lists them all.
 3. Write the issue below. Each section starts with its marker and heading:
 
    ```markdown

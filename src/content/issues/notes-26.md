@@ -9,6 +9,7 @@ linkedinUrl: "https://www.linkedin.com/pulse/notes-26-can-i-use-foldable-phones-
 personalNoteTitle: "\"Are You Blind?\": Is It Really a Red Card Offence?"
 inDetailTitle: "5 Key Takeaways From SODAR 2026"
 inDetailSlug: "5-key-takeaways-from-sodar-2026"
+discussion: [{"context": "Galatasaray's head coach Okan Buruk says he shouted \"Don't you see?\", but the referee heard \"Are you blind?\" and showed him a red card.", "question": "Is \"Are you blind?\" an insult that deserves a red card?"}]
 ---
 
 <!-- section:personal-notes -->

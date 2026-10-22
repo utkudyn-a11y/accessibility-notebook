@@ -7,6 +7,7 @@ cover: "/images/notes-19-cover.jpg"
 album: {"artist": "The Temper Trap", "title": "Sungazer", "url": "https://open.spotify.com/intl-tr/album/1oNybU0H4Odc0CHNQRdgaj"}
 linkedinUrl: "https://www.linkedin.com/pulse/notes-19-ai-omnibus-usablenets-midyear-report-bill-utku-demiryakan-yx65f/"
 personalNoteTitle: "A Ball in a Plastic Bag: Accessibility Can Be That Easy"
+discussion: [{"context": "The European Disability Forum warns that the EU's AI Omnibus would allow sensitive data, including disability information, to be used without individual consent, which could lead to bias in areas like recruitment.", "question": "Should disability data ever be used without consent? Where would you draw the line?"}, {"context": "UsableNet expects more than 6,000 website accessibility lawsuits in the US in 2026, because private plaintiffs step in when federal enforcement slows down.", "question": "Are lawsuits a healthy way to enforce accessibility, or a sign that the system is broken?"}]
 ---
 
 (My “I am still in my 20s and listening to lively indie rock” album of the year)

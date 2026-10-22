@@ -9,6 +9,7 @@ linkedinUrl: "https://www.linkedin.com/pulse/notes-10-irony-nepal-audible-crawl-
 personalNoteTitle: "Labour Day Barricades Through Partially Sighted Eyes"
 inDetailTitle: "The Most Common Windows High Contrast Mode Incompatibilities"
 inDetailSlug: "the-most-common-windows-high-contrast-mode-incompatibilities"
+discussion: [{"context": "Most accessibility professionals say Windows High Contrast Mode issues don't fail WCAG 2.1. Utku believes they're still serious usability problems that need fixing.", "question": "Should high contrast support be a requirement, or is \"not a WCAG failure\" good enough?"}]
 ---
 
 <!-- section:personal-notes -->

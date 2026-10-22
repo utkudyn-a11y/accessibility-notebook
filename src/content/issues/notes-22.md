@@ -9,6 +9,7 @@ linkedinUrl: "https://www.linkedin.com/pulse/notes-22-could-ai-increasing-our-ac
 personalNoteTitle: "Freeze or Melt: The Inaccessible Office Thermostat"
 inDetailTitle: "Takeaways From Deque’s “From Debt To Dividend” Report"
 inDetailSlug: "takeaways-from-deques-from-debt-to-dividend-report"
+discussion: [{"context": "Deque surveyed 200 engineering leaders and found that teams are highly confident in the accessibility of AI-generated code, while the reality is very different.", "question": "Is AI increasing our accessibility debt? What should be done?"}]
 ---
 
 <!-- section:personal-notes -->

@@ -9,6 +9,7 @@ linkedinUrl: "https://www.linkedin.com/pulse/notes-6-applevis-digital-accessibil
 personalNoteTitle: "Kiel on Foot: Tactile Paving, Silent Traffic Lights and Cyclists"
 inDetailTitle: "What Are Assertions?"
 inDetailSlug: "what-are-assertions"
+discussion: [{"context": "In the 2025 AppleVis Report Card, blind, low-vision and deaf-blind users rated Apple's accessibility lower than the year before, and many asked Apple to fix bugs before shipping new features.", "question": "Should big tech pause new features until accessibility bugs are fixed?"}]
 ---
 
 <!-- section:personal-notes -->

@@ -1,0 +1,103 @@
+---
+// Discussion Corner: shows one question at a time, picked at random from the "discussion"
+// list in each issue's front matter. There is deliberately no page that lists every question.
+import { getIssues } from '../lib/issues.js';
+
+const { headingLevel = 2 } = Astro.props;
+const H = `h${headingLevel}`;
+
+const questions = getIssues().flatMap((i) =>
+  (i.discussion || []).map((d) => ({ n: i.number, issue: i.url, linkedin: i.linkedinUrl, context: d.context, question: d.question }))
+);
+// Without JavaScript, readers see the latest issue's question.
+const first = questions[0];
+---
+{first && (
+  <section class="dc" aria-labelledby="dc-title" data-questions={JSON.stringify(questions)}>
+    <H id="dc-title">Discussion Corner</H>
+    <p class="intro">Every issue raises a question worth arguing about. Read it, pick a side or bring a third one, and share your view in the comments of the issue's LinkedIn post.</p>
+
+    <div class="q">
+      <span class="mark" aria-hidden="true">?</span>
+      <div class="q-body">
+        <p class="over">From Notes # {first.n}</p>
+        <p class="context">{first.context}</p>
+        <p class="ask">{first.question}</p>
+        <p class="links">
+          <a href={first.linkedin}>Share your view on LinkedIn<span class="visually-hidden"> (Notes # {first.n} post)</span></a>
+          <a href={first.issue}>Read Notes # {first.n}</a>
+        </p>
+      </div>
+    </div>
+
+    <button type="button" class="another" hidden>Show another question</button>
+  </section>
+)}
+
+<script>
+  type Q = { n: number; issue: string; linkedin: string; context: string; question: string };
+  const root = document.querySelector<HTMLElement>('.dc');
+  if (root) {
+    const all: Q[] = JSON.parse(root.dataset.questions || '[]');
+    const body = root.querySelector<HTMLElement>('.q-body')!;
+    const button = root.querySelector<HTMLButtonElement>('.another')!;
+    const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
+
+    // Shuffled deck: every question comes up once before any repeats.
+    let deck: number[] = [];
+    let last = -1;
+    const next = () => {
+      if (!deck.length) {
+        deck = all.map((_, i) => i);
+        for (let i = deck.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [deck[i], deck[j]] = [deck[j], deck[i]];
+        }
+        if (deck.length > 1 && deck[deck.length - 1] === last) deck.unshift(deck.pop()!);
+      }
+      last = deck.pop()!;
+      return all[last];
+    };
+    const show = (q: Q) => {
+      body.innerHTML =
+        `<p class="over">From Notes # ${q.n}</p>` +
+        `<p class="context">${esc(q.context)}</p>` +
+        `<p class="ask">${esc(q.question)}</p>` +
+        `<p class="links"><a href="${esc(q.linkedin)}">Share your view on LinkedIn<span class="visually-hidden"> (Notes # ${q.n} post)</span></a>` +
+        `<a href="${esc(q.issue)}">Read Notes # ${q.n}</a></p>`;
+    };
+
+    if (all.length) {
+      show(next()); // a surprise question on every visit
+      body.setAttribute('aria-live', 'polite');
+      if (all.length > 1) {
+        button.hidden = false;
+        button.addEventListener('click', () => show(next()));
+      }
+    }
+  }
+</script>
+
+<style>
+  .dc { margin-top: 4rem; }
+  .dc h2, .dc h3 { font-size: var(--step-1); margin: 0 0 0.5rem; }
+  .intro { max-width: 60ch; }
+
+  /* The question card is a speech bubble */
+  .q { position: relative; max-width: 44rem; margin: 1.5rem 0 2rem; background: #fff; border: 2px solid var(--notebook); border-radius: 12px; padding: 1.5rem 1.6rem 1.25rem 4.6rem; }
+  .q::after { content: ''; position: absolute; left: 2.2rem; bottom: -14px; width: 24px; height: 24px; background: #fff; border-right: 2px solid var(--notebook); border-bottom: 2px solid var(--notebook); transform: rotate(45deg); }
+  .mark { position: absolute; left: 1.2rem; top: 1.4rem; width: 2.4rem; height: 2.4rem; border-radius: 50%; background: var(--highlight); color: var(--ink); display: grid; place-items: center; font-weight: 800; font-size: 1.4rem; }
+  .q-body :global(p) { margin: 0; }
+  .q-body :global(.over) { font-size: var(--step--1); color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.06em; font-weight: 700; margin-bottom: 0.5rem; }
+  .q-body :global(.context) { margin-bottom: 0.6rem; }
+  .q-body :global(.ask) { font-weight: 800; font-size: 1.25rem; line-height: 1.4; color: var(--notebook); margin-bottom: 0.6rem; }
+  .q-body :global(.links) { display: flex; flex-wrap: wrap; gap: 0 1.5rem; }
+  .q-body :global(.links a) { display: inline-flex; align-items: center; min-height: 44px; font-weight: 700; }
+  @media (max-width: 30rem) {
+    .q { padding: 4rem 1.25rem 1.25rem; }
+    .mark { left: 1.25rem; top: 1.1rem; }
+  }
+
+  .another { font: inherit; font-weight: 800; padding: 0.7rem 1.6rem; min-height: 48px; border: 2px solid var(--notebook); background: var(--notebook); color: #fff; border-radius: 6px; cursor: pointer; }
+  .another:hover { background: #fff; color: var(--notebook); }
+</style>
