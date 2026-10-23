@@ -70,3 +70,11 @@ The website of [Accessibility Notebook](https://buttondown.com/accessibility-not
 - `scripts/gen-questions.mjs` runs before every build and tells the API which question ids (`<issue>-<n>`) and how many options exist.
 - A Cloudflare rate limiting rule ("Discussion Corner votes") blocks more than 5 votes in 10 seconds from one IP.
 - To reset all votes: run `DELETE FROM votes;` in the D1 console.
+
+## Search
+
+- The search page (`/search/`) runs in the browser with MiniSearch. Its data, `/search-index.json`, is built from the issues on every build (`src/pages/search-index.json.js`): full issues (with album), Personal Notes, In Detail, An Article From Me, every News and Inspirations item, and the Discussion Corner questions.
+- Matching ignores case and accents ("Altin Gun" finds "Altın Gün"), treats simple plurals as the same word ("CAPTCHAs" = "captcha") and forgives small typos in longer words ("accesibility").
+- Abbreviations: `src/lib/search-synonyms.js` lists abbreviations with their long forms, so "EAA" also finds "European Accessibility Act" and the other way round. **When a new issue uses an abbreviation that is not in the list, add a line with its long form**, for example `['dsa', 'digital services act'],`.
+- Results link straight to the story on its issue page (`#news-2`, `#inspiration-1`, `#personal-notes`), to the In Detail page, or to the Discussion Corner question on the home page (`/?question=23-1`).
+- The "Popular topics" on the search page are set at the top of `src/pages/search.astro`.

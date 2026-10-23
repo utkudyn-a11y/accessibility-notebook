@@ -35,8 +35,8 @@ const sections = ORDER.filter((k) => issue.sections[k]).map((k) => ({ key: k, ..
           {s.key === 'in-detail' && issue.inDetailSlug && (
             <p class="standalone"><a href={`/in-detail/${issue.inDetailSlug}/`}>Read this article on its own page</a></p>
           )}
-          {s.key === 'news' && issue.news.length ? (
-            issue.news.map((it) => (
+          {(s.key === 'news' || s.key === 'inspirations') && issue[s.key].length ? (
+            issue[s.key].map((it) => (
               <div class="news-item" id={it.anchor}>
                 <h3>{it.source ? it.title : it.url ? <a href={it.url}>{it.title}</a> : it.title}</h3>
                 {it.source && <p>Source: <a href={it.source.url}>{it.source.name}</a></p>}

@@ -172,7 +172,15 @@ const first = questions[0];
     };
 
     if (all.length) {
-      show(next()); // a surprise question on every visit
+      // A link from search (/?question=6-1) opens that question; otherwise a surprise question.
+      const asked = new URL(location.href).searchParams.get('question');
+      const pick = all.findIndex((q) => q.id === asked);
+      if (pick >= 0) {
+        last = pick;
+        show(all[pick]);
+      } else {
+        show(next());
+      }
       if (all.length > 1) {
         another.hidden = false;
         another.addEventListener('click', () => {

@@ -1,0 +1,250 @@
+---
+import Base from '../layouts/Base.astro';
+
+const POPULAR = ['CAPTCHA', 'European Accessibility Act', 'AI', 'alt text', 'WCAG 3', 'overlays', 'sign language'];
+const GROUPS = ['Originals', 'News', 'Inspirations', 'Discussion', 'Full Issues'];
+---
+<Base title="Search" description="Search every Accessibility Notebook issue, news story, inspiration and original article.">
+  <div class="wrap page">
+    <h1>Search</h1>
+
+    <form class="sform" role="search" action="/search/" method="get">
+      <label for="q">Search all issues, news and inspirations</label>
+      <div class="srow">
+        <input id="q" name="q" type="search" autocomplete="off" spellcheck="false" />
+        <button type="submit">Search</button>
+      </div>
+    </form>
+    <noscript><p class="note">Search needs JavaScript. You can browse <a href="/notes/">all issues</a> instead.</p></noscript>
+
+    <p class="state-msg" hidden></p>
+
+    <div class="suggest">
+      <p id="popular-label">Popular topics:</p>
+      <ul aria-labelledby="popular-label">
+        {POPULAR.map((t) => <li><a href={`/search/?q=${encodeURIComponent(t)}`} data-q={t}>{t}</a></li>)}
+      </ul>
+    </div>
+
+    <div class="results-area" hidden>
+      <p class="count"></p>
+      <fieldset class="filter">
+        <legend>Show</legend>
+        <div class="chips">
+          {['All', ...GROUPS].map((g) => (
+            <label class="chip" data-group={g}>
+              <input type="radio" name="group" value={g} checked={g === 'All'} />
+              <span class="face">{g} <span class="n"></span></span>
+            </label>
+          ))}
+        </div>
+      </fieldset>
+      <ol class="results"></ol>
+      <div class="none" hidden>
+        <p>Try a shorter or more general word, or one of these topics:
+          {POPULAR.slice(0, 4).map((t, k) => <>{k > 0 && ', '}<a href={`/search/?q=${encodeURIComponent(t)}`} data-q={t}>{t}</a></>)}.
+        </p>
+      </div>
+    </div>
+
+    <p class="visually-hidden" aria-live="polite" id="search-status"></p>
+  </div>
+</Base>
+
+<script>
+  import MiniSearch from 'minisearch';
+  import { processTerm, fold } from '../lib/search-text.js';
+  import { SYNONYMS } from '../lib/search-synonyms.js';
+
+  type Doc = { id: number; group: string; kind: string; title: string; url: string; meta: string; text: string };
+  type Hit = Doc & { score: number; terms: string[] };
+
+  const form = document.querySelector<HTMLFormElement>('.sform')!;
+  const input = document.querySelector<HTMLInputElement>('#q')!;
+  const stateMsg = document.querySelector<HTMLElement>('.state-msg')!;
+  const suggest = document.querySelector<HTMLElement>('.suggest')!;
+  const area = document.querySelector<HTMLElement>('.results-area')!;
+  const countEl = area.querySelector<HTMLElement>('.count')!;
+  const list = area.querySelector<HTMLOListElement>('.results')!;
+  const none = area.querySelector<HTMLElement>('.none')!;
+  const filter = area.querySelector<HTMLFieldSetElement>('.filter')!;
+  const chips = [...area.querySelectorAll<HTMLElement>('.chip')];
+  const status = document.querySelector<HTMLElement>('#search-status')!;
+
+  const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
+  const norm = (s: string) => fold(s).replace(/[^a-z0-9]+/g, ' ').trim();
+  const groups = SYNONYMS.map((g) => g.map(norm));
+
+  let ms: MiniSearch<Doc> | null = null;
+  let hits: Hit[] = [];
+  let current = '';
+
+  // The query plus the same query with each known abbreviation swapped for its other forms.
+  const expand = (q: string) => {
+    const base = norm(q);
+    const out = new Set([base]);
+    for (const g of groups) {
+      for (const form of g) {
+        const re = new RegExp(`(^| )${form}( |$)`);
+        if (!re.test(base)) continue;
+        for (const other of g) if (other !== form) out.add(base.replace(re, `$1${other}$2`).trim());
+      }
+    }
+    return [...out].filter(Boolean);
+  };
+
+  // Highlight every word whose normalised form is one of the matched index terms.
+  const mark = (s: string, terms: Set<string>) =>
+    s.replace(/[\p{L}\p{N}]+|[^\p{L}\p{N}]+/gu, (w) => (terms.has(processTerm(w) || '') ? `<mark>${esc(w)}</mark>` : esc(w)));
+
+  const excerpt = (text: string, terms: Set<string>) => {
+    const re = /[\p{L}\p{N}]+/gu;
+    let m: RegExpExecArray | null;
+    let at = -1;
+    while ((m = re.exec(text))) if (terms.has(processTerm(m[0]) || '')) { at = m.index; break; }
+    if (at < 0) return esc(text.slice(0, 200)) + (text.length > 200 ? '…' : '');
+    let start = Math.max(0, at - 90);
+    if (start > 0) start = text.indexOf(' ', start) + 1;
+    let end = Math.min(text.length, start + 260);
+    if (end < text.length) end = text.lastIndexOf(' ', end);
+    return (start > 0 ? '…' : '') + mark(text.slice(start, end), terms) + (end < text.length ? '…' : '');
+  };
+
+  const selected = () => area.querySelector<HTMLInputElement>('input[name="group"]:checked')!.value;
+
+  const render = () => {
+    const g = selected();
+    const shown = g === 'All' ? hits : hits.filter((h) => h.group === g);
+    list.innerHTML = shown.map((h) => {
+      const terms = new Set(h.terms);
+      return `<li><p class="kind">${esc(h.kind)} · ${esc(h.meta)}</p>` +
+        `<h2><a href="${esc(h.url)}">${mark(h.title, terms)}</a></h2>` +
+        `<p class="ex">${excerpt(h.text, terms)}</p></li>`;
+    }).join('');
+  };
+
+  let announceTimer = 0;
+  const announce = (now: boolean) => {
+    clearTimeout(announceTimer);
+    const say = () => { status.textContent = countEl.textContent || ''; };
+    if (now) say(); else announceTimer = window.setTimeout(say, 900);
+  };
+
+  const run = (q: string, announceNow: boolean) => {
+    current = q.trim();
+    const url = new URL(location.href);
+    if (current) url.searchParams.set('q', current); else url.searchParams.delete('q');
+    history.replaceState(null, '', url);
+    if (!ms) return;
+    if (current.length < 2) {
+      area.hidden = true;
+      suggest.hidden = false;
+      status.textContent = '';
+      return;
+    }
+    const alts = expand(current);
+    hits = ms.search({ combineWith: 'OR', queries: alts.map((a) => ({ combineWith: 'AND', queries: [a] })) } as any) as unknown as Hit[];
+    const counts: Record<string, number> = {};
+    for (const h of hits) counts[h.group] = (counts[h.group] || 0) + 1;
+    for (const c of chips) {
+      const g = c.dataset.group!;
+      const n = g === 'All' ? hits.length : counts[g] || 0;
+      c.querySelector<HTMLElement>('.n')!.textContent = String(n);
+      c.hidden = g !== 'All' && n === 0;
+    }
+    if (selected() !== 'All' && !counts[selected()]) area.querySelector<HTMLInputElement>('input[value="All"]')!.checked = true;
+    area.hidden = false;
+    suggest.hidden = hits.length > 0;
+    filter.hidden = hits.length === 0;
+    none.hidden = hits.length > 0;
+    countEl.textContent = hits.length
+      ? `${hits.length} ${hits.length === 1 ? 'result' : 'results'} for “${current}”`
+      : `No results for “${current}”.`;
+    render();
+    announce(announceNow);
+  };
+
+  let typingTimer = 0;
+  input.addEventListener('input', () => {
+    clearTimeout(typingTimer);
+    typingTimer = window.setTimeout(() => run(input.value, false), 200);
+  });
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    clearTimeout(typingTimer);
+    run(input.value, true);
+  });
+  for (const r of area.querySelectorAll<HTMLInputElement>('input[name="group"]')) r.addEventListener('change', render);
+  document.addEventListener('click', (e) => {
+    const a = (e.target as HTMLElement).closest<HTMLAnchorElement>('a[data-q]');
+    if (!a) return;
+    e.preventDefault();
+    input.value = a.dataset.q!;
+    run(input.value, true);
+    input.focus();
+  });
+
+  const start = new URL(location.href).searchParams.get('q') || '';
+  input.value = start;
+  stateMsg.hidden = false;
+  stateMsg.textContent = 'Loading search…';
+  fetch('/search-index.json')
+    .then((r) => { if (!r.ok) throw new Error(String(r.status)); return r.json(); })
+    .then((docs: Doc[]) => {
+      ms = new MiniSearch<Doc>({
+        fields: ['title', 'kind', 'text'],
+        storeFields: ['group', 'kind', 'title', 'url', 'meta', 'text'],
+        processTerm,
+        searchOptions: {
+          boost: { title: 3 },
+          prefix: (term: string) => term.length > 3,
+          fuzzy: (term: string) => (term.length > 4 ? 0.2 : false),
+        },
+      });
+      ms.addAll(docs);
+      stateMsg.hidden = true;
+      if (input.value) run(input.value, true);
+    })
+    .catch(() => { stateMsg.textContent = 'Sorry, search could not be loaded. Please reload the page.'; });
+</script>
+
+<style>
+  .page { padding-top: 2.5rem; padding-bottom: 2rem; }
+  .sform { max-width: 44rem; margin: 0.5rem 0 1.5rem; }
+  .sform label { display: block; font-weight: 800; margin-bottom: 0.5rem; }
+  .srow { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+  .srow input { flex: 1 1 14rem; min-width: 0; font: inherit; padding: 0.7rem 0.9rem; min-height: 52px; border: 2px solid var(--ink-soft); border-radius: 8px; background: #fff; color: var(--ink); }
+  .srow input:focus-visible { outline: 3px solid var(--notebook); outline-offset: 2px; }
+  .srow button { font: inherit; font-weight: 800; padding: 0.7rem 1.6rem; min-height: 52px; border: 2px solid var(--notebook); background: var(--notebook); color: #fff; border-radius: 8px; cursor: pointer; }
+  .srow button:hover { background: #fff; color: var(--notebook); }
+  .note, .state-msg { font-weight: 700; }
+  .suggest p { font-weight: 700; margin: 0 0 0.5rem; }
+  .suggest ul { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .suggest li { margin: 0; }
+  .suggest a { display: inline-flex; align-items: center; min-height: 44px; padding: 0.3rem 0.9rem; border: 2px solid var(--rule); border-radius: 999px; font-weight: 700; text-decoration: none; background: #fff; }
+  .suggest a:hover { border-color: var(--notebook); }
+  .suggest[hidden], .results-area[hidden], .none[hidden], .filter[hidden], .chip[hidden] { display: none; }
+  .suggest { margin-bottom: 1.5rem; }
+
+  .count { font-weight: 800; font-size: var(--step-1); margin: 0 0 1rem; }
+  .filter { border: 0; padding: 0; margin: 0 0 1.5rem; min-width: 0; }
+  .filter legend { font-weight: 800; padding: 0; margin-bottom: 0.5rem; }
+  .chips { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .chip { position: relative; }
+  .chip input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
+  .face { display: inline-flex; align-items: center; gap: 0.45rem; min-height: 44px; padding: 0.35rem 0.95rem; border: 2px solid var(--notebook); border-radius: 999px; background: #fff; color: var(--notebook); font-weight: 700; }
+  .n { font-weight: 400; font-size: 0.9em; color: var(--ink-soft); }
+  .chip:hover .face { background: var(--tint); }
+  .chip input:checked + .face { background: var(--notebook); color: #fff; }
+  .chip input:checked + .face .n { color: #e4dcfa; }
+  .chip input:checked + .face::before { content: '✓' / ''; font-weight: 800; }
+  .chip input:focus-visible + .face { outline: 3px solid var(--notebook); outline-offset: 3px; }
+  @media (forced-colors: active) { .chip input:checked + .face { outline: 3px solid CanvasText; } }
+
+  .results { list-style: none; padding: 0; margin: 0; max-width: 46rem; }
+  .results :global(li) { margin: 0; padding: 1.1rem 0; border-top: 2px solid var(--rule); }
+  .results :global(.kind) { margin: 0 0 0.3rem; font-size: var(--step--1); color: var(--ink-soft); font-weight: 700; }
+  .results :global(h2) { font-size: 1.2rem; margin: 0 0 0.4rem; line-height: 1.3; }
+  .results :global(.ex) { margin: 0; overflow-wrap: anywhere; }
+  .results :global(mark), .results :global(h2 mark) { background: var(--highlight); color: var(--ink); padding: 0 0.1em; border-radius: 2px; }
+</style>

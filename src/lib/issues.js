@@ -56,7 +56,7 @@ const issues = Object.entries(files)
         // Original publication date of the story (front matter newsDates, same order as the items); null = unknown
         published: checkDate(data.newsDates?.[idx], data.number),
       })),
-      inspirations: splitItems(parts['inspirations']?.markdown).map((it, idx) => ({ ...it, issue: data.number, date: data.date, topics: checkTopics(data.inspirationTopics?.[idx], data.number) })),
+      inspirations: splitItems(parts['inspirations']?.markdown).map((it, idx) => ({ ...it, issue: data.number, date: data.date, anchor: `inspiration-${idx + 1}`, topics: checkTopics(data.inspirationTopics?.[idx], data.number) })),
       body: content,
     };
   })
