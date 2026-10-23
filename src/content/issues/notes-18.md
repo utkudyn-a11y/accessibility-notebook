@@ -9,7 +9,7 @@ linkedinUrl: "https://www.linkedin.com/pulse/notes-18-netflix-judicial-services-
 personalNoteTitle: "A Braille-Labelled Hot Wheels Car in a Bursa Shopping Mall"
 inDetailTitle: "Norway Font For The 2026 FIFA World Cup"
 inDetailSlug: "norway-font-for-the-2026-fifa-world-cup"
-discussion: [{"context": "A Tech Policy article argues that the web is being made readable for AI agents, not for people. AI only needs plain text, while screen reader users also need headings, landmarks, link text and alt text.", "question": "Will the AI agent boom help screen reader users, or leave them behind?"}]
+discussion: [{"context": "A Tech Policy article argues that the web is being made readable for AI agents, not for people. AI only needs plain text, while screen reader users also need headings, landmarks, link text and alt text.", "question": "Will the AI agent boom help screen reader users, or leave them behind?", "options": ["It will help them", "It will leave them behind", "It depends on how sites are built"]}]
 inspirationTopics: [["AI"], ["Strategy"], ["Design"]]
 newsDates: ["2026-06-21", "2026-05-18", "2026-06-24"]
 ---

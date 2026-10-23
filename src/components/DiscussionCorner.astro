@@ -1,15 +1,27 @@
 ---
-// Discussion Corner: shows one question at a time, picked at random from the "discussion"
-// list in each issue's front matter. There is deliberately no page that lists every question.
-import { getIssues } from '../lib/issues.js';
+// Discussion Corner: one random question at a time from the "discussion" list in each issue's
+// front matter, with a vote. There is deliberately no page that lists every question.
+// Votes are stored by the Pages Function in functions/api/votes.js.
+import { getIssues, formatDateLong } from '../lib/issues.js';
+import { OTHER_OPTION, questionId } from '../lib/discussion.js';
 
 const { headingLevel = 2 } = Astro.props;
 const H = `h${headingLevel}`;
 
 const questions = getIssues().flatMap((i) =>
-  (i.discussion || []).map((d) => ({ n: i.number, date: i.date, dateText: new Date(`${i.date}T12:00:00Z`).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }), issue: i.url, linkedin: i.linkedinUrl, context: d.context, question: d.question }))
+  (i.discussion || []).map((d, k) => ({
+    id: questionId(i.number, k),
+    n: i.number,
+    date: i.date,
+    dateText: formatDateLong(i.date),
+    issue: i.url,
+    linkedin: i.linkedinUrl,
+    context: d.context,
+    question: d.question,
+    options: [...(d.options || []), OTHER_OPTION],
+  }))
 );
-// Without JavaScript, readers see the latest issue's question.
+// Without JavaScript, readers see the latest issue's question (no vote).
 const first = questions[0];
 ---
 {first && (
@@ -31,17 +43,117 @@ const first = questions[0];
     </div>
 
     <button type="button" class="another" hidden>Show another question</button>
+    <p class="visually-hidden dc-status" aria-live="polite"></p>
   </section>
 )}
 
 <script>
-  type Q = { n: number; date: string; dateText: string; issue: string; linkedin: string; context: string; question: string };
+  type Q = { id: string; n: number; date: string; dateText: string; issue: string; linkedin: string; context: string; question: string; options: string[] };
+  type Res = { counts: number[]; total: number };
   const root = document.querySelector<HTMLElement>('.dc');
   if (root) {
     const all: Q[] = JSON.parse(root.dataset.questions || '[]');
     const body = root.querySelector<HTMLElement>('.q-body')!;
-    const button = root.querySelector<HTMLButtonElement>('.another')!;
+    const another = root.querySelector<HTMLButtonElement>('.another')!;
+    const status = root.querySelector<HTMLElement>('.dc-status')!;
     const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
+    const plural = (n: number) => `${n} ${n === 1 ? 'vote' : 'votes'}`;
+
+    // Remember which option this browser voted for (only a convenience; it may be unavailable).
+    const store = {
+      get(id: string): number | null {
+        try { const v = localStorage.getItem(`an-vote-${id}`); return v === null ? null : Number(v); } catch { return null; }
+      },
+      set(id: string, option: number) {
+        try { localStorage.setItem(`an-vote-${id}`, String(option)); } catch {}
+      },
+    };
+
+    const head = (q: Q) =>
+      `<p class="over">From Notes # ${q.n} on <time datetime="${esc(q.date)}">${esc(q.dateText)}</time></p>` +
+      `<p class="context">${esc(q.context)}</p>`;
+    const linkedinLink = (q: Q) =>
+      `<a href="${esc(q.linkedin)}">Share your view on LinkedIn<span class="visually-hidden"> (Notes # ${q.n} post)</span></a>`;
+    const readLink = (q: Q) => `<a href="${esc(q.issue)}">Read Notes # ${q.n}</a>`;
+
+    const renderForm = (q: Q, error = '') => {
+      body.innerHTML =
+        head(q) +
+        `<form class="vote-form" novalidate>` +
+          `<fieldset><legend class="ask">${esc(q.question)}</legend>` +
+          `<div class="opts">` +
+          q.options.map((o, i) =>
+            `<label class="opt${i === q.options.length - 1 ? ' other' : ''}"><input type="radio" name="vote-${esc(q.id)}" value="${i}"> <span>${esc(o)}</span></label>`
+          ).join('') +
+          `</div></fieldset>` +
+          `<p class="vote-error" role="alert">${esc(error)}</p>` +
+          `<button type="submit" class="vote">Vote</button>` +
+        `</form>` +
+        `<p class="links">${linkedinLink(q)}${readLink(q)}</p>`;
+      const form = body.querySelector<HTMLFormElement>('form')!;
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        if (form.querySelector('.vote')!.getAttribute('aria-disabled') === 'true') return; // already sending
+        const picked = form.querySelector<HTMLInputElement>('input:checked');
+        const err = form.querySelector<HTMLElement>('.vote-error')!;
+        if (!picked) {
+          err.textContent = 'Choose an option first.';
+          form.querySelector<HTMLInputElement>('input')!.focus();
+          return;
+        }
+        vote(q, Number(picked.value), form);
+      });
+    };
+
+    const renderResults = (q: Q, r: Res, mine: number | null, justVoted: boolean) => {
+      const rows = q.options.map((o, i) => {
+        const c = r.counts[i] || 0;
+        const pct = r.total ? Math.round((c / r.total) * 100) : 0;
+        return `<li${i === mine ? ' class="mine"' : ''}><div class="row"><span class="lbl">${esc(o)}${i === mine ? ' <span class="yours">Your vote</span>' : ''}</span>` +
+          `<span class="pct">${pct}% <small>(${plural(c)})</small></span></div>` +
+          `<div class="bar" aria-hidden="true"><span style="width:${pct}%"></span></div></li>`;
+      }).join('');
+      body.innerHTML =
+        head(q) +
+        `<p class="ask">${esc(q.question)}</p>` +
+        `<p class="total" tabindex="-1">${justVoted ? '<span class="visually-hidden">Your vote is saved. Results: </span>' : ''}${plural(r.total)}</p>` +
+        `<ul class="res">${rows}</ul>` +
+        `<p class="thanks">${mine !== null ? 'Thanks for voting! ' : ''}${justVoted && r.total === 1 ? "You're the first one here. " : ''}Why did you choose this? ${linkedinLink(q)}</p>` +
+        `<p class="links">${readLink(q)}</p>`;
+      if (justVoted) body.querySelector<HTMLElement>('.total')!.focus();
+    };
+
+    const vote = async (q: Q, option: number, form: HTMLFormElement) => {
+      const btn = form.querySelector<HTMLButtonElement>('.vote')!;
+      const err = form.querySelector<HTMLElement>('.vote-error')!;
+      btn.setAttribute('aria-disabled', 'true');
+      btn.textContent = 'Saving…';
+      try {
+        const res = await fetch('/api/votes', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ q: q.id, option }) });
+        if (!res.ok) throw new Error(String(res.status));
+        const data: Res = await res.json();
+        store.set(q.id, option);
+        renderResults(q, data, option, true);
+      } catch {
+        btn.removeAttribute('aria-disabled');
+        btn.textContent = 'Vote';
+        err.textContent = 'Sorry, your vote could not be saved. Please try again in a moment.';
+      }
+    };
+
+    const show = async (q: Q) => {
+      const mine = store.get(q.id);
+      if (mine === null) return renderForm(q);
+      body.innerHTML = head(q) + `<p class="ask">${esc(q.question)}</p><p class="total">Loading results…</p>`;
+      try {
+        const res = await fetch(`/api/votes?q=${encodeURIComponent(q.id)}`);
+        if (!res.ok) throw new Error(String(res.status));
+        renderResults(q, await res.json(), mine, false);
+      } catch {
+        body.innerHTML = head(q) + `<p class="ask">${esc(q.question)}</p><p class="total">You voted on this question. The results could not be loaded right now.</p>` +
+          `<p class="links">${linkedinLink(q)}${readLink(q)}</p>`;
+      }
+    };
 
     // Shuffled deck: every question comes up once before any repeats.
     let deck: number[] = [];
@@ -58,21 +170,16 @@ const first = questions[0];
       last = deck.pop()!;
       return all[last];
     };
-    const show = (q: Q) => {
-      body.innerHTML =
-        `<p class="over">From Notes # ${q.n} on <time datetime="${esc(q.date)}">${esc(q.dateText)}</time></p>` +
-        `<p class="context">${esc(q.context)}</p>` +
-        `<p class="ask">${esc(q.question)}</p>` +
-        `<p class="links"><a href="${esc(q.linkedin)}">Share your view on LinkedIn<span class="visually-hidden"> (Notes # ${q.n} post)</span></a>` +
-        `<a href="${esc(q.issue)}">Read Notes # ${q.n}</a></p>`;
-    };
 
     if (all.length) {
       show(next()); // a surprise question on every visit
-      body.setAttribute('aria-live', 'polite');
       if (all.length > 1) {
-        button.hidden = false;
-        button.addEventListener('click', () => show(next()));
+        another.hidden = false;
+        another.addEventListener('click', () => {
+          const q = next();
+          show(q);
+          status.textContent = `New question from Notes # ${q.n}: ${q.question}`;
+        });
       }
     }
   }
@@ -84,20 +191,58 @@ const first = questions[0];
   .intro { max-width: 60ch; }
 
   /* The question card is a speech bubble */
-  .q { position: relative; max-width: 44rem; margin: 1.5rem 0 2rem; background: #fff; border: 2px solid var(--notebook); border-radius: 12px; padding: 1.5rem 1.6rem 1.25rem 4.6rem; }
+  .q { position: relative; max-width: 44rem; margin: 1.5rem 0 2rem; background: #fff; border: 2px solid var(--notebook); border-radius: 12px; padding: 1.5rem 1.6rem 1.4rem 4.6rem; }
   .q::after { content: ''; position: absolute; left: 2.2rem; bottom: -14px; width: 24px; height: 24px; background: #fff; border-right: 2px solid var(--notebook); border-bottom: 2px solid var(--notebook); transform: rotate(45deg); }
   .mark { position: absolute; left: 1.2rem; top: 1.4rem; width: 2.4rem; height: 2.4rem; border-radius: 50%; background: var(--highlight); color: var(--ink); display: grid; place-items: center; font-weight: 800; font-size: 1.4rem; }
   .q-body :global(p) { margin: 0; }
   .q-body :global(.over) { font-size: var(--step--1); color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.06em; font-weight: 700; margin-bottom: 0.5rem; }
-  .q-body :global(.context) { margin-bottom: 0.6rem; }
+  .q-body :global(.context) { margin-bottom: 0.8rem; }
   .q-body :global(.ask) { font-weight: 800; font-size: 1.25rem; line-height: 1.4; color: var(--notebook); margin-bottom: 0.6rem; }
-  .q-body :global(.links) { display: flex; flex-wrap: wrap; gap: 0 1.5rem; }
+  .q-body :global(.links) { display: flex; flex-wrap: wrap; gap: 0 1.5rem; margin-top: 0.6rem; }
   .q-body :global(.links a) { display: inline-flex; align-items: center; min-height: 44px; font-weight: 700; }
+
+  /* Vote form */
+  .q-body :global(fieldset) { border: 0; padding: 0; margin: 0; min-width: 0; }
+  .q-body :global(legend) { padding: 0; margin-bottom: 0.7rem; }
+  .q-body :global(.opts) { display: grid; gap: 0.5rem; }
+  .q-body :global(.opt) { display: flex; align-items: flex-start; gap: 0.7rem; padding: 0.65rem 0.9rem; border: 2px solid var(--rule); border-radius: 8px; cursor: pointer; min-height: 48px; }
+  .q-body :global(.opt input) { width: 1.3rem; height: 1.3rem; margin: 0.15rem 0 0; accent-color: var(--notebook); flex: none; }
+  .q-body :global(.opt:hover) { border-color: var(--notebook); }
+  .q-body :global(.opt:has(input:checked)) { border-color: var(--notebook); background: var(--tint); }
+  .q-body :global(.opt:has(input:focus-visible)) { outline: 3px solid var(--notebook); outline-offset: 2px; }
+  .q-body :global(.opt.other) { border-style: dashed; }
+  .q-body :global(.vote-error:not(:empty)) { margin-top: 0.8rem; font-weight: 700; color: #a3123a; }
+  .q-body :global(.vote) { margin-top: 1rem; font: inherit; font-weight: 800; padding: 0.7rem 1.8rem; min-height: 48px; border: 2px solid var(--notebook); background: var(--notebook); color: #fff; border-radius: 6px; cursor: pointer; }
+  .q-body :global(.vote:hover) { background: #fff; color: var(--notebook); }
+  .q-body :global(.vote[aria-disabled='true']) { opacity: 0.75; cursor: progress; }
+
+  /* Results */
+  .q-body :global(.total) { font-weight: 700; color: var(--ink-soft); margin-bottom: 0.9rem; }
+  .q-body :global(.total:focus) { outline: none; }
+  .q-body :global(.total:focus-visible) { outline: 3px solid var(--notebook); outline-offset: 3px; }
+  .q-body :global(.res) { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.8rem; }
+  .q-body :global(.res li) { margin: 0; }
+  .q-body :global(.row) { display: flex; justify-content: space-between; gap: 1rem; align-items: baseline; }
+  .q-body :global(.pct) { font-weight: 800; white-space: nowrap; }
+  .q-body :global(.pct small) { font-weight: 400; color: var(--ink-soft); font-size: 0.9rem; }
+  .q-body :global(.bar) { height: 0.75rem; border-radius: 999px; background: var(--tint); border: 1px solid var(--rule); margin-top: 0.3rem; overflow: hidden; }
+  .q-body :global(.bar span) { display: block; height: 100%; background: #8f78c9; }
+  .q-body :global(.mine .bar span) { background: var(--notebook); }
+  .q-body :global(.mine .lbl) { font-weight: 800; }
+  .q-body :global(.yours) { display: inline-block; margin-left: 0.4rem; font-size: 0.8rem; font-weight: 800; background: var(--highlight); color: var(--ink); border-radius: 4px; padding: 0.05rem 0.4rem; white-space: nowrap; }
+  .q-body :global(.thanks) { margin-top: 1rem; padding: 0.8rem 1rem; background: var(--tint); border-radius: 8px; }
+  .q-body :global(.thanks a) { font-weight: 800; }
+  @media (forced-colors: active) {
+    .q-body :global(.bar) { border-color: CanvasText; }
+    .q-body :global(.bar span) { background: CanvasText; }
+  }
+
   @media (max-width: 30rem) {
     .q { padding: 4rem 1.25rem 1.25rem; }
     .mark { left: 1.25rem; top: 1.1rem; }
+    .q-body :global(.row) { flex-direction: column; gap: 0; }
   }
 
-  .another { font: inherit; font-weight: 800; padding: 0.7rem 1.6rem; min-height: 48px; border: 2px solid var(--notebook); background: var(--notebook); color: #fff; border-radius: 6px; cursor: pointer; }
-  .another:hover { background: #fff; color: var(--notebook); }
+  .another { font: inherit; font-weight: 800; padding: 0.7rem 1.6rem; min-height: 48px; border: 2px solid var(--notebook); background: #fff; color: var(--notebook); border-radius: 6px; cursor: pointer; }
+  .another:hover { background: var(--notebook); color: #fff; }
 </style>

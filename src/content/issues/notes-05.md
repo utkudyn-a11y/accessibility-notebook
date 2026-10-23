@@ -7,7 +7,7 @@ cover: "/images/notes-05-cover.jpg"
 album: {"artist": "Yahritza Y Su Esencia", "title": "Metamorfosis", "url": "https://open.spotify.com/intl-tr/album/05UjWgHQqCa8cYoMmDmUlg"}
 linkedinUrl: "https://www.linkedin.com/pulse/notes-5-italys-accessibility-guidelines-digital-euro-math-demiryakan-ynedf/"
 personalNoteTitle: "AI and Humans Describing a Documentary Together"
-discussion: [{"context": "Utku watched a documentary whose audio description was written by AI and then edited by a human. It worked well and took less effort, but at times the description clashed with the dialogue.", "question": "Should AI-first, human-edited audio description become the norm, or should it stay a fully human craft?"}]
+discussion: [{"context": "Utku watched a documentary whose audio description was written by AI and then edited by a human. It worked well and took less effort, but at times the description clashed with the dialogue.", "question": "Should AI-first, human-edited audio description become the norm, or should it stay a fully human craft?", "options": ["AI-first, human-edited should be the norm", "It should stay a fully human craft", "It depends on the content"]}]
 inspirationTopics: [["Design", "Testing"], ["Testing", "Resources"], ["Resources", "Design"]]
 newsDates: ["2026-03-11", "2026-02-24", "2026-03-04", null]
 ---

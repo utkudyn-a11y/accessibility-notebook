@@ -9,7 +9,7 @@ linkedinUrl: "https://www.linkedin.com/pulse/notes-11-indias-voice-first-revolut
 personalNoteTitle: "Beating Becky: Duolingo's Time Challenges and Screen Magnifiers"
 inDetailTitle: "What Does The European Commission’s Mid‑Term Report Say To Us?"
 inDetailSlug: "what-does-the-european-commissions-mid-term-report-say-to-us"
-discussion: [{"context": "Ryan Jones tested kiosks at four US airports and found accessibility hardware that was there but didn't work, along with the argument that low usage makes accessibility impractical.", "question": "Is low usage a reason to invest less, or a sign that the accessibility isn't working?"}]
+discussion: [{"context": "Ryan Jones tested kiosks at four US airports and found accessibility hardware that was there but didn't work, along with the argument that low usage makes accessibility impractical.", "question": "Is low usage a reason to invest less, or a sign that the accessibility isn't working?", "options": ["A reason to invest less", "A sign that the accessibility isn't working"]}]
 inspirationTopics: [["Disability & Stories", "Testing"], ["AI", "Disability & Stories"], ["AI", "Strategy"]]
 newsDates: ["2026-04-27", "2026-05-06", null]
 ---

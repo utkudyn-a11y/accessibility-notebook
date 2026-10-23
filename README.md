@@ -12,8 +12,9 @@ The website of [Accessibility Notebook](https://buttondown.com/accessibility-not
    - `linkedinUrl`: the LinkedIn article address
    - `personalNoteTitle`: a title for the Personal Notes section
    - `inDetailTitle` and `inDetailSlug`: the In Detail title and its web address (lowercase, words joined with `-`)
-   - `discussion`: one or more Discussion Corner questions, each with a short `context` and the `question` itself, for example
-     `discussion: [{"context": "Some background.", "question": "What do you think?"}]`.
+   - `discussion`: one or more Discussion Corner questions, each with a short `context`, the `question` itself and 2–4 vote `options`, for example
+     `discussion: [{"context": "Some background.", "question": "Yes or no?", "options": ["Yes", "No"]}]`.
+     "Something else, I'll explain on LinkedIn" is added as the last option automatically. Never reorder or remove options of a published question: votes are stored by option position.
      The home page shows one question at a time, at random; there is no page that lists them all.
    - `inspirationTopics`: the topics of each Inspirations item, one list per item, in the same order as the items, for example
      `inspirationTopics: [["AI", "Development"], ["Design"], ["Resources", "Disability & Stories"]]`.
@@ -61,3 +62,11 @@ The website of [Accessibility Notebook](https://buttondown.com/accessibility-not
 | `npm run dev` | Local preview at http://localhost:4321 |
 | `npm run build` | Builds the site into `dist/` |
 | `npm run test:a11y` | Runs axe (WCAG 2.2 AA) on every built page, desktop and mobile |
+
+## Discussion Corner votes
+
+- Votes are counted by a Cloudflare Pages Function (`functions/api/votes.js`) in the D1 database `notebook-votes`, bound to the Pages project as `DB` (Settings → Bindings). The table is created by `schema.sql`.
+- Only a counter per question and option is stored; no personal data. A browser remembers its own vote in localStorage.
+- `scripts/gen-questions.mjs` runs before every build and tells the API which question ids (`<issue>-<n>`) and how many options exist.
+- A Cloudflare rate limiting rule ("Discussion Corner votes") blocks more than 5 votes in 10 seconds from one IP.
+- To reset all votes: run `DELETE FROM votes;` in the D1 console.

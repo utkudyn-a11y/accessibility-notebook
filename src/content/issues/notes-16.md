@@ -9,7 +9,7 @@ linkedinUrl: "https://www.linkedin.com/pulse/notes-16-legal-action-france-inclus
 personalNoteTitle: "Correcting Myself: FIFA's Audio Description App Just Works"
 inDetailTitle: "AI and Human Collaboration in Accessibility Work – The Binclusive Example"
 inDetailSlug: "ai-and-human-collaboration-in-accessibility-work-the-binclusive-example"
-discussion: [{"context": "Axess Lab looked at a site built with Lovable's AI that scored 100% in its built-in accessibility check, and manual testing still found real problems.", "question": "Should tools be allowed to show a \"100% accessible\" score at all?"}]
+discussion: [{"context": "Axess Lab looked at a site built with Lovable's AI that scored 100% in its built-in accessibility check, and manual testing still found real problems.", "question": "Should tools be allowed to show a \"100% accessible\" score at all?", "options": ["Yes, with a clear note on what automated checks miss", "No, it misleads people"]}]
 inspirationTopics: [["Design", "Resources"], ["AI", "Testing"], ["AI"]]
 newsDates: ["2026-06-02", "2026-06-02", "2026-05-21"]
 ---
