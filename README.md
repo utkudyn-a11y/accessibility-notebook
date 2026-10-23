@@ -14,7 +14,7 @@ The website of [Accessibility Notebook](https://buttondown.com/accessibility-not
    - `inDetailTitle` and `inDetailSlug`: the In Detail title and its web address (lowercase, words joined with `-`)
    - `discussion`: one or more Discussion Corner questions, each with a short `context`, the `question` itself and 2–4 vote `options`, for example
      `discussion: [{"context": "Some background.", "question": "Yes or no?", "options": ["Yes", "No"]}]`.
-     "Something else, I'll explain on LinkedIn" is added as the last option automatically. Never reorder or remove options of a published question: votes are stored by option position.
+     Never reorder or remove options of a published question: votes are stored by option position.
      The home page shows one question at a time, at random; there is no page that lists them all.
    - `inspirationTopics`: the topics of each Inspirations item, one list per item, in the same order as the items, for example
      `inspirationTopics: [["AI", "Development"], ["Design"], ["Resources", "Disability & Stories"]]`.

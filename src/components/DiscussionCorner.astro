@@ -3,7 +3,7 @@
 // front matter, with a vote. There is deliberately no page that lists every question.
 // Votes are stored by the Pages Function in functions/api/votes.js.
 import { getIssues, formatDateLong } from '../lib/issues.js';
-import { OTHER_OPTION, questionId } from '../lib/discussion.js';
+import { questionId } from '../lib/discussion.js';
 
 const { headingLevel = 2 } = Astro.props;
 const H = `h${headingLevel}`;
@@ -18,7 +18,7 @@ const questions = getIssues().flatMap((i) =>
     linkedin: i.linkedinUrl,
     context: d.context,
     question: d.question,
-    options: [...(d.options || []), OTHER_OPTION],
+    options: d.options || [],
   }))
 );
 // Without JavaScript, readers see the latest issue's question (no vote).
@@ -83,7 +83,7 @@ const first = questions[0];
           `<fieldset><legend class="ask">${esc(q.question)}</legend>` +
           `<div class="opts">` +
           q.options.map((o, i) =>
-            `<label class="opt${i === q.options.length - 1 ? ' other' : ''}"><input type="radio" name="vote-${esc(q.id)}" value="${i}"> <span>${esc(o)}</span></label>`
+            `<label class="opt"><input type="radio" name="vote-${esc(q.id)}" value="${i}"> <span>${esc(o)}</span></label>`
           ).join('') +
           `</div></fieldset>` +
           `<p class="vote-error" role="alert">${esc(error)}</p>` +
@@ -210,7 +210,6 @@ const first = questions[0];
   .q-body :global(.opt:hover) { border-color: var(--notebook); }
   .q-body :global(.opt:has(input:checked)) { border-color: var(--notebook); background: var(--tint); }
   .q-body :global(.opt:has(input:focus-visible)) { outline: 3px solid var(--notebook); outline-offset: 2px; }
-  .q-body :global(.opt.other) { border-style: dashed; }
   .q-body :global(.vote-error:not(:empty)) { margin-top: 0.8rem; font-weight: 700; color: #a3123a; }
   .q-body :global(.vote) { margin-top: 1rem; font: inherit; font-weight: 800; padding: 0.7rem 1.8rem; min-height: 48px; border: 2px solid var(--notebook); background: var(--notebook); color: #fff; border-radius: 6px; cursor: pointer; }
   .q-body :global(.vote:hover) { background: #fff; color: var(--notebook); }
