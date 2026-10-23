@@ -8,6 +8,7 @@ album: {"artist": "Yahritza Y Su Esencia", "title": "Metamorfosis", "url": "http
 linkedinUrl: "https://www.linkedin.com/pulse/notes-5-italys-accessibility-guidelines-digital-euro-math-demiryakan-ynedf/"
 personalNoteTitle: "AI and Humans Describing a Documentary Together"
 discussion: [{"context": "Utku watched a documentary whose audio description was written by AI and then edited by a human. It worked well and took less effort, but at times the description clashed with the dialogue.", "question": "Should AI-first, human-edited audio description become the norm, or should it stay a fully human craft?"}]
+inspirationTopics: [["Design", "Testing"], ["Testing", "Resources"], ["Resources", "Design"]]
 ---
 
 <!-- section:personal-notes -->

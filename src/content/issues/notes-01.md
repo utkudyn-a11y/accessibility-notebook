@@ -8,6 +8,7 @@ album: {"artist": "ROSALİA", "title": "LUX", "url": "https://open.spotify.com/i
 linkedinUrl: "https://www.linkedin.com/pulse/notes-digital-accessibility-1-web-almanac-sundance-film-demiryakan-mrkdf/"
 personalNoteTitle: "2026 Starts Fast: Northern Cyprus and an Invitation to Zero Project"
 discussion: [{"context": "The Missouri Chamber wants to give businesses more time to fix minor technical accessibility issues, and the right to counter-sue, to protect small businesses from \"abusive lawsuits.\"", "question": "Is this a fair balance, or does it weaken the right to equal access?"}]
+inspirationTopics: [["Resources", "Disability & Stories"], ["Disability & Stories", "Design"], ["AI", "Resources"]]
 ---
 
 Hey there! This is Utku, and as an “accessibility person” dealing with almost every aspect of digital accessibility, this newsletter is as my personal notebook. I will share recent updates from me, some digital accessibility news and inspirations that I read or watched. While consuming a lot of content, I have a responsibility to share knowledge and give back to the field as well. So, I will share an article from me at the end each issue. Enjoy!

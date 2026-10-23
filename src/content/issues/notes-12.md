@@ -10,6 +10,7 @@ personalNoteTitle: "Fifty Awareness Weeks Later: We Need Action, Not Awareness"
 inDetailTitle: "The Short History Of 10 – 16 May Disability Awareness Week"
 inDetailSlug: "the-short-history-of-10-16-may-disability-awareness-week"
 discussion: [{"context": "Utku says he's tired of Turkey's yearly Disability Awareness Week: plenty of events and strong speeches, but little action.", "question": "Should awareness weeks continue, change their format, or be replaced altogether? What would you do instead?"}]
+inspirationTopics: [["AI"], ["AI", "Resources"], ["Disability & Stories"]]
 ---
 
 <!-- section:personal-notes -->

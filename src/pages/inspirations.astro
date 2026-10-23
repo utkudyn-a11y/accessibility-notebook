@@ -1,16 +1,104 @@
 ---
 import Base from '../layouts/Base.astro';
 import ItemFeed from '../components/ItemFeed.astro';
-import { getIssues } from '../lib/issues.js';
+import { getIssues, TOPICS, topicSlug } from '../lib/issues.js';
+
+const issues = getIssues();
+const items = issues.flatMap((i) => i.inspirations);
+const counts = Object.fromEntries(TOPICS.map((t) => [t, items.filter((it) => it.topics?.includes(t)).length]));
+const options = [{ label: 'All', slug: 'all', count: items.length }, ...TOPICS.map((t) => ({ label: t, slug: topicSlug(t), count: counts[t] }))];
 ---
-<Base title="Inspirations" description="Articles, videos and tools on digital accessibility that inspired Utku Demiryakan, newest first.">
+<Base title="Inspirations" description="Articles, videos and tools on digital accessibility that inspired Utku Demiryakan, newest first. Filter by AI, design, development, testing, legal and standards, disability stories, resources and strategy.">
   <div class="wrap page reading">
     <h1>Inspirations</h1>
     <p class="lead">Articles, videos and tools that taught me something about accessibility. Newest first.</p>
-    <ItemFeed issues={getIssues()} field="inspirations" />
+
+    <div class="filter-area" data-total={items.length} hidden>
+      <fieldset class="filter">
+        <legend>Filter by topic</legend>
+        <div class="chips">
+          {options.map((o) => (
+            <label class="chip">
+              <input type="radio" name="topic" value={o.slug} data-label={o.label} data-count={o.count} checked={o.slug === 'all'} />
+              <span class="face">{o.label} <span class="n">{o.count}</span></span>
+            </label>
+          ))}
+        </div>
+      </fieldset>
+      <div class="status">
+        <p class="status-text" aria-live="polite">Showing all {items.length} inspirations</p>
+        <button type="button" class="show-all" hidden>Show all</button>
+      </div>
+    </div>
+
+    <ItemFeed issues={issues} field="inspirations" showTopics />
   </div>
 </Base>
+
+<script>
+  const area = document.querySelector<HTMLElement>('.filter-area');
+  if (area) {
+    const total = Number(area.dataset.total);
+    const radios = [...area.querySelectorAll<HTMLInputElement>('input[name="topic"]')];
+    const statusText = area.querySelector<HTMLElement>('.status-text')!;
+    const showAll = area.querySelector<HTMLButtonElement>('.show-all')!;
+    const items = [...document.querySelectorAll<HTMLElement>('.item[data-topics]')];
+    const groups = [...document.querySelectorAll<HTMLElement>('.group')];
+
+    const apply = (slug: string, updateUrl: boolean) => {
+      const radio = radios.find((r) => r.value === slug) || radios[0];
+      radio.checked = true;
+      const all = radio.value === 'all';
+      for (const it of items) it.hidden = !all && !(it.dataset.topics || '').split(' ').includes(radio.value);
+      for (const g of groups) g.hidden = !g.querySelector('.item:not([hidden])');
+      statusText.textContent = all
+        ? `Showing all ${total} inspirations`
+        : `Showing ${radio.dataset.count} of ${total} inspirations in ${radio.dataset.label}`;
+      showAll.hidden = all;
+      if (updateUrl) {
+        const url = new URL(location.href);
+        if (all) url.searchParams.delete('topic'); else url.searchParams.set('topic', radio.value);
+        history.replaceState(null, '', url);
+      }
+    };
+
+    area.hidden = false;
+    for (const r of radios) r.addEventListener('change', () => apply(r.value, true));
+    showAll.addEventListener('click', () => {
+      apply('all', true);
+      radios[0].focus();
+    });
+    const start = new URL(location.href).searchParams.get('topic');
+    if (start && start !== 'all') apply(start, false);
+  }
+</script>
+
 <style>
   .page { padding-top: 2.5rem; }
   .lead { font-size: var(--step-1); line-height: 1.45; }
+
+  .filter { border: 0; padding: 0; margin: 1.5rem 0 0; min-width: 0; }
+  .filter legend { font-weight: 800; padding: 0; margin-bottom: 0.6rem; }
+  .chips { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .chip { position: relative; }
+  .chip input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
+  .face { display: inline-flex; align-items: center; gap: 0.45rem; min-height: 44px; padding: 0.35rem 0.95rem; border: 2px solid var(--notebook); border-radius: 999px; background: #fff; color: var(--notebook); font-weight: 700; }
+  .n { font-weight: 400; font-size: 0.9em; color: var(--ink-soft); }
+  .chip:hover .face { background: var(--tint); }
+  .chip input:checked + .face { background: var(--notebook); color: #fff; }
+  .chip input:checked + .face .n { color: #e4dcfa; }
+  .chip input:checked + .face::before { content: '✓' / ''; font-weight: 800; }
+  .chip input:focus-visible + .face { outline: 3px solid var(--notebook); outline-offset: 3px; }
+  @media (forced-colors: active) {
+    .chip input:checked + .face { outline: 3px solid CanvasText; }
+  }
+  @media (max-width: 30rem) {
+    .chips { gap: 0.4rem; }
+    .face { padding: 0.3rem 0.75rem; font-size: 1rem; gap: 0.35rem; }
+  }
+
+  .status { display: flex; flex-wrap: wrap; align-items: center; gap: 0 1rem; margin: 1.25rem 0 0; padding: 0.5rem 1rem; background: var(--tint); border-radius: 8px; }
+  .status-text { margin: 0; font-weight: 700; padding: 0.4rem 0; }
+  .show-all { font: inherit; font-weight: 700; color: var(--notebook); background: none; border: 0; padding: 0; min-height: 44px; text-decoration: underline; text-underline-offset: 0.18em; cursor: pointer; }
+  .show-all:hover { text-decoration-thickness: 0.16em; }
 </style>

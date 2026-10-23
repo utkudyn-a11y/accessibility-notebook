@@ -21,6 +21,14 @@ export const plainText = (md, max = 220) => {
   return t.length > max ? t.slice(0, t.lastIndexOf(' ', max)) + '…' : t;
 };
 
+// Inspirations topics. Each issue lists them in front matter (inspirationTopics), one entry per item, in order.
+export const TOPICS = ['AI', 'Design', 'Development', 'Testing', 'Legal & Standards', 'Disability & Stories', 'Resources', 'Strategy'];
+export const topicSlug = (t) => t.toLowerCase().replace(/&/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+const checkTopics = (list = [], n) => {
+  for (const t of list) if (!TOPICS.includes(t)) throw new Error(`Notes # ${n}: unknown Inspirations topic "${t}". Use one of: ${TOPICS.join(', ')}`);
+  return list;
+};
+
 const issues = Object.entries(files)
   .map(([path, raw]) => {
     const { data, content } = matter(raw);
@@ -33,7 +41,7 @@ const issues = Object.entries(files)
       intro,
       sections: parts,
       news: splitItems(parts['news']?.markdown).map((it) => ({ ...it, issue: data.number, date: data.date })),
-      inspirations: splitItems(parts['inspirations']?.markdown).map((it) => ({ ...it, issue: data.number, date: data.date })),
+      inspirations: splitItems(parts['inspirations']?.markdown).map((it, idx) => ({ ...it, issue: data.number, date: data.date, topics: checkTopics(data.inspirationTopics?.[idx], data.number) })),
       body: content,
     };
   })

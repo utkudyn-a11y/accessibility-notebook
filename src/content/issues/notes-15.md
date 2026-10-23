@@ -10,6 +10,7 @@ personalNoteTitle: "AJet's Accessibility Page Is Live"
 inDetailTitle: "What We Considered While Creating AJet’s Accessibility Page?"
 inDetailSlug: "what-we-considered-while-creating-ajets-accessibility-page"
 discussion: [{"context": "NPR reports that more than 30 US states have banned phones in schools, and some want to remove laptops and tablets as well, even though some students with disabilities depend on them.", "question": "Should screen bans come with exemptions, or would that single out the students who need them?"}, {"context": "Sheri Byrne-Haber says face-based age verification often fails people with disabilities, so it should never be the only option.", "question": "If an alternative path exists, does it need to be just as easy as the main one?"}]
+inspirationTopics: [["Disability & Stories"], ["Development", "Design"], ["Disability & Stories"]]
 ---
 
 <!-- section:personal-notes -->

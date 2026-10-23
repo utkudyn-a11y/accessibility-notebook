@@ -8,6 +8,7 @@ album: {"artist": "Altın Gün", "title": "Garip", "url": "https://youtube.com/p
 linkedinUrl: "https://www.linkedin.com/pulse/notes-3-zerocon26-youtube-united-nations-utku-demiryakan-llsgf/"
 personalNoteTitle: "Two Panels at ZeroCon26: Accessible Aviation and Skills Development"
 discussion: [{"context": "Lucy Greco argues that CES's separate accessibility stage made products harder to find and kept them out of mainstream coverage. Utku thinks a dedicated stage still helps people discover these solutions.", "question": "Who's right?"}]
+inspirationTopics: [["Disability & Stories", "Strategy"], ["Design", "Disability & Stories"], ["Disability & Stories"]]
 ---
 
 <!-- section:personal-notes -->

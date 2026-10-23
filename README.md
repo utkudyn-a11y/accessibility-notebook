@@ -15,6 +15,9 @@ The website of [Accessibility Notebook](https://buttondown.com/accessibility-not
    - `discussion`: one or more Discussion Corner questions, each with a short `context` and the `question` itself, for example
      `discussion: [{"context": "Some background.", "question": "What do you think?"}]`.
      The home page shows one question at a time, at random; there is no page that lists them all.
+   - `inspirationTopics`: the topics of each Inspirations item, one list per item, in the same order as the items, for example
+     `inspirationTopics: [["AI", "Development"], ["Design"], ["Resources", "Disability & Stories"]]`.
+     Allowed topics: AI, Design, Development, Testing, Legal & Standards, Disability & Stories, Resources, Strategy (one or two per item). A misspelled topic stops the build with an error message.
 3. Write the issue below. Each section starts with its marker and heading:
 
    ```markdown

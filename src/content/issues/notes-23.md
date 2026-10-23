@@ -10,6 +10,7 @@ personalNoteTitle: "A CAPTCHA I Can't See: Booking a Schengen Visa Appointment"
 inDetailTitle: "Bonus: What W3C Says on CAPTCHAs?"
 inDetailSlug: "what-w3c-says-on-captchas"
 discussion: [{"context": "At almost every step of booking a Schengen visa appointment, Utku is shown a light gray CAPTCHA on a white background that he simply can't read. W3C has long warned that traditional CAPTCHAs lock out many people with disabilities.", "question": "Should CAPTCHAs be banned from public services? What would you use instead?"}, {"context": "Utku's design team sometimes can't agree on colors because WCAG's contrast formula doesn't match real human perception.", "question": "Should we wait for APCA in WCAG 3, or keep following the current rule even when it feels wrong?"}]
+inspirationTopics: [["Legal & Standards", "Design"], ["Resources", "Strategy"], ["Testing"]]
 ---
 
 <!-- section:personal-notes -->

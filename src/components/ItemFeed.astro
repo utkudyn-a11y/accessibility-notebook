@@ -1,16 +1,22 @@
 ---
 // A chronological feed of News or Inspirations items, grouped by issue.
-import { render, formatDate } from '../lib/issues.js';
-const { issues, field } = Astro.props;
+// With showTopics, each item lists its topics and carries data-topics for the Inspirations filter.
+import { render, formatDate, topicSlug } from '../lib/issues.js';
+const { issues, field, showTopics = false } = Astro.props;
 ---
 {issues.filter((i) => i[field].length).map((i) => (
   <section class="group" aria-labelledby={`g-${i.number}`}>
     <h2 id={`g-${i.number}`}><time datetime={i.date}>{formatDate(i.date)}</time></h2>
     <p class="from">From <a href={i.url}>{i.title}</a></p>
     {i[field].map((it) => (
-      <article class="item">
+      <article class="item" data-topics={showTopics ? (it.topics || []).map(topicSlug).join(' ') : undefined}>
         <h3>{it.url ? <a href={it.url}>{it.title}</a> : it.title}</h3>
         {it.source && <p class="source">Source: {it.source.name}</p>}
+        {showTopics && it.topics?.length > 0 && (
+          <p class="tags"><span class="visually-hidden">Topics: </span>{it.topics.map((t, k) => (
+            <><span class="tag">{t}</span>{k < it.topics.length - 1 && <span class="visually-hidden">, </span>}</>
+          ))}</p>
+        )}
         <div class="prose" set:html={render(it.markdown)} />
       </article>
     ))}
@@ -23,4 +29,6 @@ const { issues, field } = Astro.props;
   .item { padding: 1.25rem 0 0.25rem; border-bottom: 2px solid var(--rule); }
   .item h3 { margin: 0 0 0.3rem; font-size: 1.25rem; line-height: 1.3; }
   .source { margin: 0 0 0.6rem; color: var(--ink-soft); font-size: var(--step--1); }
+  .tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: -0.2rem 0 0.7rem; }
+  .tag { font-size: 0.85rem; font-weight: 700; color: var(--ink); background: var(--tint); border: 1px solid var(--rule); border-radius: 4px; padding: 0.1rem 0.5rem; }
 </style>
