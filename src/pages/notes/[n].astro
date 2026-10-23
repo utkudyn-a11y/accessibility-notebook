@@ -3,6 +3,7 @@ import Base from '../../layouts/Base.astro';
 import Subscribe from '../../components/Subscribe.astro';
 import { getIssues, render, formatDate } from '../../lib/issues.js';
 import { articleLd } from '../../lib/ld.js';
+import { webp } from '../../lib/images.js';
 
 export function getStaticPaths() {
   const all = getIssues();
@@ -13,6 +14,7 @@ export function getStaticPaths() {
 }
 const { issue, newer, older } = Astro.props;
 const ORDER = ['personal-notes', 'news', 'inspirations', 'in-detail', 'article-from-me'];
+const cover = webp(issue.cover);
 const sections = ORDER.filter((k) => issue.sections[k]).map((k) => ({ key: k, ...issue.sections[k] }));
 ---
 <Base title={issue.title} description={issue.description} image={issue.cover} type="article"
@@ -23,7 +25,10 @@ const sections = ORDER.filter((k) => issue.sections[k]).map((k) => ({ key: k, ..
       <h1>{issue.title}</h1>
       <p class="meta"><time datetime={issue.date}>{formatDate(issue.date)}</time></p>
     </header>
-    <img class="cover" src={issue.cover} alt="" width="1280" height="720" />
+    <picture>
+      {cover && <source type="image/webp" srcset={cover.srcset} sizes="(min-width: 56rem) 52rem, calc(100vw - 2rem)" />}
+      <img class="cover" src={issue.cover} alt="" width={cover?.width ?? 1280} height={cover?.height ?? 720} fetchpriority="high" decoding="async" />
+    </picture>
     <div class="reading prose">
       {issue.album && (
         <p class="album" id="album">Created while listening: <a href={issue.album.url}>{issue.album.artist} – {issue.album.title}</a></p>

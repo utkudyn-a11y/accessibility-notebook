@@ -1,0 +1,774 @@
+{
+ "/images/notes-01-cover.png": {
+  "width": 1280,
+  "height": 720,
+  "webp": [
+   [
+    "/images/webp/notes-01-cover-480.webp",
+    480
+   ],
+   [
+    "/images/webp/notes-01-cover-800.webp",
+    800
+   ],
+   [
+    "/images/webp/notes-01-cover-1280.webp",
+    1280
+   ]
+  ]
+ },
+ "/images/notes-02-cover.jpg": {
+  "width": 1280,
+  "height": 720,
+  "webp": [
+   [
+    "/images/webp/notes-02-cover-480.webp",
+    480
+   ],
+   [
+    "/images/webp/notes-02-cover-800.webp",
+    800
+   ],
+   [
+    "/images/webp/notes-02-cover-1280.webp",
+    1280
+   ]
+  ]
+ },
+ "/images/notes-03-cover.jpg": {
+  "width": 1280,
+  "height": 720,
+  "webp": [
+   [
+    "/images/webp/notes-03-cover-480.webp",
+    480
+   ],
+   [
+    "/images/webp/notes-03-cover-800.webp",
+    800
+   ],
+   [
+    "/images/webp/notes-03-cover-1280.webp",
+    1280
+   ]
+  ]
+ },
+ "/images/notes-04-cover.jpg": {
+  "width": 1280,
+  "height": 720,
+  "webp": [
+   [
+    "/images/webp/notes-04-cover-480.webp",
+    480
+   ],
+   [
+    "/images/webp/notes-04-cover-800.webp",
+    800
+   ],
+   [
+    "/images/webp/notes-04-cover-1280.webp",
+    1280
+   ]
+  ]
+ },
+ "/images/notes-05-cover.jpg": {
+  "width": 1280,
+  "height": 720,
+  "webp": [
+   [
+    "/images/webp/notes-05-cover-480.webp",
+    480
+   ],
+   [
+    "/images/webp/notes-05-cover-800.webp",
+    800
+   ],
+   [
+    "/images/webp/notes-05-cover-1280.webp",
+    1280
+   ]
+  ]
+ },
+ "/images/notes-06-cover.jpg": {
+  "width": 1280,
+  "height": 720,
+  "webp": [
+   [
+    "/images/webp/notes-06-cover-480.webp",
+    480
+   ],
+   [
+    "/images/webp/notes-06-cover-800.webp",
+    800
+   ],
+   [
+    "/images/webp/notes-06-cover-1280.webp",
+    1280
+   ]
+  ]
+ },
+ "/images/notes-07-cover.jpg": {
+  "width": 1280,
+  "height": 720,
+  "webp": [
+   [
+    "/images/webp/notes-07-cover-480.webp",
+    480
+   ],
+   [
+    "/images/webp/notes-07-cover-800.webp",
+    800
+   ],
+   [
+    "/images/webp/notes-07-cover-1280.webp",
+    1280
+   ]
+  ]
+ },
+ "/images/notes-08-cover.jpg": {
+  "width": 1280,
+  "height": 720,
+  "webp": [
+   [
+    "/images/webp/notes-08-cover-480.webp",
+    480
+   ],
+   [
+    "/images/webp/notes-08-cover-800.webp",
+    800
+   ],
+   [
+    "/images/webp/notes-08-cover-1280.webp",
+    1280
+   ]
+  ]
+ },
+ "/images/notes-09-1.png": {
+  "width": 636,
+  "height": 292,
+  "webp": [
+   [
+    "/images/webp/notes-09-1-480.webp",
+    480
+   ],
+   [
+    "/images/webp/notes-09-1-636.webp",
+    636
+   ]
+  ]
+ },
+ "/images/notes-09-2.png": {
+  "width": 864,
+  "height": 306,
+  "webp": [
+   [
+    "/images/webp/notes-09-2-480.webp",
+    480
+   ],
+   [
+    "/images/webp/notes-09-2-800.webp",
+    800
+   ],
+   [
+    "/images/webp/notes-09-2-864.webp",
+    864
+   ]
+  ]
+ },
+ "/images/notes-09-cover.jpg": {
+  "width": 1280,
+  "height": 720,
+  "webp": [
+   [
+    "/images/webp/notes-09-cover-480.webp",
+    480
+   ],
+   [
+    "/images/webp/notes-09-cover-800.webp",
+    800
+   ],
+   [
+    "/images/webp/notes-09-cover-1280.webp",
+    1280
+   ]
+  ]
+ },
+ "/images/notes-10-1.png": {
+  "width": 1118,
+  "height": 236,
+  "webp": [
+   [
+    "/images/webp/notes-10-1-480.webp",
+    480
+   ],
+   [
+    "/images/webp/notes-10-1-800.webp",
+    800
+   ],
+   [
+    "/images/webp/notes-10-1-1118.webp",
+    1118
+   ]
+  ]
+ },
+ "/images/notes-10-2.png": {
+  "width": 262,
+  "height": 208,
+  "webp": [
+   [
+    "/images/webp/notes-10-2-262.webp",
+    262
+   ]
+  ]
+ },
+ "/images/notes-10-3.png": {
+  "width": 304,
+  "height": 212,
+  "webp": [
+   [
+    "/images/webp/notes-10-3-304.webp",
+    304
+   ]
+  ]
+ },
+ "/images/notes-10-4.png": {
+  "width": 900,
+  "height": 856,
+  "webp": [
+   [
+    "/images/webp/notes-10-4-480.webp",
+    480
+   ],
+   [
+    "/images/webp/notes-10-4-800.webp",
+    800
+   ],
+   [
+    "/images/webp/notes-10-4-900.webp",
+    900
+   ]
+  ]
+ },
+ "/images/notes-10-5.png": {
+  "width": 946,
+  "height": 578,
+  "webp": [
+   [
+    "/images/webp/notes-10-5-480.webp",
+    480
+   ],
+   [
+    "/images/webp/notes-10-5-800.webp",
+    800
+   ],
+   [
+    "/images/webp/notes-10-5-946.webp",
+    946
+   ]
+  ]
+ },
+ "/images/notes-10-6.png": {
+  "width": 908,
+  "height": 384,
+  "webp": [
+   [
+    "/images/webp/notes-10-6-480.webp",
+    480
+   ],
+   [
+    "/images/webp/notes-10-6-800.webp",
+    800
+   ],
+   [
+    "/images/webp/notes-10-6-908.webp",
+    908
+   ]
+  ]
+ },
+ "/images/notes-10-7.png": {
+  "width": 2232,
+  "height": 182,
+  "webp": [
+   [
+    "/images/webp/notes-10-7-480.webp",
+    480
+   ],
+   [
+    "/images/webp/notes-10-7-800.webp",
+    800
+   ],
+   [
+    "/images/webp/notes-10-7-1280.webp",
+    1280
+   ],
+   [
+    "/images/webp/notes-10-7-1600.webp",
+    1600
+   ],
+   [
+    "/images/webp/notes-10-7-2232.webp",
+    2232
+   ]
+  ]
+ },
+ "/images/notes-10-cover.jpg": {
+  "width": 1280,
+  "height": 720,
+  "webp": [
+   [
+    "/images/webp/notes-10-cover-480.webp",
+    480
+   ],
+   [
+    "/images/webp/notes-10-cover-800.webp",
+    800
+   ],
+   [
+    "/images/webp/notes-10-cover-1280.webp",
+    1280
+   ]
+  ]
+ },
+ "/images/notes-11-cover.jpg": {
+  "width": 1280,
+  "height": 720,
+  "webp": [
+   [
+    "/images/webp/notes-11-cover-480.webp",
+    480
+   ],
+   [
+    "/images/webp/notes-11-cover-800.webp",
+    800
+   ],
+   [
+    "/images/webp/notes-11-cover-1280.webp",
+    1280
+   ]
+  ]
+ },
+ "/images/notes-12-cover.jpg": {
+  "width": 1280,
+  "height": 720,
+  "webp": [
+   [
+    "/images/webp/notes-12-cover-480.webp",
+    480
+   ],
+   [
+    "/images/webp/notes-12-cover-800.webp",
+    800
+   ],
+   [
+    "/images/webp/notes-12-cover-1280.webp",
+    1280
+   ]
+  ]
+ },
+ "/images/notes-13-cover.jpg": {
+  "width": 1280,
+  "height": 720,
+  "webp": [
+   [
+    "/images/webp/notes-13-cover-480.webp",
+    480
+   ],
+   [
+    "/images/webp/notes-13-cover-800.webp",
+    800
+   ],
+   [
+    "/images/webp/notes-13-cover-1280.webp",
+    1280
+   ]
+  ]
+ },
+ "/images/notes-14-1.png": {
+  "width": 858,
+  "height": 374,
+  "webp": [
+   [
+    "/images/webp/notes-14-1-480.webp",
+    480
+   ],
+   [
+    "/images/webp/notes-14-1-800.webp",
+    800
+   ],
+   [
+    "/images/webp/notes-14-1-858.webp",
+    858
+   ]
+  ]
+ },
+ "/images/notes-14-2.png": {
+  "width": 514,
+  "height": 268,
+  "webp": [
+   [
+    "/images/webp/notes-14-2-480.webp",
+    480
+   ],
+   [
+    "/images/webp/notes-14-2-514.webp",
+    514
+   ]
+  ]
+ },
+ "/images/notes-14-3.png": {
+  "width": 388,
+  "height": 498,
+  "webp": [
+   [
+    "/images/webp/notes-14-3-388.webp",
+    388
+   ]
+  ]
+ },
+ "/images/notes-14-4.png": {
+  "width": 310,
+  "height": 410,
+  "webp": [
+   [
+    "/images/webp/notes-14-4-310.webp",
+    310
+   ]
+  ]
+ },
+ "/images/notes-14-5.png": {
+  "width": 372,
+  "height": 208,
+  "webp": [
+   [
+    "/images/webp/notes-14-5-372.webp",
+    372
+   ]
+  ]
+ },
+ "/images/notes-14-cover.jpg": {
+  "width": 1280,
+  "height": 720,
+  "webp": [
+   [
+    "/images/webp/notes-14-cover-480.webp",
+    480
+   ],
+   [
+    "/images/webp/notes-14-cover-800.webp",
+    800
+   ],
+   [
+    "/images/webp/notes-14-cover-1280.webp",
+    1280
+   ]
+  ]
+ },
+ "/images/notes-15-cover.jpg": {
+  "width": 1280,
+  "height": 720,
+  "webp": [
+   [
+    "/images/webp/notes-15-cover-480.webp",
+    480
+   ],
+   [
+    "/images/webp/notes-15-cover-800.webp",
+    800
+   ],
+   [
+    "/images/webp/notes-15-cover-1280.webp",
+    1280
+   ]
+  ]
+ },
+ "/images/notes-16-cover.jpg": {
+  "width": 1280,
+  "height": 720,
+  "webp": [
+   [
+    "/images/webp/notes-16-cover-480.webp",
+    480
+   ],
+   [
+    "/images/webp/notes-16-cover-800.webp",
+    800
+   ],
+   [
+    "/images/webp/notes-16-cover-1280.webp",
+    1280
+   ]
+  ]
+ },
+ "/images/notes-17-cover.jpg": {
+  "width": 1280,
+  "height": 720,
+  "webp": [
+   [
+    "/images/webp/notes-17-cover-480.webp",
+    480
+   ],
+   [
+    "/images/webp/notes-17-cover-800.webp",
+    800
+   ],
+   [
+    "/images/webp/notes-17-cover-1280.webp",
+    1280
+   ]
+  ]
+ },
+ "/images/notes-18-1.png": {
+  "width": 744,
+  "height": 223,
+  "webp": [
+   [
+    "/images/webp/notes-18-1-480.webp",
+    480
+   ],
+   [
+    "/images/webp/notes-18-1-744.webp",
+    744
+   ]
+  ]
+ },
+ "/images/notes-18-2.png": {
+  "width": 747,
+  "height": 328,
+  "webp": [
+   [
+    "/images/webp/notes-18-2-480.webp",
+    480
+   ],
+   [
+    "/images/webp/notes-18-2-747.webp",
+    747
+   ]
+  ]
+ },
+ "/images/notes-18-cover.jpg": {
+  "width": 1280,
+  "height": 720,
+  "webp": [
+   [
+    "/images/webp/notes-18-cover-480.webp",
+    480
+   ],
+   [
+    "/images/webp/notes-18-cover-800.webp",
+    800
+   ],
+   [
+    "/images/webp/notes-18-cover-1280.webp",
+    1280
+   ]
+  ]
+ },
+ "/images/notes-19-cover.jpg": {
+  "width": 1280,
+  "height": 720,
+  "webp": [
+   [
+    "/images/webp/notes-19-cover-480.webp",
+    480
+   ],
+   [
+    "/images/webp/notes-19-cover-800.webp",
+    800
+   ],
+   [
+    "/images/webp/notes-19-cover-1280.webp",
+    1280
+   ]
+  ]
+ },
+ "/images/notes-20-cover.jpg": {
+  "width": 1280,
+  "height": 720,
+  "webp": [
+   [
+    "/images/webp/notes-20-cover-480.webp",
+    480
+   ],
+   [
+    "/images/webp/notes-20-cover-800.webp",
+    800
+   ],
+   [
+    "/images/webp/notes-20-cover-1280.webp",
+    1280
+   ]
+  ]
+ },
+ "/images/notes-21-cover.jpg": {
+  "width": 1280,
+  "height": 720,
+  "webp": [
+   [
+    "/images/webp/notes-21-cover-480.webp",
+    480
+   ],
+   [
+    "/images/webp/notes-21-cover-800.webp",
+    800
+   ],
+   [
+    "/images/webp/notes-21-cover-1280.webp",
+    1280
+   ]
+  ]
+ },
+ "/images/notes-22-cover.jpg": {
+  "width": 1280,
+  "height": 720,
+  "webp": [
+   [
+    "/images/webp/notes-22-cover-480.webp",
+    480
+   ],
+   [
+    "/images/webp/notes-22-cover-800.webp",
+    800
+   ],
+   [
+    "/images/webp/notes-22-cover-1280.webp",
+    1280
+   ]
+  ]
+ },
+ "/images/notes-23-1.png": {
+  "width": 463,
+  "height": 700,
+  "webp": [
+   [
+    "/images/webp/notes-23-1-463.webp",
+    463
+   ]
+  ]
+ },
+ "/images/notes-23-cover.jpg": {
+  "width": 1280,
+  "height": 720,
+  "webp": [
+   [
+    "/images/webp/notes-23-cover-480.webp",
+    480
+   ],
+   [
+    "/images/webp/notes-23-cover-800.webp",
+    800
+   ],
+   [
+    "/images/webp/notes-23-cover-1280.webp",
+    1280
+   ]
+  ]
+ },
+ "/images/notes-24-cover.jpg": {
+  "width": 1280,
+  "height": 720,
+  "webp": [
+   [
+    "/images/webp/notes-24-cover-480.webp",
+    480
+   ],
+   [
+    "/images/webp/notes-24-cover-800.webp",
+    800
+   ],
+   [
+    "/images/webp/notes-24-cover-1280.webp",
+    1280
+   ]
+  ]
+ },
+ "/images/notes-25-cover.jpg": {
+  "width": 1280,
+  "height": 720,
+  "webp": [
+   [
+    "/images/webp/notes-25-cover-480.webp",
+    480
+   ],
+   [
+    "/images/webp/notes-25-cover-800.webp",
+    800
+   ],
+   [
+    "/images/webp/notes-25-cover-1280.webp",
+    1280
+   ]
+  ]
+ },
+ "/images/notes-26-cover.jpg": {
+  "width": 1280,
+  "height": 720,
+  "webp": [
+   [
+    "/images/webp/notes-26-cover-480.webp",
+    480
+   ],
+   [
+    "/images/webp/notes-26-cover-800.webp",
+    800
+   ],
+   [
+    "/images/webp/notes-26-cover-1280.webp",
+    1280
+   ]
+  ]
+ },
+ "/images/notes-27-cover.jpg": {
+  "width": 1280,
+  "height": 720,
+  "webp": [
+   [
+    "/images/webp/notes-27-cover-480.webp",
+    480
+   ],
+   [
+    "/images/webp/notes-27-cover-800.webp",
+    800
+   ],
+   [
+    "/images/webp/notes-27-cover-1280.webp",
+    1280
+   ]
+  ]
+ },
+ "/images/notes-28-cover.jpg": {
+  "width": 1600,
+  "height": 900,
+  "webp": [
+   [
+    "/images/webp/notes-28-cover-480.webp",
+    480
+   ],
+   [
+    "/images/webp/notes-28-cover-800.webp",
+    800
+   ],
+   [
+    "/images/webp/notes-28-cover-1280.webp",
+    1280
+   ],
+   [
+    "/images/webp/notes-28-cover-1600.webp",
+    1600
+   ]
+  ]
+ },
+ "/logo.png": {
+  "width": 160,
+  "height": 158,
+  "webp": [
+   [
+    "/images/webp/logo-96.webp",
+    96
+   ],
+   [
+    "/images/webp/logo-160.webp",
+    160
+   ]
+  ]
+ }
+}

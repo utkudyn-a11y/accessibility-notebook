@@ -87,3 +87,10 @@ The website of [Accessibility Notebook](https://buttondown.com/accessibility-not
 - The album card in Read While Listening links to the issue's album line (`#album`).
 - Do not reword or remove a published pledge lightly: people may have shared cards with it.
 - The page's social image is `public/images/pledge-og.png`.
+
+## Images
+
+- `npm run build` first runs `scripts/optimize-images.mjs`: it makes smaller WebP copies of every image in `public/images/` (and the logo) in `public/images/webp/` at a few widths, and writes their sizes to `src/data/images.json`. Commit the new files it makes.
+- Pages show the WebP copy in a `<picture>` element; browsers without WebP get the original. Originals are never removed, so old emails, LinkedIn posts and social previews keep working. `*-og.png` social images are not converted.
+- Images in issue text get their width and height and load only when the reader scrolls near them.
+- Only missing copies are made. If you replace an image under the same file name, delete its files in `public/images/webp/` first.

@@ -3,8 +3,11 @@
 import matter from 'gray-matter';
 import { marked } from 'marked';
 import { splitSections, splitItems } from './parse.js';
+import { pictureHtml } from './images.js';
 
 marked.setOptions({ gfm: true });
+// Images in issue text: WebP copy when there is one, lazy loading, fixed size so the page does not jump.
+marked.use({ renderer: { image({ href, title, text }) { return pictureHtml(href, text, { title }); } } });
 
 const files = import.meta.glob('../content/issues/*.md', { query: '?raw', import: 'default', eager: true });
 
