@@ -8,7 +8,7 @@ const H = `h${headingLevel}`;
 
 const albums = getIssues()
   .filter((i) => i.album?.title)
-  .map((i) => ({ n: i.number, date: i.date, dateText: new Date(`${i.date}T12:00:00Z`).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }), artist: i.album.artist, title: i.album.title, url: i.album.url, issue: i.url }));
+  .map((i) => ({ n: i.number, date: i.date, dateText: new Date(`${i.date}T12:00:00Z`).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }), artist: i.album.artist, title: i.album.title, url: i.album.url, issue: `${i.url}#album` }));
 ---
 <section class="spin" aria-labelledby="spin-title" data-albums={JSON.stringify(albums)}>
   <H id="spin-title">Read While Listening</H>

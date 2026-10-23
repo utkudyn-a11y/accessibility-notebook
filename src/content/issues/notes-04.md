@@ -7,7 +7,7 @@ cover: "/images/notes-04-cover.jpg"
 album: {"artist": "Infinito Latente", "title": "Sem Início Nem Fim", "url": "https://open.spotify.com/intl-tr/album/4X8OdTAgIsHiFYItSm1k5D"}
 linkedinUrl: "https://www.linkedin.com/pulse/notes-4-web-accessibility-ukraine-french-standards-us-utku-demiryakan-oshpf/"
 personalNoteTitle: "Only 30 Answers: Where Is the Non-Disabled Accessibility Community?"
-discussion: [{"context": "A UNDP report shows that Ukraine more than quadrupled the number of highly accessible government websites in a single year, in the middle of a war. Utku says \"it's not our priority\" is no longer an acceptable excuse.", "question": "Do you agree, or does accessibility sometimes really have to wait?", "options": ["Agree: \"not our priority\" is no excuse", "Sometimes accessibility really has to wait"]}]
+discussion: [{"context": "A UNDP report shows that Ukraine more than quadrupled the number of highly accessible government websites in a single year, in the middle of a war. Utku says \"it's not our priority\" is no longer an acceptable excuse.", "question": "Do you agree, or does accessibility sometimes really have to wait?", "options": ["Agree: \"not our priority\" is no excuse", "Sometimes accessibility really has to wait"], "from": "news-1"}]
 inspirationTopics: [["Resources", "Legal & Standards"], ["AI", "Development"], ["Design"]]
 newsDates: ["2026-03-04", "2026-03-05", "2026-03-02", null]
 ---

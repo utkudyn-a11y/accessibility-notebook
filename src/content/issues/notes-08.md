@@ -9,10 +9,10 @@ linkedinUrl: "https://www.linkedin.com/pulse/notes-8-pdfs-germany-ai-agents-rede
 personalNoteTitle: "Disco Anxiety: My Accessibility Needs vs. My Love for Dark Music"
 inDetailTitle: "What Else Can A Redesign Project Improve Accessibility? – The Case Of AJet"
 inDetailSlug: "what-else-can-a-redesign-project-improve-accessibility-the-case-of-ajet"
-discussion: [{"context": "Korea's Supreme Court agreed that missing alt text on a shopping site is discriminatory, but it cancelled the damages because there was no clear evidence of intent or negligence.", "question": "Should companies pay for inaccessibility even when no one can prove they meant it?", "options": ["Yes, they should pay without proof of intent", "No, damages need intent or negligence"]}]
+discussion: [{"context": "Korea's Supreme Court agreed that missing alt text on a shopping site is discriminatory, but it cancelled the damages because there was no clear evidence of intent or negligence.", "question": "Should companies pay for inaccessibility even when no one can prove they meant it?", "options": ["Yes, they should pay without proof of intent", "No, damages need intent or negligence"], "from": "news-2"}]
 inspirationTopics: [["Design"], ["AI", "Development"], ["Design"]]
 newsDates: [null, "2026-04-13", "2026-04-15"]
-pledges: [{"role": "Design & Content", "text": "I will publish tagged, accessible PDFs or HTML pages"}]
+pledges: [{"role": "Design & Content", "text": "I will publish tagged, accessible PDFs or HTML pages", "from": "news-1"}]
 ---
 
 <!-- section:personal-notes -->

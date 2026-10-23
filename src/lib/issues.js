@@ -47,12 +47,28 @@ const checkPledges = (list = [], n) => {
   return list;
 };
 
+// "from": where a pledge or Discussion Corner question comes from inside its issue, so "Notes # N" links
+// land on that spot: personal-notes, in-detail, article-from-me, news-1, inspiration-2, ...
+const checkFrom = (list = [], anchors, n) => {
+  for (const x of list) {
+    if (x.from && !anchors.includes(x.from)) throw new Error(`Notes # ${n}: "from": "${x.from}" is not a part of this issue. Use one of: ${anchors.join(', ')}`);
+  }
+  return list;
+};
+
 const issues = Object.entries(files)
   .map(([path, raw]) => {
     const { data, content } = matter(raw);
     const { intro, parts } = splitSections(content);
+    const anchors = [
+      ...Object.keys(parts),
+      ...splitItems(parts['news']?.markdown).map((_, i) => `news-${i + 1}`),
+      ...splitItems(parts['inspirations']?.markdown).map((_, i) => `inspiration-${i + 1}`),
+    ];
+    const at = (from) => `/notes/${data.number}/${from ? `#${from}` : ''}`;
     return {
       ...data,
+      discussion: checkFrom(data.discussion, anchors, data.number).map((d) => ({ ...d, sourceUrl: at(d.from) })),
       slug: String(data.number),
       url: `/notes/${data.number}/`,
       dateObj: new Date(`${data.date}T09:00:00+03:00`),
@@ -67,7 +83,7 @@ const issues = Object.entries(files)
         published: checkDate(data.newsDates?.[idx], data.number),
       })),
       inspirations: splitItems(parts['inspirations']?.markdown).map((it, idx) => ({ ...it, issue: data.number, date: data.date, anchor: `inspiration-${idx + 1}`, topics: checkTopics(data.inspirationTopics?.[idx], data.number) })),
-      pledges: checkPledges(data.pledges, data.number),
+      pledges: checkFrom(checkPledges(data.pledges, data.number), anchors, data.number).map((p) => ({ ...p, sourceUrl: at(p.from) })),
       body: content,
     };
   })
@@ -105,6 +121,6 @@ export const formatDate = (d) =>
 export const getPledges = () => {
   const latest = issues[0]?.number;
   return issues.flatMap((i) =>
-    i.pledges.map((p, k) => ({ id: `${i.number}-${k + 1}`, role: p.role, text: p.text, issue: i.number, issueUrl: i.url, isNew: i.number === latest }))
+    i.pledges.map((p, k) => ({ id: `${i.number}-${k + 1}`, role: p.role, text: p.text, issue: i.number, issueUrl: p.sourceUrl, isNew: i.number === latest }))
   );
 };

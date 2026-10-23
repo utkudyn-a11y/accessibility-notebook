@@ -13,7 +13,8 @@ The website of [Accessibility Notebook](https://buttondown.com/accessibility-not
    - `personalNoteTitle`: a title for the Personal Notes section
    - `inDetailTitle` and `inDetailSlug`: the In Detail title and its web address (lowercase, words joined with `-`)
    - `discussion`: one or more Discussion Corner questions, each with a short `context`, the `question` itself and 2–4 vote `options`, for example
-     `discussion: [{"context": "Some background.", "question": "Yes or no?", "options": ["Yes", "No"]}]`.
+     `discussion: [{"context": "Some background.", "question": "Yes or no?", "options": ["Yes", "No"], "from": "news-2"}]`.
+     `from` says which part of the issue the question comes from, so "Read Notes # N" lands there: `personal-notes`, `in-detail`, `article-from-me`, `news-1`, `news-2`…, `inspiration-1`… A wrong value stops the build.
      Never reorder or remove options of a published question: votes are stored by option position.
      The home page shows one question at a time, at random; there is no page that lists them all.
    - `inspirationTopics`: the topics of each Inspirations item, one list per item, in the same order as the items, for example
@@ -82,6 +83,7 @@ The website of [Accessibility Notebook](https://buttondown.com/accessibility-not
 ## Accessibility Pledge
 
 - `/pledge/` (menu: Accessibility Pledge) lets readers pick up to 3 pledges and download a 1080 × 1080 card, share it (on phones) and copy its alt text. Everything happens in the browser; nothing is stored.
-- Pledges live in each issue's front matter, 1–2 per issue: `pledges: [{"role": "Testing", "text": "I will test every flow with a keyboard, not only with tools"}]`. Roles: Design & Content, Development, Testing, Product. Text starts with "I will", about 80 characters at most, no final period. The latest issue's pledges get a "New" label.
+- Pledges live in each issue's front matter, 1–2 per issue: `pledges: [{"role": "Testing", "text": "I will test every flow with a keyboard, not only with tools", "from": "inspiration-3"}]`. `from` works as in `discussion`: the "From Notes # N" link lands on that part of the issue. Roles: Design & Content, Development, Testing, Product. Text starts with "I will", about 80 characters at most, no final period. The latest issue's pledges get a "New" label.
+- The album card in Read While Listening links to the issue's album line (`#album`).
 - Do not reword or remove a published pledge lightly: people may have shared cards with it.
 - The page's social image is `public/images/pledge-og.png`.

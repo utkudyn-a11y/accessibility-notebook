@@ -9,7 +9,7 @@ linkedinUrl: "https://www.linkedin.com/pulse/notes-9-deadline-extensions-us-gaad
 personalNoteTitle: "\"Of Course I Can Do It\": My Mother's Temporary Disability"
 inDetailTitle: "Why I Choose Six Hands Marker Typeface In Accessibility Notebook?"
 inDetailSlug: "why-i-choose-six-hands-marker-typeface-in-accessibility-notebook"
-discussion: [{"context": "When Utku's mother broke her arm, the family kept asking her \"Can you do that?\" Every time, she answered \"Of course I can do it.\" As a teenager, Utku reacted the same way to the same question.", "question": "When does an offer of help feel supportive, and when does it feel patronizing? How would you ask?", "options": ["Ask \"Can you do that?\"", "Offer something specific: \"Would you like me to…?\"", "Wait until they ask", "Just help without asking"]}]
+discussion: [{"context": "When Utku's mother broke her arm, the family kept asking her \"Can you do that?\" Every time, she answered \"Of course I can do it.\" As a teenager, Utku reacted the same way to the same question.", "question": "When does an offer of help feel supportive, and when does it feel patronizing? How would you ask?", "options": ["Ask \"Can you do that?\"", "Offer something specific: \"Would you like me to…?\"", "Wait until they ask", "Just help without asking"], "from": "personal-notes"}]
 inspirationTopics: [["Testing", "Strategy"], ["AI", "Strategy"], ["Design"]]
 newsDates: ["2026-04-20", "2026-04-10", "2026-04-22"]
 ---

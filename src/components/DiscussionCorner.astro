@@ -14,7 +14,7 @@ const questions = getIssues().flatMap((i) =>
     n: i.number,
     date: i.date,
     dateText: formatDateLong(i.date),
-    issue: i.url,
+    issue: d.sourceUrl,
     linkedin: i.linkedinUrl,
     context: d.context,
     question: d.question,

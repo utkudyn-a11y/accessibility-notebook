@@ -9,10 +9,10 @@ linkedinUrl: "https://www.linkedin.com/pulse/notes-10-irony-nepal-audible-crawl-
 personalNoteTitle: "Labour Day Barricades Through Partially Sighted Eyes"
 inDetailTitle: "The Most Common Windows High Contrast Mode Incompatibilities"
 inDetailSlug: "the-most-common-windows-high-contrast-mode-incompatibilities"
-discussion: [{"context": "Most accessibility professionals say Windows High Contrast Mode issues don't fail WCAG 2.1. Utku believes they're still serious usability problems that need fixing.", "question": "Should high contrast support be a requirement, or is \"not a WCAG failure\" good enough?", "options": ["It should be a requirement", "\"Not a WCAG failure\" is good enough"]}]
+discussion: [{"context": "Most accessibility professionals say Windows High Contrast Mode issues don't fail WCAG 2.1. Utku believes they're still serious usability problems that need fixing.", "question": "Should high contrast support be a requirement, or is \"not a WCAG failure\" good enough?", "options": ["It should be a requirement", "\"Not a WCAG failure\" is good enough"], "from": "inspiration-3"}]
 inspirationTopics: [["Design"], ["Design", "Development"], ["Legal & Standards"]]
 newsDates: ["2026-04-30", "2026-04-30", "2026-04-28"]
-pledges: [{"role": "Design & Content", "text": "I will check my designs in high contrast mode"}, {"role": "Development", "text": "I will warn users before a session times out and let them extend it"}]
+pledges: [{"role": "Design & Content", "text": "I will check my designs in high contrast mode", "from": "inspiration-3"}, {"role": "Development", "text": "I will warn users before a session times out and let them extend it", "from": "inspiration-2"}]
 ---
 
 <!-- section:personal-notes -->

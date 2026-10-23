@@ -9,10 +9,10 @@ linkedinUrl: "https://www.linkedin.com/pulse/notes-20-movie-ticket-apps-aimac-se
 personalNoteTitle: "No Audio Guide, No Way In: The İstanbul Archaeology Museum"
 inDetailTitle: "Museums And Digital Accessibility"
 inDetailSlug: "museums-and-digital-accessibility"
-discussion: [{"context": "AFixt says SEO is not accessibility, and that they have the data to prove it. Yet many of us still pitch accessibility to managers through its SEO benefits.", "question": "Is SEO a useful door opener, or does it give people the wrong idea of what accessibility is?", "options": ["A useful door opener", "It gives people the wrong idea"]}]
+discussion: [{"context": "AFixt says SEO is not accessibility, and that they have the data to prove it. Yet many of us still pitch accessibility to managers through its SEO benefits.", "question": "Is SEO a useful door opener, or does it give people the wrong idea of what accessibility is?", "options": ["A useful door opener", "It gives people the wrong idea"], "from": "inspiration-3"}]
 inspirationTopics: [["AI"], ["Design", "Disability & Stories"], ["Strategy"]]
 newsDates: ["2026-07-14", "2026-07-13", null]
-pledges: [{"role": "Development", "text": "I will use real headings so screen reader users can find their way"}]
+pledges: [{"role": "Development", "text": "I will use real headings so screen reader users can find their way", "from": "inspiration-2"}]
 ---
 
 <!-- section:personal-notes -->
