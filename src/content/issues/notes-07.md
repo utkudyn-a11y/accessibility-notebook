@@ -11,6 +11,7 @@ inDetailTitle: "Takeaways From WebAIM Million"
 inDetailSlug: "takeaways-from-webaim-million"
 discussion: [{"context": "The Dutch regulator ACM found that testers with disabilities couldn't place an order at all in 61% of the cases it tested. Still, companies are being given \"considerable time\" to comply.", "question": "Should regulators give companies time, or start enforcing right away?"}]
 inspirationTopics: [["Legal & Standards"], ["Disability & Stories"], ["Legal & Standards"]]
+newsDates: ["2026-03-30", "2026-03-26", "2026-04-02"]
 ---
 
 <!-- section:personal-notes -->

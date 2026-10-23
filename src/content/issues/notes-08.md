@@ -11,6 +11,7 @@ inDetailTitle: "What Else Can A Redesign Project Improve Accessibility? – The 
 inDetailSlug: "what-else-can-a-redesign-project-improve-accessibility-the-case-of-ajet"
 discussion: [{"context": "Korea's Supreme Court agreed that missing alt text on a shopping site is discriminatory, but it cancelled the damages because there was no clear evidence of intent or negligence.", "question": "Should companies pay for inaccessibility even when no one can prove they meant it?"}]
 inspirationTopics: [["Design"], ["AI", "Development"], ["Design"]]
+newsDates: [null, "2026-04-13", "2026-04-15"]
 ---
 
 <!-- section:personal-notes -->

@@ -11,6 +11,7 @@ inDetailTitle: "What Changed In EN 301 549 Version 4.1.1?"
 inDetailSlug: "what-changed-in-en-301-549-version-4-1-1"
 discussion: [{"context": "AAArdvark argues that Lighthouse or axe scores are misleading, but that a score that includes manual testing can work as a progress indicator.", "question": "Can accessibility be measured with a single number, or does any score oversimplify it?"}]
 inspirationTopics: [["Design"], ["Testing", "Strategy"], ["Testing"]]
+newsDates: [null, "2026-08-27", "2026-08-17"]
 ---
 
 <!-- section:personal-notes -->

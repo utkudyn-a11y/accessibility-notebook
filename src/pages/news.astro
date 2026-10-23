@@ -1,16 +1,119 @@
 ---
 import Base from '../layouts/Base.astro';
-import ItemFeed from '../components/ItemFeed.astro';
-import { getIssues } from '../lib/issues.js';
+import { getIssues, plainText, formatDateLong } from '../lib/issues.js';
+
+// Every story, dated by its original publication date (or the issue date when that is unknown),
+// grouped by month, newest month and newest story first.
+const items = getIssues()
+  .flatMap((i) => i.news.map((it) => ({ ...it, issueUrl: i.url, when: it.published || i.date })))
+  .sort((a, b) => b.when.localeCompare(a.when) || b.issue - a.issue);
+
+const months = [];
+for (const it of items) {
+  const key = it.when.slice(0, 7);
+  let m = months.at(-1);
+  if (!m || m.key !== key) {
+    m = { key, label: new Date(`${key}-15T12:00:00Z`).toLocaleDateString('en-GB', { month: 'long', year: 'numeric', timeZone: 'UTC' }), items: [] };
+    months.push(m);
+  }
+  m.items.push(it);
+}
 ---
-<Base title="Digital Accessibility News" description="Digital accessibility news from around the world, collected and commented on by Utku Demiryakan, newest first.">
-  <div class="wrap page reading">
+<Base title="Digital Accessibility News" description="Digital accessibility news from around the world, collected and commented on by Utku Demiryakan. Grouped by the month each story was first published, newest first.">
+  <div class="wrap page">
     <h1>Digital Accessibility News</h1>
-    <p class="lead">News I found and commented on each week: laws, enforcement, research and products from around the world. Newest first.</p>
-    <ItemFeed issues={getIssues()} field="news" />
+    <p class="lead">News I found and commented on each week: laws, enforcement, research and products from around the world. Grouped by the month each story was first published, newest first.</p>
+
+    <div class="tools"><button type="button" class="toggle-all" hidden>Expand all months</button></div>
+
+    {months.map((m, i) => (
+      <section class="month" aria-labelledby={`m-${m.key}`}>
+        <h2 id={`m-${m.key}`}>
+          <button type="button" class="disclosure" aria-expanded="true" aria-controls={`p-${m.key}`} data-first={i === 0 ? 'true' : undefined}>
+            <span class="label">{m.label}</span>
+            <span class="count">{m.items.length} {m.items.length === 1 ? 'story' : 'stories'}</span>
+            <span class="chev" aria-hidden="true"></span>
+          </button>
+        </h2>
+        <ul class="grid" id={`p-${m.key}`}>
+          {m.items.map((it) => (
+            <li>
+              <article class="card">
+                <p class="meta">
+                  {it.published
+                    ? <>Published <time datetime={it.published}>{formatDateLong(it.published)}</time></>
+                    : <>Shared <time datetime={it.date}>{formatDateLong(it.date)}</time></>}
+                  {it.source && <> · {it.source.name}</>}
+                </p>
+                <h3>{it.url ? <a href={it.url}>{it.title}</a> : it.title}</h3>
+                <p class="ex">{plainText(it.markdown, 170)}</p>
+                <a class="go" href={`${it.issueUrl}#${it.anchor}`}>Read on Notes # {it.issue}<span class="visually-hidden">: {it.title}</span> <span aria-hidden="true">→</span></a>
+              </article>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))}
   </div>
 </Base>
+
+<script>
+  const buttons = [...document.querySelectorAll<HTMLButtonElement>('.month .disclosure')];
+  const toggleAll = document.querySelector<HTMLButtonElement>('.toggle-all');
+  const set = (b: HTMLButtonElement, open: boolean) => {
+    b.setAttribute('aria-expanded', String(open));
+    document.getElementById(b.getAttribute('aria-controls')!)!.hidden = !open;
+  };
+  const syncAll = () => {
+    if (!toggleAll) return;
+    const allOpen = buttons.every((b) => b.getAttribute('aria-expanded') === 'true');
+    toggleAll.textContent = allOpen ? 'Collapse all months' : 'Expand all months';
+  };
+  // Only the newest month starts open (without JavaScript every month stays open).
+  for (const b of buttons) {
+    set(b, b.dataset.first === 'true');
+    b.addEventListener('click', () => { set(b, b.getAttribute('aria-expanded') !== 'true'); syncAll(); });
+  }
+  if (toggleAll) {
+    toggleAll.hidden = false;
+    toggleAll.addEventListener('click', () => {
+      const open = toggleAll.textContent!.startsWith('Expand');
+      for (const b of buttons) set(b, open);
+      syncAll();
+    });
+    syncAll();
+  }
+</script>
+
 <style>
   .page { padding-top: 2.5rem; }
-  .lead { font-size: var(--step-1); line-height: 1.45; }
+  .lead { font-size: var(--step-1); line-height: 1.45; max-width: 60ch; }
+  .tools { display: flex; justify-content: flex-end; margin: 1.5rem 0 0.5rem; min-height: 44px; }
+  .toggle-all { font: inherit; font-weight: 700; color: var(--notebook); background: none; border: 0; padding: 0; min-height: 44px; text-decoration: underline; text-underline-offset: 0.18em; cursor: pointer; }
+  .toggle-all:hover { text-decoration-thickness: 0.16em; }
+
+  .month { border-top: 3px solid var(--notebook); }
+  .month:last-of-type { border-bottom: 3px solid var(--notebook); }
+  .month h2 { margin: 0; font-size: var(--step-1); }
+  .disclosure { font: inherit; color: var(--ink); background: none; border: 0; width: 100%; display: flex; flex-wrap: wrap; align-items: center; gap: 0.25rem 0.75rem; padding: 0.9rem 0.25rem; min-height: 56px; cursor: pointer; text-align: left; font-weight: 800; }
+  .disclosure:hover .label { text-decoration: underline; text-decoration-thickness: 0.08em; text-underline-offset: 0.18em; }
+  .count { font-size: var(--step--1); font-weight: 700; color: var(--ink-soft); }
+  .chev { margin-left: auto; width: 2rem; height: 2rem; flex: none; border-radius: 50%; border: 2px solid var(--notebook); position: relative; }
+  .chev::before { content: ''; position: absolute; left: 50%; top: 50%; width: 0.5rem; height: 0.5rem; border-right: 2.5px solid var(--notebook); border-bottom: 2.5px solid var(--notebook); transform: translate(-50%, -70%) rotate(45deg); }
+  .disclosure[aria-expanded='true'] .chev::before { transform: translate(-50%, -30%) rotate(-135deg); }
+
+  .grid { list-style: none; padding: 0.25rem 0 2rem; margin: 0; display: grid; gap: 1.25rem; grid-template-columns: minmax(0, 1fr); }
+  @media (min-width: 40rem) { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (min-width: 64rem) { .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  .grid[hidden] { display: none; }
+  .grid li { margin: 0; }
+  .card { height: 100%; display: flex; flex-direction: column; background: #fff; border: 2px solid var(--rule); border-radius: 10px; padding: 1.1rem 1.2rem 1.2rem; }
+  .card .meta { margin: 0 0 0.5rem; }
+  .card h3 { margin: 0 0 0.6rem; font-size: 1.15rem; line-height: 1.3; overflow-wrap: anywhere; }
+  .card h3 a { color: var(--ink); }
+  .card h3 a:hover { color: var(--notebook); }
+  .ex { margin: 0 0 1rem; font-size: 1.02rem; }
+  .go { margin-top: auto; align-self: flex-start; display: inline-flex; align-items: center; gap: 0.4rem; min-height: 44px; padding: 0.45rem 1rem; border: 2px solid var(--notebook); border-radius: 6px; color: var(--notebook); font-weight: 800; text-decoration: none; }
+  .go:hover { background: var(--notebook); color: #fff; }
+  @media (forced-colors: active) { .chev::before { border-color: CanvasText; } }
 </style>

@@ -9,6 +9,7 @@ linkedinUrl: "https://www.linkedin.com/pulse/notes-4-web-accessibility-ukraine-f
 personalNoteTitle: "Only 30 Answers: Where Is the Non-Disabled Accessibility Community?"
 discussion: [{"context": "A UNDP report shows that Ukraine more than quadrupled the number of highly accessible government websites in a single year, in the middle of a war. Utku says \"it's not our priority\" is no longer an acceptable excuse.", "question": "Do you agree, or does accessibility sometimes really have to wait?"}]
 inspirationTopics: [["Resources", "Legal & Standards"], ["AI", "Development"], ["Design"]]
+newsDates: ["2026-03-04", "2026-03-05", "2026-03-02", null]
 ---
 
 <!-- section:personal-notes -->

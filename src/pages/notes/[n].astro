@@ -35,7 +35,17 @@ const sections = ORDER.filter((k) => issue.sections[k]).map((k) => ({ key: k, ..
           {s.key === 'in-detail' && issue.inDetailSlug && (
             <p class="standalone"><a href={`/in-detail/${issue.inDetailSlug}/`}>Read this article on its own page</a></p>
           )}
-          <Fragment set:html={render(s.markdown)} />
+          {s.key === 'news' && issue.news.length ? (
+            issue.news.map((it) => (
+              <div class="news-item" id={it.anchor}>
+                <h3>{it.source ? it.title : it.url ? <a href={it.url}>{it.title}</a> : it.title}</h3>
+                {it.source && <p>Source: <a href={it.source.url}>{it.source.name}</a></p>}
+                <Fragment set:html={render(it.markdown)} />
+              </div>
+            ))
+          ) : (
+            <Fragment set:html={render(s.markdown)} />
+          )}
         </section>
       ))}
       <p class="discuss"><a href={issue.linkedinUrl}>Discuss this issue on LinkedIn</a></p>
@@ -52,6 +62,8 @@ const sections = ORDER.filter((k) => issue.sections[k]).map((k) => ({ key: k, ..
   .issue { padding-top: 2.5rem; }
   .cover { display: block; width: min(100%, 52rem); border-radius: 10px; border: 1px solid var(--rule); margin: 0.5rem 0 2rem; }
   .album { color: var(--ink-soft); }
+  .news-item { scroll-margin-top: 1rem; }
+  .news-item:target h3 { background: var(--highlight); box-shadow: 0 0 0 0.3rem var(--highlight); }
   .standalone { font-size: var(--step--1); }
   .discuss { margin-top: 3rem; padding-top: 1.5rem; border-top: 2px solid var(--rule); font-weight: 700; }
   .pager { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); margin: 2rem 0 3rem; }

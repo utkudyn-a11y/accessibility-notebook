@@ -11,6 +11,7 @@ inDetailTitle: "Why I Choose Six Hands Marker Typeface In Accessibility Notebook
 inDetailSlug: "why-i-choose-six-hands-marker-typeface-in-accessibility-notebook"
 discussion: [{"context": "When Utku's mother broke her arm, the family kept asking her \"Can you do that?\" Every time, she answered \"Of course I can do it.\" As a teenager, Utku reacted the same way to the same question.", "question": "When does an offer of help feel supportive, and when does it feel patronizing? How would you ask?"}]
 inspirationTopics: [["Testing", "Strategy"], ["AI", "Strategy"], ["Design"]]
+newsDates: ["2026-04-20", "2026-04-10", "2026-04-22"]
 ---
 
 <!-- section:personal-notes -->

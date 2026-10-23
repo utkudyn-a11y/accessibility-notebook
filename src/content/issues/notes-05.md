@@ -9,6 +9,7 @@ linkedinUrl: "https://www.linkedin.com/pulse/notes-5-italys-accessibility-guidel
 personalNoteTitle: "AI and Humans Describing a Documentary Together"
 discussion: [{"context": "Utku watched a documentary whose audio description was written by AI and then edited by a human. It worked well and took less effort, but at times the description clashed with the dialogue.", "question": "Should AI-first, human-edited audio description become the norm, or should it stay a fully human craft?"}]
 inspirationTopics: [["Design", "Testing"], ["Testing", "Resources"], ["Resources", "Design"]]
+newsDates: ["2026-03-11", "2026-02-24", "2026-03-04", null]
 ---
 
 <!-- section:personal-notes -->

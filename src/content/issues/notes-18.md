@@ -11,6 +11,7 @@ inDetailTitle: "Norway Font For The 2026 FIFA World Cup"
 inDetailSlug: "norway-font-for-the-2026-fifa-world-cup"
 discussion: [{"context": "A Tech Policy article argues that the web is being made readable for AI agents, not for people. AI only needs plain text, while screen reader users also need headings, landmarks, link text and alt text.", "question": "Will the AI agent boom help screen reader users, or leave them behind?"}]
 inspirationTopics: [["AI"], ["Strategy"], ["Design"]]
+newsDates: ["2026-06-21", "2026-05-18", "2026-06-24"]
 ---
 
 <!-- section:personal-notes -->

@@ -11,6 +11,7 @@ inDetailTitle: "Museums And Digital Accessibility"
 inDetailSlug: "museums-and-digital-accessibility"
 discussion: [{"context": "AFixt says SEO is not accessibility, and that they have the data to prove it. Yet many of us still pitch accessibility to managers through its SEO benefits.", "question": "Is SEO a useful door opener, or does it give people the wrong idea of what accessibility is?"}]
 inspirationTopics: [["AI"], ["Design", "Disability & Stories"], ["Strategy"]]
+newsDates: ["2026-07-14", "2026-07-13", null]
 ---
 
 <!-- section:personal-notes -->

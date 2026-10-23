@@ -11,6 +11,7 @@ inDetailTitle: "Best Practices From Accessible Canada Act"
 inDetailSlug: "best-practices-from-accessible-canada-act"
 discussion: [{"context": "Nepal's parliament is now interpreted into sign language on TV, but the Kathmandu Post reports that there are no standard signs for parliamentary terms, and interpreters struggle when members talk over each other.", "question": "When everyone speaks at once, whose words should the interpreter sign first?"}]
 inspirationTopics: [["AI", "Development"], ["AI", "Resources"], ["Design", "Resources"]]
+newsDates: ["2026-05-20", "2026-05-15", "2026-05-14"]
 ---
 
 <!-- section:personal-notes -->

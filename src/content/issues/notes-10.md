@@ -11,6 +11,7 @@ inDetailTitle: "The Most Common Windows High Contrast Mode Incompatibilities"
 inDetailSlug: "the-most-common-windows-high-contrast-mode-incompatibilities"
 discussion: [{"context": "Most accessibility professionals say Windows High Contrast Mode issues don't fail WCAG 2.1. Utku believes they're still serious usability problems that need fixing.", "question": "Should high contrast support be a requirement, or is \"not a WCAG failure\" good enough?"}]
 inspirationTopics: [["Design"], ["Design", "Development"], ["Legal & Standards"]]
+newsDates: ["2026-04-30", "2026-04-30", "2026-04-28"]
 ---
 
 <!-- section:personal-notes -->

@@ -11,6 +11,7 @@ inDetailTitle: "Accessibility Insights From England"
 inDetailSlug: "accessibility-insights-from-england"
 discussion: [{"context": "For Utku, independence doesn't mean doing everything alone. It means being free to decide when to ask for help. His trip to England left him with more questions than answers about this.", "question": "Should services invest in staff assistance or in accessible self-service? Where's the right balance?"}, {"context": "Almost no organization targets WCAG AAA, because no law requires it.", "question": "Are AAA criteria still useful, or have they become a \"nice to have\" that no one reads?"}]
 inspirationTopics: [["Legal & Standards"], ["Legal & Standards"], ["Strategy"]]
+newsDates: ["2026-09-25", "2026-09-16", "2026-09-29"]
 ---
 
 <!-- section:personal-notes -->

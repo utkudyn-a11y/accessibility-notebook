@@ -9,6 +9,7 @@ linkedinUrl: "https://www.linkedin.com/pulse/notes-2-wcag-3-kiosks-korea-ada-tit
 personalNoteTitle: "Rome for Two Partially Sighted Tourists: Great Streets, Unreadable Menus"
 discussion: [{"context": "Under Korea's new kiosk rules, small businesses can keep an inaccessible kiosk as long as they install a bell to call staff. Utku sees this as a good example of reasonable accommodation.", "question": "Is a call bell enough, or should every kiosk be accessible on its own?"}]
 inspirationTopics: [["Disability & Stories"], ["Resources"], ["AI", "Disability & Stories"]]
+newsDates: ["2026-01-16", "2026-01-29", "2026-01-23"]
 ---
 
 <!-- section:personal-notes -->

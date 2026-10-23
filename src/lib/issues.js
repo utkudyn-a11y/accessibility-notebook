@@ -29,6 +29,14 @@ const checkTopics = (list = [], n) => {
   return list;
 };
 
+const checkDate = (d, n) => {
+  if (d == null) return null;
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(d)) throw new Error(`Notes # ${n}: newsDates entry "${d}" must be YYYY-MM-DD or null`);
+  return d;
+};
+export const formatDateLong = (d) =>
+  new Date(`${d}T12:00:00Z`).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
+
 const issues = Object.entries(files)
   .map(([path, raw]) => {
     const { data, content } = matter(raw);
@@ -40,7 +48,14 @@ const issues = Object.entries(files)
       dateObj: new Date(`${data.date}T09:00:00+03:00`),
       intro,
       sections: parts,
-      news: splitItems(parts['news']?.markdown).map((it) => ({ ...it, issue: data.number, date: data.date })),
+      news: splitItems(parts['news']?.markdown).map((it, idx) => ({
+        ...it,
+        issue: data.number,
+        date: data.date,
+        anchor: `news-${idx + 1}`,
+        // Original publication date of the story (front matter newsDates, same order as the items); null = unknown
+        published: checkDate(data.newsDates?.[idx], data.number),
+      })),
       inspirations: splitItems(parts['inspirations']?.markdown).map((it, idx) => ({ ...it, issue: data.number, date: data.date, topics: checkTopics(data.inspirationTopics?.[idx], data.number) })),
       body: content,
     };

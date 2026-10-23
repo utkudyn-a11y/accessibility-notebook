@@ -18,6 +18,8 @@ The website of [Accessibility Notebook](https://buttondown.com/accessibility-not
    - `inspirationTopics`: the topics of each Inspirations item, one list per item, in the same order as the items, for example
      `inspirationTopics: [["AI", "Development"], ["Design"], ["Resources", "Disability & Stories"]]`.
      Allowed topics: AI, Design, Development, Testing, Legal & Standards, Disability & Stories, Resources, Strategy (one or two per item). A misspelled topic stops the build with an error message.
+   - `newsDates`: the original publication date of each News story (YYYY-MM-DD), one per story, in order, for example
+     `newsDates: ["2026-10-14", "2026-10-09", null]`. Use `null` when the source shows no date; the News page then uses the issue date and says "Shared" instead of "Published".
 3. Write the issue below. Each section starts with its marker and heading:
 
    ```markdown

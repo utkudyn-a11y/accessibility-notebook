@@ -9,6 +9,7 @@ linkedinUrl: "https://www.linkedin.com/pulse/notes-25-how-select-meaningful-samp
 personalNoteTitle: "Finalists at Travel For Every Body: An Aviation Sign Language Dictionary"
 discussion: [{"context": "Some auditors argue that page count isn't what matters in an accessibility audit; component architecture and root causes matter more.", "question": "When you audit a product, would you test as many pages as possible, or a small, well-chosen sample?"}]
 inspirationTopics: [["Strategy"], ["Testing"], ["Testing"]]
+newsDates: ["2026-09-10", "2026-09-01", "2026-09-08"]
 ---
 
 <!-- section:personal-notes -->

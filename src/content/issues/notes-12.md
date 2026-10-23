@@ -11,6 +11,7 @@ inDetailTitle: "The Short History Of 10 – 16 May Disability Awareness Week"
 inDetailSlug: "the-short-history-of-10-16-may-disability-awareness-week"
 discussion: [{"context": "Utku says he's tired of Turkey's yearly Disability Awareness Week: plenty of events and strong speeches, but little action.", "question": "Should awareness weeks continue, change their format, or be replaced altogether? What would you do instead?"}]
 inspirationTopics: [["AI"], ["AI", "Resources"], ["Disability & Stories"]]
+newsDates: ["2026-05-14", "2026-05-13", "2026-05-07"]
 ---
 
 <!-- section:personal-notes -->
