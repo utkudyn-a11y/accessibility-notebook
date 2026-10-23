@@ -10,6 +10,7 @@ personalNoteTitle: "AI and Humans Describing a Documentary Together"
 discussion: [{"context": "Utku watched a documentary whose audio description was written by AI and then edited by a human. It worked well and took less effort, but at times the description clashed with the dialogue.", "question": "Should AI-first, human-edited audio description become the norm, or should it stay a fully human craft?", "options": ["AI-first, human-edited should be the norm", "It should stay a fully human craft", "It depends on the content"]}]
 inspirationTopics: [["Design", "Testing"], ["Testing", "Resources"], ["Resources", "Design"]]
 newsDates: ["2026-03-11", "2026-02-24", "2026-03-04", null]
+pledges: [{"role": "Design & Content", "text": "I will design a focus indicator everyone can see"}]
 ---
 
 <!-- section:personal-notes -->

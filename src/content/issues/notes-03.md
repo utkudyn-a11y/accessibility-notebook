@@ -10,6 +10,7 @@ personalNoteTitle: "Two Panels at ZeroCon26: Accessible Aviation and Skills Deve
 discussion: [{"context": "Lucy Greco argues that CES's separate accessibility stage made products harder to find and kept them out of mainstream coverage. Utku thinks a dedicated stage still helps people discover these solutions.", "question": "Who's right?", "options": ["Lucy is right: integrate it into the main show", "Utku is right: a dedicated stage helps people find it", "Both: keep the stage and integrate"]}]
 inspirationTopics: [["Disability & Stories", "Strategy"], ["Design", "Disability & Stories"], ["Disability & Stories"]]
 newsDates: [null, "2026-02-08", "2026-02-09", "2026-02-09"]
+pledges: [{"role": "Product", "text": "I will never put an accessibility feature behind a paywall"}]
 ---
 
 <!-- section:personal-notes -->

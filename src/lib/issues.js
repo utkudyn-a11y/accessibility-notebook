@@ -37,6 +37,16 @@ const checkDate = (d, n) => {
 export const formatDateLong = (d) =>
   new Date(`${d}T12:00:00Z`).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
 
+// Accessibility Pledge items: front matter "pledges", 1–2 per issue.
+export const PLEDGE_ROLES = ['Design & Content', 'Development', 'Testing', 'Product'];
+const checkPledges = (list = [], n) => {
+  for (const p of list) {
+    if (!PLEDGE_ROLES.includes(p.role)) throw new Error(`Notes # ${n}: unknown pledge role "${p.role}". Use one of: ${PLEDGE_ROLES.join(', ')}`);
+    if (!/^I will /.test(p.text || '')) throw new Error(`Notes # ${n}: a pledge must start with "I will": ${p.text}`);
+  }
+  return list;
+};
+
 const issues = Object.entries(files)
   .map(([path, raw]) => {
     const { data, content } = matter(raw);
@@ -57,6 +67,7 @@ const issues = Object.entries(files)
         published: checkDate(data.newsDates?.[idx], data.number),
       })),
       inspirations: splitItems(parts['inspirations']?.markdown).map((it, idx) => ({ ...it, issue: data.number, date: data.date, anchor: `inspiration-${idx + 1}`, topics: checkTopics(data.inspirationTopics?.[idx], data.number) })),
+      pledges: checkPledges(data.pledges, data.number),
       body: content,
     };
   })
@@ -89,3 +100,11 @@ export const getPersonalNotes = () =>
 
 export const formatDate = (d) =>
   new Date(`${d}T12:00:00Z`).toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
+
+// Every pledge, newest issue first; the latest issue's pledges are marked as new.
+export const getPledges = () => {
+  const latest = issues[0]?.number;
+  return issues.flatMap((i) =>
+    i.pledges.map((p, k) => ({ id: `${i.number}-${k + 1}`, role: p.role, text: p.text, issue: i.number, issueUrl: i.url, isNew: i.number === latest }))
+  );
+};

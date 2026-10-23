@@ -12,6 +12,7 @@ inDetailSlug: "what-we-considered-while-creating-ajets-accessibility-page"
 discussion: [{"context": "NPR reports that more than 30 US states have banned phones in schools, and some want to remove laptops and tablets as well, even though some students with disabilities depend on them.", "question": "Should screen bans come with exemptions, or would that single out the students who need them?", "options": ["Bans with exemptions", "No bans, teach responsible use", "Ban phones only, keep laptops and tablets"]}, {"context": "Sheri Byrne-Haber says face-based age verification often fails people with disabilities, so it should never be the only option.", "question": "If an alternative path exists, does it need to be just as easy as the main one?", "options": ["Yes, just as easy", "It can be harder, as long as it exists"]}]
 inspirationTopics: [["Disability & Stories"], ["Development", "Design"], ["Disability & Stories"]]
 newsDates: ["2026-05-29", "2026-06-04", "2026-05-21"]
+pledges: [{"role": "Product", "text": "I will publish an accessibility page that says what's done and what's still missing"}]
 ---
 
 <!-- section:personal-notes -->

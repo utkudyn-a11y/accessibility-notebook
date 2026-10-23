@@ -12,6 +12,7 @@ inDetailSlug: "common-accessibility-failures-in-the-seat-maps"
 discussion: [{"context": "In Turkish bus seat maps, seats taken by women and men are shown in different colors, because passengers of different genders can only sit side by side if they book together. Utku calls this the biggest design problem in these maps.", "question": "How would you show this information without relying on color?", "options": ["Icons or symbols on each seat", "Text labels on each seat", "Patterns as well as colors", "A text list of free seats instead of a map"]}]
 inspirationTopics: [["Resources"], ["AI", "Development"], ["Strategy"]]
 newsDates: ["2026-05-21", "2026-05-25", "2026-05-21"]
+pledges: [{"role": "Design & Content", "text": "I will never use color alone to show meaning"}]
 ---
 
 <!-- section:personal-notes -->

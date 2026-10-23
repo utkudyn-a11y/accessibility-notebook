@@ -12,6 +12,7 @@ inDetailSlug: "what-else-can-a-redesign-project-improve-accessibility-the-case-o
 discussion: [{"context": "Korea's Supreme Court agreed that missing alt text on a shopping site is discriminatory, but it cancelled the damages because there was no clear evidence of intent or negligence.", "question": "Should companies pay for inaccessibility even when no one can prove they meant it?", "options": ["Yes, they should pay without proof of intent", "No, damages need intent or negligence"]}]
 inspirationTopics: [["Design"], ["AI", "Development"], ["Design"]]
 newsDates: [null, "2026-04-13", "2026-04-15"]
+pledges: [{"role": "Design & Content", "text": "I will publish tagged, accessible PDFs or HTML pages"}]
 ---
 
 <!-- section:personal-notes -->

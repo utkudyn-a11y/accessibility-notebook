@@ -78,3 +78,10 @@ The website of [Accessibility Notebook](https://buttondown.com/accessibility-not
 - Abbreviations: `src/lib/search-synonyms.js` lists abbreviations with their long forms, so "EAA" also finds "European Accessibility Act" and the other way round. **When a new issue uses an abbreviation that is not in the list, add a line with its long form**, for example `['dsa', 'digital services act'],`.
 - Results link straight to the story on its issue page (`#news-2`, `#inspiration-1`, `#personal-notes`), to the In Detail page, or to the Discussion Corner question on the home page (`/?question=23-1`).
 - The "Popular topics" on the search page are set at the top of `src/pages/search.astro`.
+
+## Accessibility Pledge
+
+- `/pledge/` (menu: Accessibility Pledge) lets readers pick up to 3 pledges and download a 1080 × 1080 card, share it (on phones) and copy its alt text. Everything happens in the browser; nothing is stored.
+- Pledges live in each issue's front matter, 1–2 per issue: `pledges: [{"role": "Testing", "text": "I will test every flow with a keyboard, not only with tools"}]`. Roles: Design & Content, Development, Testing, Product. Text starts with "I will", about 80 characters at most, no final period. The latest issue's pledges get a "New" label.
+- Do not reword or remove a published pledge lightly: people may have shared cards with it.
+- The page's social image is `public/images/pledge-og.png`.
