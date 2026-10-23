@@ -9,6 +9,8 @@ const notes = getPersonalNotes();
     <h1>Originals</h1>
     <p class="lead reading">Everything I wrote myself: in-depth articles on standards, research and practice, and personal notes from my life as a partially sighted accessibility specialist.</p>
 
+    <p class="jump"><a href="#personal-notes">See Personal Notes <span class="arrow" aria-hidden="true">↓</span></a></p>
+
     <div class="cols">
       <section aria-labelledby="in-detail-title">
         <h2 id="in-detail-title">In Detail</h2>
@@ -22,7 +24,7 @@ const notes = getPersonalNotes();
           ))}
         </ul>
       </section>
-      <section aria-labelledby="notes-title">
+      <section id="personal-notes" aria-labelledby="notes-title">
         <h2 id="notes-title">Personal Notes</h2>
         <ul class="entries">
           {notes.map((n) => (
@@ -42,6 +44,13 @@ const notes = getPersonalNotes();
   .lead { font-size: var(--step-1); line-height: 1.45; }
   .cols { display: grid; gap: 1rem 4rem; }
   @media (min-width: 64rem) { .cols { grid-template-columns: 1fr 1fr; } }
+  /* Shortcut to Personal Notes, only when the two lists sit one under the other */
+  .jump { margin: 1rem 0 0; }
+  .jump a { display: inline-flex; align-items: center; gap: 0.4rem; min-height: 44px; font-weight: 800; }
+  .jump .arrow { font-size: 1.3em; line-height: 1; }
+  @media (min-width: 64rem) { .jump { display: none; } }
+  #personal-notes { scroll-margin-top: 1rem; }
+  @media (prefers-reduced-motion: no-preference) { :global(html) { scroll-behavior: smooth; } }
   h2 { margin-top: 2rem; padding-bottom: 0.4rem; border-bottom: 3px solid var(--notebook); }
   .entries { list-style: none; padding: 0; margin: 0; }
   .entries li { padding: 1.25rem 0; border-bottom: 2px solid var(--rule); }
