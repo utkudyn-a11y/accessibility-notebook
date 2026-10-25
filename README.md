@@ -9,7 +9,7 @@ The website of [Accessibility Notebook](https://buttondown.com/accessibility-not
    - `title`, `number`, `date` (YYYY-MM-DD), `description` (1–2 sentences, shown in Google and on the home page)
    - `cover`: put the cover in `public/images/` and write `/images/<file name>`
    - `album`: artist, title and Spotify link
-   - `linkedinUrl`: the LinkedIn article address. Leave it out if the issue goes on the site before LinkedIn: the LinkedIn links are then hidden. Add it when the post is live.
+   - `linkedinUrl`: the LinkedIn article address (optional; kept for reference, the site no longer links to LinkedIn posts: discussion happens in the site's comments).
    - `personalNoteTitle`: a title for the Personal Notes section
    - `inDetailTitle` and `inDetailSlug`: the In Detail title and its web address (lowercase, words joined with `-`)
    - `discussion`: one or more Discussion Corner questions, each with a short `context`, the `question` itself and 2–4 vote `options`, for example
