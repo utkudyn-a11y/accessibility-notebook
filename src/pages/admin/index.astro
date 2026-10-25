@@ -1,5 +1,5 @@
 ---
-// Comment moderation for Utku. Cloudflare Access asks for his email before this page and its API load.
+// Comment moderation for Utku. Log in with the admin password (Pages secret ADMIN_PASSWORD).
 // Not in the sitemap, not indexed.
 import Base from '../../layouts/Base.astro';
 ---
@@ -7,9 +7,19 @@ import Base from '../../layouts/Base.astro';
   <div class="wrap admin">
     <h1 id="title">Comments to review<span class="n"></span></h1>
     <p class="status" role="status"></p>
-    <div class="pending"><p>Loading…</p></div>
-    <h2>Approved recently</h2>
-    <div class="approved"></div>
+    <form class="login" novalidate hidden>
+      <p>Please log in to review comments.</p>
+      <label for="pw">Password</label>
+      <input id="pw" type="password" autocomplete="current-password" required aria-describedby="pw-err" />
+      <p class="err" id="pw-err"></p>
+      <button type="submit">Log in</button>
+    </form>
+    <div class="board" hidden>
+      <div class="pending"><p>Loading…</p></div>
+      <h2>Approved recently</h2>
+      <div class="approved"></div>
+      <p><button type="button" class="ghost logout">Log out</button></p>
+    </div>
   </div>
 </Base>
 
@@ -20,6 +30,10 @@ import Base from '../../layouts/Base.astro';
   const approvedEl = $('.approved');
   const status = $('.status');
   const count = $('#title .n');
+  const login = $<HTMLFormElement>('.login');
+  const board = $('.board');
+  const pw = $<HTMLInputElement>('#pw');
+  const pwErr = $('#pw-err');
   const esc = (s: string) => s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
   const day = (d: string) => new Date(d).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
 
@@ -43,7 +57,9 @@ import Base from '../../layouts/Base.astro';
 
   const load = async () => {
     const res = await fetch('/api/admin/comments', { cache: 'no-store' });
-    if (res.status === 401) { pendingEl.innerHTML = '<p>Please log in through Cloudflare Access to review comments.</p>'; approvedEl.innerHTML = ''; return; }
+    if (res.status === 401) { board.hidden = true; login.hidden = false; count.textContent = ''; return; }
+    login.hidden = true;
+    board.hidden = false;
     if (!res.ok) { pendingEl.innerHTML = '<p>Comments could not be loaded. Please reload the page.</p>'; return; }
     const { pending, approved }: { pending: Row[]; approved: Row[] } = await res.json();
     count.textContent = ` (${pending.length})`;
@@ -74,6 +90,24 @@ import Base from '../../layouts/Base.astro';
       return;
     }
     act(id, b.dataset.act!);
+  });
+  login.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!pw.value) { pwErr.textContent = 'Please enter the password.'; pw.setAttribute('aria-invalid', 'true'); pw.focus(); return; }
+    const res = await fetch('/api/admin/login', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ password: pw.value }) });
+    if (!res.ok) { pwErr.textContent = 'Wrong password. Please try again.'; pw.setAttribute('aria-invalid', 'true'); pw.select(); pw.focus(); return; }
+    pw.value = '';
+    pwErr.textContent = '';
+    pw.removeAttribute('aria-invalid');
+    await load();
+    $<HTMLElement>('#title').focus();
+  });
+  $('.logout').addEventListener('click', async () => {
+    await fetch('/api/admin/login', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ logout: true }) });
+    status.textContent = 'Logged out.';
+    await load();
+    pw.focus();
   });
   document.addEventListener('submit', (e) => {
     const f = (e.target as HTMLElement).closest<HTMLFormElement>('form.reply');
@@ -106,4 +140,13 @@ import Base from '../../layouts/Base.astro';
   .admin :global(form.reply label) { display: block; font-weight: 800; margin-bottom: 0.3rem; }
   .admin :global(form.reply textarea) { width: 100%; font: inherit; padding: 0.6rem 0.8rem; border: 2px solid var(--ink-soft); border-radius: 8px; margin-bottom: 0.6rem; }
   .admin :global(.snip) { color: var(--ink-soft); }
+  .login { max-width: 28rem; border: 2px solid var(--notebook); border-radius: 12px; padding: 1.3rem 1.4rem; background: var(--tint); }
+  .login p:first-child { margin-top: 0; }
+  .login label { display: block; font-weight: 800; margin-bottom: 0.3rem; }
+  .login input { width: 100%; font: inherit; padding: 0.6rem 0.8rem; border: 2px solid var(--ink-soft); border-radius: 8px; background: #fff; }
+  .login input:focus-visible { outline: 3px solid var(--notebook); outline-offset: 2px; }
+  .login [aria-invalid='true'] { border-color: #a1001b; }
+  .login button { margin-top: 1rem; }
+  .err { color: #a1001b; font-weight: 700; margin: 0.3rem 0 0; }
+  .err:empty { display: none; }
 </style>
