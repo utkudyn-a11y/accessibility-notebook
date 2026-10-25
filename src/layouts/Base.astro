@@ -15,6 +15,7 @@ const {
   type = 'website',
   published,
   jsonLd,
+  noindex = false,
 } = Astro.props;
 
 const pageTitle = title ? `${title} | ${SITE_TITLE}` : SITE_TITLE;
@@ -37,6 +38,7 @@ const ld = jsonLd ?? {
     <title>{pageTitle}</title>
     {[font400, font700, font800].map((f) => <link rel="preload" href={f} as="font" type="font/woff2" crossorigin />)}
     <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
     <link rel="canonical" href={canonical} />
     <meta name="google-site-verification" content="nFoONTGjqrizseo2bnZlKl4eiDIJh38K30A4mIdDDoM" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />

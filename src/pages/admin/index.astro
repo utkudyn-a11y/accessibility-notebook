@@ -1,0 +1,109 @@
+---
+// Comment moderation for Utku. Cloudflare Access asks for his email before this page and its API load.
+// Not in the sitemap, not indexed.
+import Base from '../../layouts/Base.astro';
+---
+<Base title="Comments to review" description="Comment moderation" noindex>
+  <div class="wrap admin">
+    <h1 id="title">Comments to review<span class="n"></span></h1>
+    <p class="status" role="status"></p>
+    <div class="pending"><p>Loading…</p></div>
+    <h2>Approved recently</h2>
+    <div class="approved"></div>
+  </div>
+</Base>
+
+<script>
+  type Row = { id: number; issue: number; parent_id: number | null; name: string; body: string; is_author: number; status: string; created_at: string };
+  const $ = <T extends HTMLElement>(s: string) => document.querySelector<T>(s)!;
+  const pendingEl = $('.pending');
+  const approvedEl = $('.approved');
+  const status = $('.status');
+  const count = $('#title .n');
+  const esc = (s: string) => s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
+  const day = (d: string) => new Date(d).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+
+  const card = (r: Row) =>
+    `<li><article class="c" aria-labelledby="a-${r.id}">` +
+    `<h2 class="who" id="a-${r.id}">${esc(r.name)} <span class="meta">${day(r.created_at)} · <a href="/notes/${r.issue}/#comments">Notes # ${r.issue}</a></span></h2>` +
+    `<p class="body">${esc(r.body)}</p>` +
+    `<div class="actions">` +
+    `<button type="button" data-act="approve" data-id="${r.id}">Approve<span class="visually-hidden"> comment by ${esc(r.name)}</span></button>` +
+    `<button type="button" class="ghost" data-act="reply-open" data-id="${r.id}" aria-expanded="false" aria-controls="r-${r.id}">Reply<span class="visually-hidden"> to ${esc(r.name)}</span></button>` +
+    `<button type="button" class="danger" data-act="delete" data-id="${r.id}">Delete<span class="visually-hidden"> comment by ${esc(r.name)}</span></button>` +
+    `</div>` +
+    `<form class="reply" id="r-${r.id}" data-id="${r.id}" hidden><label for="rt-${r.id}">Your reply (approves the comment too)</label>` +
+    `<textarea id="rt-${r.id}" rows="4" maxlength="2000"></textarea><button type="submit">Approve and reply</button></form>` +
+    `</article></li>`;
+
+  const done = (r: Row) =>
+    `<li>${esc(r.name)}${r.is_author ? ' (your reply)' : ''} on <a href="/notes/${r.issue}/#comments">Notes # ${r.issue}</a>, ${day(r.created_at)}: ` +
+    `<span class="snip">${esc(r.body.slice(0, 90))}${r.body.length > 90 ? '…' : ''}</span> ` +
+    `<button type="button" class="link" data-act="hide" data-id="${r.id}">Hide<span class="visually-hidden"> comment by ${esc(r.name)}</span></button></li>`;
+
+  const load = async () => {
+    const res = await fetch('/api/admin/comments', { cache: 'no-store' });
+    if (res.status === 401) { pendingEl.innerHTML = '<p>Please log in through Cloudflare Access to review comments.</p>'; approvedEl.innerHTML = ''; return; }
+    if (!res.ok) { pendingEl.innerHTML = '<p>Comments could not be loaded. Please reload the page.</p>'; return; }
+    const { pending, approved }: { pending: Row[]; approved: Row[] } = await res.json();
+    count.textContent = ` (${pending.length})`;
+    pendingEl.innerHTML = pending.length ? `<ol>${pending.map(card).join('')}</ol>` : '<p>Nothing to review. 🎉</p>';
+    approvedEl.innerHTML = approved.length ? `<ul>${approved.map(done).join('')}</ul>` : '<p>None yet.</p>';
+  };
+
+  const act = async (id: string, action: string, reply = '') => {
+    const res = await fetch('/api/admin/comments', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ id: Number(id), action, reply }) });
+    if (!res.ok) { status.textContent = 'That did not work. Please try again.'; return false; }
+    const msg: Record<string, string> = { approve: 'Approved.', delete: 'Deleted.', hide: 'Hidden from the site.', reply: 'Approved and replied.' };
+    status.textContent = msg[action];
+    await load();
+    $<HTMLElement>('#title').focus();
+    return true;
+  };
+
+  $('#title').setAttribute('tabindex', '-1');
+  document.addEventListener('click', (e) => {
+    const b = (e.target as HTMLElement).closest<HTMLButtonElement>('button[data-act]');
+    if (!b) return;
+    const id = b.dataset.id!;
+    if (b.dataset.act === 'reply-open') {
+      const f = document.getElementById(`r-${id}`) as HTMLFormElement;
+      f.hidden = !f.hidden;
+      b.setAttribute('aria-expanded', String(!f.hidden));
+      if (!f.hidden) f.querySelector('textarea')!.focus();
+      return;
+    }
+    act(id, b.dataset.act!);
+  });
+  document.addEventListener('submit', (e) => {
+    const f = (e.target as HTMLElement).closest<HTMLFormElement>('form.reply');
+    if (!f) return;
+    e.preventDefault();
+    const text = f.querySelector('textarea')!.value.trim();
+    if (!text) { status.textContent = 'Write a reply first.'; f.querySelector('textarea')!.focus(); return; }
+    act(f.dataset.id!, 'reply', text);
+  });
+  load();
+</script>
+
+<style>
+  .admin { padding: 2rem 0 4rem; max-width: 56rem; }
+  h1:focus { outline: none; }
+  .status:empty { display: none; }
+  .status { font-weight: 700; color: #1d6b3a; }
+  .admin :global(ol), .admin :global(ul) { list-style: none; padding: 0; margin: 0 0 2rem; display: grid; gap: 1rem; }
+  .admin :global(article.c) { border: 2px solid var(--rule); border-radius: 10px; padding: 1rem 1.2rem; background: #fff; }
+  .admin :global(h2.who) { font-size: 1.05rem; margin: 0; }
+  .admin :global(.meta) { font-weight: 400; font-size: var(--step--1); color: var(--ink-soft); }
+  .admin :global(.body) { white-space: pre-line; overflow-wrap: anywhere; margin: 0.5rem 0 0; }
+  .admin :global(.actions) { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 1rem; }
+  .admin :global(button) { font: inherit; font-weight: 800; border-radius: 8px; padding: 0.6rem 1.2rem; background: var(--notebook); color: #fff; border: 2px solid var(--notebook); cursor: pointer; }
+  .admin :global(button.ghost) { background: #fff; color: var(--notebook); }
+  .admin :global(button.danger) { background: #fff; color: #a1001b; border-color: #a1001b; }
+  .admin :global(button.link) { background: none; border: 0; padding: 0; color: var(--notebook); text-decoration: underline; font-weight: 700; }
+  .admin :global(button:focus-visible) { outline: 3px solid var(--notebook); outline-offset: 3px; }
+  .admin :global(form.reply) { margin-top: 1rem; }
+  .admin :global(form.reply label) { display: block; font-weight: 800; margin-bottom: 0.3rem; }
+  .admin :global(form.reply textarea) { width: 100%; font: inherit; padding: 0.6rem 0.8rem; border: 2px solid var(--ink-soft); border-radius: 8px; margin-bottom: 0.6rem; }
+  .admin :global(.snip) { color: var(--ink-soft); }
+</style>

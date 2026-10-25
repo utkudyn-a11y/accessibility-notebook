@@ -94,3 +94,13 @@ The website of [Accessibility Notebook](https://buttondown.com/accessibility-not
 - Pages show the WebP copy in a `<picture>` element; browsers without WebP get the original. Originals are never removed, so old emails, LinkedIn posts and social previews keep working. `*-og.png` social images are not converted.
 - Images in issue text get their width and height and load only when the reader scrolls near them.
 - Only missing copies are made. If you replace an image under the same file name, delete its files in `public/images/webp/` first.
+
+## Comments
+
+- Every issue page ends with a Comments section and an "I Have Something To Say" form (`src/components/Comments.astro`). In Detail pages link to the issue's comments (`/notes/N/#comments`).
+- Readers give only a name and a comment (no email, nothing else stored). A comment waits as "pending" and shows on the site after Utku approves it. Links in comments are shown as plain text.
+- API: `functions/api/comments.js` (GET approved comments, POST a new one; also works as a plain form post without JavaScript). Spam protection: hidden honeypot field, the Cloudflare rate limiting rule, length limits, a cap on waiting comments, and moderation.
+- Moderation: `/admin/` (not in the sitemap, not indexed) lists waiting comments with Approve, Reply and Delete, and recent approved ones with Hide. Utku's replies are shown under the comment with an "Author" label. Its API is `functions/api/admin/comments.js`.
+- `/admin/` and `/api/admin/` are protected by Cloudflare Access (Zero Trust), and the API also checks the Access token itself. It needs these Pages environment variables: `ACCESS_TEAM_DOMAIN` (e.g. `https://<team>.cloudflareaccess.com`), `ACCESS_AUD` (the Access application's AUD tag) and `ADMIN_EMAIL`. Until they are set, the admin API answers 401 and comments simply wait.
+- The `comments` table is in `schema.sql` (database notebook-votes).
+- Local testing: temporary `wrangler.toml` with the D1 binding, `wrangler d1 execute notebook-votes --local --file schema.sql`, then `wrangler pages dev dist --binding ADMIN_DEV=1` (opens /admin/ on localhost without Access). Never set `ADMIN_DEV` in Cloudflare and never commit `wrangler.toml`.

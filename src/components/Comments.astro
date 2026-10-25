@@ -1,0 +1,173 @@
+---
+// Comments at the end of an issue page. Readers' comments show after Utku approves them in /admin/.
+// The API is functions/api/comments.js. Without JavaScript the form still works (normal form post).
+const { issue } = Astro.props;
+const NAME_MAX = 60;
+const BODY_MAX = 2000;
+---
+<section class="cm" aria-labelledby="comments" data-issue={issue}>
+  <h2 id="comments">Comments<span class="n"></span></h2>
+  <p class="lead">What do you think about this issue?</p>
+  <div class="list">
+    <noscript><p>Turn on JavaScript to read the comments. You can still send one below.</p></noscript>
+  </div>
+
+  <div class="sent" tabindex="-1" hidden></div>
+
+  <form class="form" method="post" action="/api/comments" novalidate aria-labelledby="cm-form-title">
+    <h3 id="cm-form-title">I Have Something To Say</h3>
+    <p class="hint" id="cm-hint">Comments appear after Utku reads them. Please keep it kind and on topic.</p>
+    <input type="hidden" name="issue" value={issue} />
+    <div class="field">
+      <label for="cm-name">Name</label>
+      <input id="cm-name" name="name" type="text" autocomplete="name" maxlength={NAME_MAX} required aria-describedby="cm-name-err" />
+      <p class="err" id="cm-name-err"></p>
+    </div>
+    <div class="field">
+      <label for="cm-text">Comment</label>
+      <textarea id="cm-text" name="comment" rows="6" maxlength={BODY_MAX} required aria-describedby="cm-text-err cm-count"></textarea>
+      <p class="err" id="cm-text-err"></p>
+      <p class="count" id="cm-count"><span>0</span> of {BODY_MAX.toLocaleString('en')} characters</p>
+    </div>
+    <!-- Spam trap: hidden from everyone, including screen readers; bots tend to fill it in -->
+    <div class="trap" aria-hidden="true">
+      <label for="cm-website">Leave this empty</label>
+      <input id="cm-website" name="website" type="text" tabindex="-1" autocomplete="off" />
+    </div>
+    <button type="submit" class="send">Send comment</button>
+    <p class="form-err" role="alert"></p>
+    <p class="privacy">We store only your name and comment. No email, no tracking.</p>
+  </form>
+</section>
+
+<script>
+  type C = { id: number; name: string; body: string; date: string; author: boolean; replies: C[] };
+  const root = document.querySelector<HTMLElement>('.cm');
+  if (root) {
+    const issue = root.dataset.issue!;
+    const list = root.querySelector<HTMLElement>('.list')!;
+    const count = root.querySelector<HTMLElement>('#comments .n')!;
+    const form = root.querySelector<HTMLFormElement>('.form')!;
+    const sent = root.querySelector<HTMLElement>('.sent')!;
+    const nameEl = form.querySelector<HTMLInputElement>('#cm-name')!;
+    const textEl = form.querySelector<HTMLTextAreaElement>('#cm-text')!;
+    const counter = form.querySelector<HTMLElement>('#cm-count span')!;
+    const formErr = form.querySelector<HTMLElement>('.form-err')!;
+    const btn = form.querySelector<HTMLButtonElement>('.send')!;
+
+    const esc = (s: string) => s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
+    const day = (d: string) => new Date(d).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+    const item = (c: C): string =>
+      `<li><article class="c${c.author ? ' author' : ''}" aria-labelledby="c-${c.id}">` +
+      `<h3 id="c-${c.id}">${esc(c.name)}${c.author ? ' <span class="badge">Author</span>' : ''} <time datetime="${esc(c.date)}">${day(c.date)}</time></h3>` +
+      `<p class="body">${esc(c.body)}</p></article>` +
+      (c.replies.length ? `<ol class="replies">${c.replies.map(item).join('')}</ol>` : '') + '</li>';
+
+    const load = async () => {
+      try {
+        const res = await fetch(`/api/comments?issue=${encodeURIComponent(issue)}`);
+        if (!res.ok) throw new Error(String(res.status));
+        const data: { comments: C[]; count: number } = await res.json();
+        count.textContent = data.count ? ` (${data.count})` : '';
+        list.innerHTML = data.comments.length
+          ? `<ol class="items">${data.comments.map(item).join('')}</ol>`
+          : '<p class="empty">No comments yet. Be the first to share your view.</p>';
+      } catch {
+        list.innerHTML = '<p class="empty">Comments could not be loaded right now. You can still send one.</p>';
+      }
+    };
+
+    const showSent = (name: string) => {
+      form.hidden = true;
+      sent.hidden = false;
+      sent.innerHTML = `<p><strong>Thanks${name ? `, ${esc(name)}` : ''}!</strong> Your comment was sent. It will appear here after Utku reads it.</p>`;
+      sent.focus();
+    };
+
+    const setError = (el: HTMLInputElement | HTMLTextAreaElement, msg: string) => {
+      const box = form.querySelector<HTMLElement>(`#${el.id}-err`)!;
+      box.textContent = msg;
+      if (msg) el.setAttribute('aria-invalid', 'true'); else el.removeAttribute('aria-invalid');
+    };
+
+    textEl.addEventListener('input', () => { counter.textContent = textEl.value.length.toLocaleString('en'); });
+    nameEl.addEventListener('input', () => nameEl.value.trim() && setError(nameEl, ''));
+    textEl.addEventListener('input', () => textEl.value.trim() && setError(textEl, ''));
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      formErr.textContent = '';
+      const name = nameEl.value.trim();
+      const text = textEl.value.trim();
+      setError(nameEl, name ? '' : 'Please enter your name.');
+      setError(textEl, text ? '' : 'Please write a comment.');
+      if (!name || !text) { (name ? textEl : nameEl).focus(); return; }
+      btn.disabled = true;
+      btn.textContent = 'Sending…';
+      try {
+        const res = await fetch('/api/comments', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ issue, name, comment: text, website: (form.elements.namedItem('website') as HTMLInputElement).value }),
+        });
+        if (res.status === 422) {
+          const { errors } = await res.json();
+          setError(nameEl, errors.name || '');
+          setError(textEl, errors.comment || '');
+          (errors.name ? nameEl : textEl).focus();
+        } else if (!res.ok) {
+          throw new Error(String(res.status));
+        } else {
+          showSent(name);
+          return;
+        }
+      } catch {
+        formErr.textContent = 'Sorry, your comment could not be sent. Please try again in a moment.';
+      }
+      btn.disabled = false;
+      btn.textContent = 'Send comment';
+    });
+
+    // After a form post without JavaScript the API sends the reader back with ?comment=sent|error|busy
+    const state = new URL(location.href).searchParams.get('comment');
+    if (state === 'sent') showSent('');
+    else if (state === 'error') formErr.textContent = 'Please enter your name and a comment.';
+    else if (state === 'busy') formErr.textContent = 'Sorry, comments are paused for a moment. Please try again later.';
+
+    load();
+  }
+</script>
+
+<style>
+  .cm { margin-top: 3rem; padding-top: 1.5rem; border-top: 2px solid var(--rule); max-width: var(--measure); scroll-margin-top: 1rem; }
+  .cm h2 { margin: 0 0 0.3rem; }
+  .lead { color: var(--ink-soft); margin: 0 0 1.5rem; }
+  .cm :global(ol) { list-style: none; padding: 0; margin: 0; display: grid; gap: 1rem; }
+  .cm :global(.items) { margin-bottom: 2rem; }
+  .cm :global(.replies) { margin: 1rem 0 0 clamp(1rem, 4vw, 2rem); }
+  .cm :global(article.c) { border: 2px solid var(--rule); border-radius: 10px; padding: 1rem 1.2rem; background: #fff; }
+  .cm :global(article.author) { border-color: var(--notebook); background: var(--tint); }
+  .cm :global(article h3) { font-size: 1.05rem; margin: 0; display: flex; gap: 0.3rem 0.6rem; align-items: baseline; flex-wrap: wrap; }
+  .cm :global(.badge) { font-size: 0.8rem; font-weight: 800; background: var(--notebook); color: #fff; border-radius: 999px; padding: 0.1rem 0.6rem; }
+  .cm :global(time) { font-size: var(--step--1); color: var(--ink-soft); font-weight: 400; }
+  .cm :global(.body) { margin: 0.5rem 0 0; white-space: pre-line; overflow-wrap: anywhere; }
+  .cm :global(.empty) { margin: 0 0 2rem; }
+  .form, .sent { border: 2px solid var(--notebook); border-radius: 12px; padding: 1.3rem 1.4rem; background: var(--tint); }
+  .sent { border-color: #1d6b3a; background: #eaf7ee; }
+  .sent :global(p) { margin: 0; }
+  .form h3 { font-size: var(--step-1); margin: 0 0 0.3rem; }
+  .hint { font-size: var(--step--1); color: var(--ink-soft); margin: 0.2rem 0 0.5rem; }
+  .field label { display: block; font-weight: 800; margin: 1rem 0 0.3rem; }
+  .field input, .field textarea { width: 100%; font: inherit; padding: 0.6rem 0.8rem; border: 2px solid var(--ink-soft); border-radius: 8px; background: #fff; color: var(--ink); }
+  .field textarea { min-height: 9rem; resize: vertical; }
+  .field input:focus-visible, .field textarea:focus-visible { outline: 3px solid var(--notebook); outline-offset: 2px; }
+  .field [aria-invalid='true'] { border-color: #a1001b; }
+  .err, .form-err { color: #a1001b; font-weight: 700; margin: 0.3rem 0 0; }
+  .err:empty, .form-err:empty { display: none; }
+  .count { font-size: var(--step--1); color: var(--ink-soft); margin: 0.3rem 0 0; }
+  .send { margin-top: 1.2rem; font: inherit; font-weight: 800; background: var(--notebook); color: #fff; border: 0; border-radius: 8px; padding: 0.7rem 1.4rem; cursor: pointer; }
+  .send:focus-visible { outline: 3px solid var(--notebook); outline-offset: 3px; }
+  .send:disabled { opacity: 0.7; cursor: wait; }
+  .privacy { font-size: var(--step--1); color: var(--ink-soft); margin: 1rem 0 0; }
+  .trap { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+</style>

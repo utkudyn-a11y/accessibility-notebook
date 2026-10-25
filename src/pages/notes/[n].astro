@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import Subscribe from '../../components/Subscribe.astro';
+import Comments from '../../components/Comments.astro';
 import { getIssues, render, formatDate } from '../../lib/issues.js';
 import { articleLd } from '../../lib/ld.js';
 import { webp } from '../../lib/images.js';
@@ -53,6 +54,7 @@ const sections = ORDER.filter((k) => issue.sections[k]).map((k) => ({ key: k, ..
           )}
         </section>
       ))}
+      <Comments issue={issue.number} />
       {issue.linkedinUrl && <p class="discuss"><a href={issue.linkedinUrl}>Discuss this issue on LinkedIn</a></p>}
     </div>
     <nav class="reading pager" aria-label="More issues">
@@ -70,7 +72,7 @@ const sections = ORDER.filter((k) => issue.sections[k]).map((k) => ({ key: k, ..
   .news-item, .album { scroll-margin-top: 1rem; }
   .news-item:target h3, .album:target, .issue :global(.prose h2:target) { background: var(--highlight); box-shadow: 0 0 0 0.3rem var(--highlight); }
   .standalone { font-size: var(--step--1); }
-  .discuss { margin-top: 3rem; padding-top: 1.5rem; border-top: 2px solid var(--rule); font-weight: 700; }
+  .discuss { margin-top: 2rem; font-weight: 700; }
   .pager { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); margin: 2rem 0 3rem; }
   .pager a { display: block; padding: 1rem 1.2rem; border: 2px solid var(--rule); border-radius: 8px; text-decoration: none; color: var(--ink); font-weight: 700; }
   .pager a:hover { border-color: var(--notebook); }

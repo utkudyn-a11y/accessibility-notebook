@@ -18,7 +18,7 @@ const server = http.createServer((req, res) => {
 }).listen(0);
 const base = `http://localhost:${server.address().port}`;
 
-const pages = ['/404.html', ...[...fs.readFileSync(path.join(DIST, 'sitemap-0.xml'), 'utf8').matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => new URL(m[1]).pathname)];
+const pages = ['/404.html', '/admin/', ...[...fs.readFileSync(path.join(DIST, 'sitemap-0.xml'), 'utf8').matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => new URL(m[1]).pathname)];
 const browser = await chromium.launch(process.env.CHROME_PATH ? { executablePath: process.env.CHROME_PATH } : {});
 let failed = 0;
 for (const [w, label] of [[1280, 'desktop'], [390, 'mobile']]) {
