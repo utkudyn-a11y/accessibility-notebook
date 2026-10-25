@@ -9,7 +9,6 @@ linkedinUrl: "https://www.linkedin.com/pulse/notes-23-am-i-disabled-robot-utku-d
 personalNoteTitle: "A CAPTCHA I Can't See: Booking a Schengen Visa Appointment"
 inDetailTitle: "Bonus: What W3C Says on CAPTCHAs?"
 inDetailSlug: "what-w3c-says-on-captchas"
-discussion: [{"context": "My design team sometimes can't agree on colors because WCAG's contrast formula doesn't match real human perception.", "question": "Should we wait for APCA in WCAG 3, or keep following the current rule even when it feels wrong?", "options": ["Wait for APCA", "Keep following the current rule"], "from": "inspiration-1", "id": "23-2"}]
 inspirationTopics: [["Legal & Standards", "Design"], ["Resources", "Strategy"], ["Testing"]]
 newsDates: ["2026-08-21", "2026-08-14", "2026-08-12"]
 pledges: [{"role": "Testing", "text": "I will test every flow with a keyboard, not only with tools", "from": "inspiration-3"}, {"role": "Product", "text": "I will never add a CAPTCHA without an equally easy alternative", "from": "in-detail"}]

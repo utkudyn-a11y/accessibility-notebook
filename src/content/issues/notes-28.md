@@ -9,7 +9,7 @@ linkedinUrl: "https://www.linkedin.com/pulse/notes-28-accessible-pos-a11y-ai-agn
 personalNoteTitle: "The \"Accessible\" POS That Announced My PIN"
 inDetailTitle: "What Did We Focus On For Alt Texts At Turkish Airlines?"
 inDetailSlug: "what-did-we-focus-on-for-alt-texts-at-turkish-airlines"
-discussion: [{"context": "The European Disability Forum and other organisations say Belgium is making digital channels the only way to reach some essential public services, and they're asking for non-digital alternatives to stay.", "question": "If a digital service is fully accessible, is a non-digital option still necessary?", "options": ["Yes, keep a non-digital option", "No, an accessible digital service is enough"], "from": "news-1"}, {"context": "Nicolas Steenhout argues that it's time to retire the idea of \"decorative images,\" because most images add context and mood even when they carry no information.", "question": "Is \"decorative\" a real category, or often just an excuse to skip alt text?", "options": ["A real category", "Often just an excuse"], "from": "inspiration-1", "id": "28-3"}]
+discussion: [{"context": "Nicolas Steenhout argues that it's time to retire the idea of \"decorative images,\" because most images add context and mood even when they carry no information.", "question": "Is \"decorative\" a real category, or often just an excuse to skip alt text?", "options": ["A real category", "Often just an excuse"], "from": "inspiration-1", "id": "28-3"}]
 inspirationTopics: [["Design"], ["Legal & Standards"], ["Resources", "Disability & Stories"]]
 newsDates: ["2026-09-28", "2026-09-24", "2026-09-26"]
 pledges: [{"role": "Design & Content", "text": "I will write alt text that says why the image is there", "from": "inspiration-1"}]

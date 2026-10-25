@@ -7,7 +7,6 @@ cover: "/images/notes-01-cover.png"
 album: {"artist": "ROSALİA", "title": "LUX", "url": "https://open.spotify.com/intl-tr/album/3SUEJULSGgBDG1j4GQhfYY"}
 linkedinUrl: "https://www.linkedin.com/pulse/notes-digital-accessibility-1-web-almanac-sundance-film-demiryakan-mrkdf/"
 personalNoteTitle: "2026 Starts Fast: Northern Cyprus and an Invitation to Zero Project"
-discussion: [{"context": "The Missouri Chamber wants to give businesses more time to fix minor technical accessibility issues, and the right to counter-sue, to protect small businesses from \"abusive lawsuits.\"", "question": "Is this a fair balance, or does it weaken the right to equal access?", "options": ["A fair balance for small businesses", "It weakens the right to equal access"], "from": "news-1"}]
 inspirationTopics: [["Resources", "Disability & Stories"], ["Disability & Stories", "Design"], ["AI", "Resources"]]
 newsDates: ["2026-01-23", "2026-01-20", "2026-01-15"]
 ---
