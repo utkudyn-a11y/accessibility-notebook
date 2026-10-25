@@ -35,7 +35,7 @@ Finally, we have seen a concrete legal decision for the EAA from France after a 
 
 Source: [Taylor Arndt](https://taylorarndt.substack.com/p/wwdc-2026-the-best-one-i-have-ever)
 
-Here is a review of Apple’s Worldwide Developers Conference by Taylor Arndt. In [Notes # 6](https://www.linkedin.com/pulse/notes-6-applevis-digital-accessibility-nigeria-508-utku-demiryakan-owdff/?trackingId=4QMDF19pRD2oU8lTDxW7XA%3D%3D), I mentioned an AppleVis study, according to which the general satisfaction rate with Apple’s accessibility solutions has decreased. However, this year’s updates announced at WWDC have excited some users, including Taylor. VoiceOver is getting richer descriptions of images, the magnifier and camera can provide smart descriptions, captions can be generated for videos automatically and sign language will be supported on FaceTime. All of these features will go live this fall.
+Here is a review of Apple’s Worldwide Developers Conference by Taylor Arndt. In [Notes # 6](/notes/6/), I mentioned an AppleVis study, according to which the general satisfaction rate with Apple’s accessibility solutions has decreased. However, this year’s updates announced at WWDC have excited some users, including Taylor. VoiceOver is getting richer descriptions of images, the magnifier and camera can provide smart descriptions, captions can be generated for videos automatically and sign language will be supported on FaceTime. All of these features will go live this fall.
 
 ### Call For Participation - Eighth Annual State of Digital Accessibility Survey
 
@@ -56,7 +56,7 @@ If you are trying to convince executives to launch an accessibility program, mos
 
 Source: [Harvard University Information Technology](https://accessibility.huit.harvard.edu/news/2026/05/deep-dive-contrast-themes)
 
-In [Notes # 10](https://www.linkedin.com/pulse/notes-10-irony-nepal-audible-crawl-rule-ikea-finland-utku-demiryakan-puzif/?trackingId=4QMDF19pRD2oU8lTDxW7XA%3D%3D), I wrote an “In Detail” section on Windows High Contrast Mode, but this article is even better than mine. I had included several screenshots and explained the common accessibility issues encountered when High Contrast Mode is turned on. In this article, you can also find code-level explanations and solution suggestions.
+In [Notes # 10](/notes/10/), I wrote an “In Detail” section on Windows High Contrast Mode, but this article is even better than mine. I had included several screenshots and explained the common accessibility issues encountered when High Contrast Mode is turned on. In this article, you can also find code-level explanations and solution suggestions.
 
 ### Dyslexia, Fonts And Finding Out What Works
 

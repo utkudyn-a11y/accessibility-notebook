@@ -1,5 +1,5 @@
 ---
-import { LINKEDIN_NEWSLETTER, BUTTONDOWN_USER } from '../consts.js';
+import { BUTTONDOWN_USER } from '../consts.js';
 const year = new Date().getFullYear();
 ---
 <footer class="site-footer">
@@ -8,7 +8,6 @@ const year = new Date().getFullYear();
     <ul>
       <li><a href="/about/">About me</a></li>
       <li><a href={`https://buttondown.com/${BUTTONDOWN_USER}`}>Subscribe by email</a></li>
-      <li><a href={LINKEDIN_NEWSLETTER}>Follow on LinkedIn</a></li>
       <li><a href="/rss.xml">RSS feed</a></li>
     </ul>
     <p class="copy">© {year} Utku Demiryakan</p>
