@@ -757,6 +757,28 @@
    ]
   ]
  },
+ "/images/notes-29-cover.jpg": {
+  "width": 1600,
+  "height": 900,
+  "webp": [
+   [
+    "/images/webp/notes-29-cover-480.webp",
+    480
+   ],
+   [
+    "/images/webp/notes-29-cover-800.webp",
+    800
+   ],
+   [
+    "/images/webp/notes-29-cover-1280.webp",
+    1280
+   ],
+   [
+    "/images/webp/notes-29-cover-1600.webp",
+    1600
+   ]
+  ]
+ },
  "/logo.png": {
   "width": 160,
   "height": 158,

@@ -21,7 +21,7 @@ const description = plainText(a.markdown, 155);
         <time datetime={a.issue.date}>{formatDate(a.issue.date)}</time>, from <a href={a.issue.url}>Notes # {a.issue.number}</a>
       </p>
       <div class="prose" set:html={render(a.markdown)} />
-      <p class="discuss"><a href={a.issue.linkedinUrl}>Discuss this article on LinkedIn</a></p>
+      {a.issue.linkedinUrl && <p class="discuss"><a href={a.issue.linkedinUrl}>Discuss this article on LinkedIn</a></p>}
       <Subscribe />
     </div>
   </article>

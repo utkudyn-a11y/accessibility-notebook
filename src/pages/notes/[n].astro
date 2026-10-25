@@ -53,7 +53,7 @@ const sections = ORDER.filter((k) => issue.sections[k]).map((k) => ({ key: k, ..
           )}
         </section>
       ))}
-      <p class="discuss"><a href={issue.linkedinUrl}>Discuss this issue on LinkedIn</a></p>
+      {issue.linkedinUrl && <p class="discuss"><a href={issue.linkedinUrl}>Discuss this issue on LinkedIn</a></p>}
     </div>
     <nav class="reading pager" aria-label="More issues">
       {older && <a rel="prev" href={older.url}><span>Previous issue</span>{older.title}</a>}

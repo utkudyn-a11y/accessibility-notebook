@@ -13,4 +13,6 @@ export const SYNONYMS = [
   ['whcm', 'windows high contrast mode', 'high contrast mode'],
   ['crpd', 'convention on the rights of persons with disabilities'],
   ['en 301 549', 'harmonised standard', 'harmonized standard'],
+  ['bsl', 'british sign language'],
+  ['cogai', 'cognitive accessibility institute'],
 ];
