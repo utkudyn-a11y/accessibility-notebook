@@ -9,7 +9,7 @@ linkedinUrl: "https://www.linkedin.com/pulse/notes-17-eaa-france-wwdc-2026-state
 personalNoteTitle: "A QR Code on a Concert Program: Small Fix, Big Impact"
 inDetailTitle: "Is the Use Of Accessibility Overlays For Dyslexia Meaningful?"
 inDetailSlug: "is-the-use-of-accessibility-overlays-for-dyslexia-meaningful"
-discussion: [{"context": "Utku wrote that accessibility overlays cause usability, legal and technical problems, including the ones that promise to help people with dyslexia. Funka says there's no \"magic dyslexia font\" and that users should get tools to adjust things themselves.", "question": "Who should provide those tools: the website, the browser, or the operating system?", "options": ["The website", "The browser", "The operating system", "All of them"], "from": "in-detail"}]
+discussion: [{"context": "Accessibility overlays cause usability, legal and technical problems, including the ones that promise to help people with dyslexia. Funka says there's no \"magic dyslexia font\" and that users should get tools to adjust things themselves.", "question": "Who should provide those tools: the website, or the browser and the operating system?", "options": ["The website", "The browser and the operating system", "Both of them"], "from": "in-detail"}]
 inspirationTopics: [["Strategy"], ["Development", "Design"], ["Design", "Disability & Stories"]]
 newsDates: ["2026-06-11", "2026-06-08", null]
 pledges: [{"role": "Design & Content", "text": "I will let users adjust text instead of choosing one \"dyslexia font\" for them", "from": "inspiration-3"}]

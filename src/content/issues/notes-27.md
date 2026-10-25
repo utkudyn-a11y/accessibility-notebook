@@ -9,7 +9,7 @@ linkedinUrl: "https://www.linkedin.com/pulse/notes-27-beatles-story-accessibilit
 personalNoteTitle: "The Beatles Story and an Audio Guide I Couldn't Use"
 inDetailTitle: "Accessibility Insights From England"
 inDetailSlug: "accessibility-insights-from-england"
-discussion: [{"context": "For Utku, independence doesn't mean doing everything alone. It means being free to decide when to ask for help. His trip to England left him with more questions than answers about this.", "question": "Should services invest in staff assistance or in accessible self-service? Where's the right balance?", "options": ["Staff assistance", "Accessible self-service", "Both, and the user chooses"], "from": "in-detail"}, {"context": "Almost no organization targets WCAG AAA, because no law requires it.", "question": "Are AAA criteria still useful, or have they become a \"nice to have\" that no one reads?", "options": ["Still useful", "A \"nice to have\" no one reads"], "from": "inspiration-2"}]
+discussion: [{"context": "Almost no organization targets WCAG AAA, because no law requires it.", "question": "Are AAA criteria still useful, or have they become a \"nice to have\" that no one reads?", "options": ["Still useful", "A \"nice to have\" no one reads"], "from": "inspiration-2", "id": "27-2"}]
 inspirationTopics: [["Legal & Standards"], ["Legal & Standards"], ["Strategy"]]
 newsDates: ["2026-09-25", "2026-09-16", "2026-09-29"]
 pledges: [{"role": "Product", "text": "I will never buy an accessibility overlay", "from": "inspiration-1"}]

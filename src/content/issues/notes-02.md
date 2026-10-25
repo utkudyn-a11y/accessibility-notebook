@@ -7,7 +7,7 @@ cover: "/images/notes-02-cover.jpg"
 album: {"artist": "Ulrika Spacek", "title": "Expo", "url": "https://open.spotify.com/intl-tr/album/6LLi2GeMAcPyUvwWxS2Gy7"}
 linkedinUrl: "https://www.linkedin.com/pulse/notes-2-wcag-3-kiosks-korea-ada-title-ii-utku-demiryakan-ib0ff/"
 personalNoteTitle: "Rome for Two Partially Sighted Tourists: Great Streets, Unreadable Menus"
-discussion: [{"context": "Under Korea's new kiosk rules, small businesses can keep an inaccessible kiosk as long as they install a bell to call staff. Utku sees this as a good example of reasonable accommodation.", "question": "Is a call bell enough, or should every kiosk be accessible on its own?", "options": ["A call bell is enough", "Every kiosk should be accessible on its own"], "from": "news-2"}]
+discussion: [{"context": "Under Korea's new kiosk rules, small businesses can keep an inaccessible kiosk as long as they install a bell to call staff.", "question": "Is a call bell enough, or should every kiosk be accessible on its own?", "options": ["A call bell is enough", "Every kiosk should be accessible on its own"], "from": "news-2"}]
 inspirationTopics: [["Disability & Stories"], ["Resources"], ["AI", "Disability & Stories"]]
 newsDates: ["2026-01-16", "2026-01-29", "2026-01-23"]
 ---

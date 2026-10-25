@@ -69,7 +69,9 @@ The website of [Accessibility Notebook](https://buttondown.com/accessibility-not
 - Votes are counted by a Cloudflare Pages Function (`functions/api/votes.js`) in the D1 database `notebook-votes`, bound to the Pages project as `DB` (Settings → Bindings). The table is created by `schema.sql`.
 - Only a counter per question and option is stored; no personal data. A browser remembers its own vote in localStorage.
 - `scripts/gen-questions.mjs` runs before every build and tells the API which question ids (`<issue>-<n>`) and how many options exist.
-- A Cloudflare rate limiting rule ("Discussion Corner votes") blocks more than 5 votes in 10 seconds from one IP.
+- Votes belong to a question id and an option position. So: never reorder options, and only remove the last option of a question. When you remove a question, every later question in the same issue keeps its old id through an explicit `"id"` (for example Notes # 28 has `"id": "28-3"` on its second question), so its votes stay attached; then delete the removed question's votes in the D1 console (`DELETE FROM votes WHERE question = '15-1';`) so a future question cannot inherit them.
+- Questions are written in Utku's own voice: "I wrote that…", "My design team…", never "Utku…".
+- A Cloudflare rate limiting rule ("Discussion Corner votes and comments") blocks more than 5 votes, comments or admin login attempts in 10 seconds from one IP.
 - To reset all votes: run `DELETE FROM votes;` in the D1 console.
 
 ## Search
@@ -77,7 +79,7 @@ The website of [Accessibility Notebook](https://buttondown.com/accessibility-not
 - The search page (`/search/`) runs in the browser with MiniSearch. Its data, `/search-index.json`, is built from the issues on every build (`src/pages/search-index.json.js`): full issues (with album), Personal Notes, In Detail, An Article From Me, every News and Inspirations item, and the Discussion Corner questions.
 - Matching ignores case and accents ("Altin Gun" finds "Altın Gün"), treats simple plurals as the same word ("CAPTCHAs" = "captcha") and forgives small typos in longer words ("accesibility").
 - Abbreviations: `src/lib/search-synonyms.js` lists abbreviations with their long forms, so "EAA" also finds "European Accessibility Act" and the other way round. **When a new issue uses an abbreviation that is not in the list, add a line with its long form**, for example `['dsa', 'digital services act'],`.
-- Results link straight to the story on its issue page (`#news-2`, `#inspiration-1`, `#personal-notes`), to the In Detail page, or to the Discussion Corner question on the home page (`/?question=23-1`).
+- Results link straight to the story on its issue page (`#news-2`, `#inspiration-1`, `#personal-notes`), to the In Detail page, or to the Discussion Corner question on the home page (`/?question=23-2`).
 - The "Popular topics" on the search page are set at the top of `src/pages/search.astro`.
 
 ## Accessibility Pledge

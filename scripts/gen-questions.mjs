@@ -5,7 +5,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import matter from 'gray-matter';
-import { questionId } from '../src/lib/discussion.js';
+import { discussionId } from '../src/lib/discussion.js';
 
 const dir = path.resolve('src/content/issues');
 const out = {};
@@ -15,7 +15,9 @@ for (const f of fs.readdirSync(dir).filter((f) => f.endsWith('.md'))) {
   issues.push(data.number);
   (data.discussion || []).forEach((d, i) => {
     if (!Array.isArray(d.options) || d.options.length < 2) throw new Error(`Notes # ${data.number}: discussion question ${i + 1} needs at least 2 options`);
-    out[questionId(data.number, i)] = d.options.length;
+    const id = discussionId(data.number, d, i);
+    if (out[id]) throw new Error(`Notes # ${data.number}: two Discussion Corner questions share the id ${id}`);
+    out[id] = d.options.length;
   });
 }
 fs.mkdirSync('functions/_data', { recursive: true });

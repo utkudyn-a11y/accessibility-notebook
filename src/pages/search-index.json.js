@@ -1,7 +1,7 @@
 // Builds /search-index.json: one entry per searchable piece of the notebook.
 // Loaded only by the search page.
 import { getIssues, plainText, formatDateLong } from '../lib/issues.js';
-import { questionId } from '../lib/discussion.js';
+import { discussionId } from '../lib/discussion.js';
 
 const text = (md) => plainText(md || '', Infinity);
 
@@ -32,7 +32,7 @@ export function GET() {
       add({ group: 'Inspirations', kind: 'Inspiration', title: it.title, url: `${i.url}#${it.anchor}`, meta: `Notes # ${i.number} · ${day}`, text: [it.source?.name, (it.topics || []).join(' '), text(it.markdown)].filter(Boolean).join(' ') });
     }
     (i.discussion || []).forEach((d, k) => {
-      add({ group: 'Discussion', kind: 'Discussion Corner', title: d.question, url: `/?question=${questionId(i.number, k)}#dc-title`, meta: `Notes # ${i.number}`, text: [d.context, ...(d.options || [])].join(' ') });
+      add({ group: 'Discussion', kind: 'Discussion Corner', title: d.question, url: `/?question=${discussionId(i.number, d, k)}#dc-title`, meta: `Notes # ${i.number}`, text: [d.context, ...(d.options || [])].join(' ') });
     });
   }
   return new Response(JSON.stringify(docs), { headers: { 'content-type': 'application/json; charset=utf-8' } });

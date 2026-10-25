@@ -9,7 +9,7 @@ linkedinUrl: "https://www.linkedin.com/pulse/notes-12-accessibility-streaming-pl
 personalNoteTitle: "Fifty Awareness Weeks Later: We Need Action, Not Awareness"
 inDetailTitle: "The Short History Of 10 – 16 May Disability Awareness Week"
 inDetailSlug: "the-short-history-of-10-16-may-disability-awareness-week"
-discussion: [{"context": "Utku says he's tired of Turkey's yearly Disability Awareness Week: plenty of events and strong speeches, but little action.", "question": "Should awareness weeks continue, change their format, or be replaced altogether? What would you do instead?", "options": ["Keep them as they are", "Keep them, but focus on action", "Replace them with something else"], "from": "personal-notes"}]
+discussion: [{"context": "I wrote that I'm tired of Turkey's yearly Disability Awareness Week: plenty of events and strong speeches, but little action.", "question": "Should awareness weeks continue, change their format, or be replaced altogether? What would you do instead?", "options": ["Keep them as they are", "Keep them, but focus on action", "Replace them with something else"], "from": "personal-notes"}]
 inspirationTopics: [["AI"], ["AI", "Resources"], ["Disability & Stories"]]
 newsDates: ["2026-05-14", "2026-05-13", "2026-05-07"]
 pledges: [{"role": "Testing", "text": "I will test with real assistive technology instead of asking AI if it works", "from": "inspiration-1"}]

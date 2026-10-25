@@ -3,14 +3,14 @@
 // front matter, with a vote. There is deliberately no page that lists every question.
 // Votes are stored by the Pages Function in functions/api/votes.js.
 import { getIssues, formatDateLong } from '../lib/issues.js';
-import { questionId } from '../lib/discussion.js';
+import { discussionId } from '../lib/discussion.js';
 
 const { headingLevel = 2 } = Astro.props;
 const H = `h${headingLevel}`;
 
 const questions = getIssues().flatMap((i) =>
   (i.discussion || []).map((d, k) => ({
-    id: questionId(i.number, k),
+    id: discussionId(i.number, d, k),
     n: i.number,
     date: i.date,
     dateText: formatDateLong(i.date),

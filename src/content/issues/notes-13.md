@@ -9,7 +9,6 @@ linkedinUrl: "https://www.linkedin.com/pulse/notes-13-canada-progress-reports-si
 personalNoteTitle: "A Great Accessibility Guide and a Discount Nobody Told Us About"
 inDetailTitle: "Best Practices From Accessible Canada Act"
 inDetailSlug: "best-practices-from-accessible-canada-act"
-discussion: [{"context": "Nepal's parliament is now interpreted into sign language on TV, but the Kathmandu Post reports that there are no standard signs for parliamentary terms, and interpreters struggle when members talk over each other.", "question": "When everyone speaks at once, whose words should the interpreter sign first?", "options": ["Whoever officially has the floor", "The Speaker first", "Two interpreters at the same time", "Sign the main speaker, caption the rest"], "from": "news-2"}]
 inspirationTopics: [["AI", "Development"], ["AI", "Resources"], ["Design", "Resources"]]
 newsDates: ["2026-05-20", "2026-05-15", "2026-05-14"]
 pledges: [{"role": "Design & Content", "text": "I will share event accessibility information in an easy-to-read format", "from": "personal-notes"}]

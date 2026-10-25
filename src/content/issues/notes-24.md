@@ -9,7 +9,6 @@ linkedinUrl: "https://www.linkedin.com/pulse/notes-24-what-changed-en-301-549-ve
 personalNoteTitle: "Why I Recommend the Graphic Novel ULIS"
 inDetailTitle: "What Changed In EN 301 549 Version 4.1.1?"
 inDetailSlug: "what-changed-in-en-301-549-version-4-1-1"
-discussion: [{"context": "AAArdvark argues that Lighthouse or axe scores are misleading, but that a score that includes manual testing can work as a progress indicator.", "question": "Can accessibility be measured with a single number, or does any score oversimplify it?", "options": ["A single number works", "Any score oversimplifies it", "A score, but always with a detailed report"], "from": "inspiration-2"}]
 inspirationTopics: [["Design"], ["Testing", "Strategy"], ["Testing"]]
 newsDates: [null, "2026-08-27", "2026-08-17"]
 pledges: [{"role": "Design & Content", "text": "I will look beyond contrast ratios when I choose colors", "from": "inspiration-1"}]

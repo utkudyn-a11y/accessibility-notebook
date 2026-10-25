@@ -7,7 +7,7 @@ cover: "/images/notes-03-cover.jpg"
 album: {"artist": "Altın Gün", "title": "Garip", "url": "https://youtube.com/playlist?list=OLAK5uy_lz4EgT2Dm4eMLqL7QTouRbNad150ycd_E&si=FwsByEsq9I5pavd6"}
 linkedinUrl: "https://www.linkedin.com/pulse/notes-3-zerocon26-youtube-united-nations-utku-demiryakan-llsgf/"
 personalNoteTitle: "Two Panels at ZeroCon26: Accessible Aviation and Skills Development"
-discussion: [{"context": "Lucy Greco argues that CES's separate accessibility stage made products harder to find and kept them out of mainstream coverage. Utku thinks a dedicated stage still helps people discover these solutions.", "question": "Who's right?", "options": ["Lucy is right: integrate it into the main show", "Utku is right: a dedicated stage helps people find it", "Both: keep the stage and integrate"], "from": "inspiration-1"}]
+discussion: [{"context": "Lucy Greco argues that CES's separate accessibility stage made products harder to find and kept them out of mainstream coverage. I think a dedicated stage still helps people discover these solutions.", "question": "Who's right?", "options": ["Lucy is right: integrate it into the main show", "You're right: a dedicated stage helps people find it", "Both: keep the stage and integrate"], "from": "inspiration-1"}]
 inspirationTopics: [["Disability & Stories", "Strategy"], ["Design", "Disability & Stories"], ["Disability & Stories"]]
 newsDates: [null, "2026-02-08", "2026-02-09", "2026-02-09"]
 pledges: [{"role": "Product", "text": "I will never put an accessibility feature behind a paywall", "from": "news-2"}]
