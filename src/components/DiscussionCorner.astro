@@ -15,7 +15,7 @@ const questions = getIssues().flatMap((i) =>
     date: i.date,
     dateText: formatDateLong(i.date),
     issue: d.sourceUrl,
-    linkedin: i.linkedinUrl,
+    comments: `${i.url}#comments`,
     context: d.context,
     question: d.question,
     options: d.options || [],
@@ -27,7 +27,7 @@ const first = questions[0];
 {first && (
   <section class="dc" aria-labelledby="dc-title" data-questions={JSON.stringify(questions)}>
     <H id="dc-title">Discussion Corner</H>
-    <p class="intro">Every issue raises a question worth arguing about. Read it, pick a side or bring a third one, and share your view in the comments of the issue's LinkedIn post.</p>
+    <p class="intro">Every issue raises a question worth arguing about. Read it, pick a side or bring a third one, and tell me why in the comments of the issue.</p>
 
     <div class="q">
       <span class="mark" aria-hidden="true">?</span>
@@ -36,7 +36,7 @@ const first = questions[0];
         <p class="context">{first.context}</p>
         <p class="ask">{first.question}</p>
         <p class="links">
-          {first.linkedin && <a href={first.linkedin}>Share your view on LinkedIn<span class="visually-hidden"> (Notes # {first.n} post)</span></a>}
+          <a href={first.comments}>Comment On Notes # {first.n}</a>
           <a href={first.issue}>Read Notes # {first.n}</a>
         </p>
       </div>
@@ -57,7 +57,7 @@ const first = questions[0];
 )}
 
 <script>
-  type Q = { id: string; n: number; date: string; dateText: string; issue: string; linkedin: string; context: string; question: string; options: string[] };
+  type Q = { id: string; n: number; date: string; dateText: string; issue: string; comments: string; context: string; question: string; options: string[] };
   type Res = { counts: number[]; total: number };
   const root = document.querySelector<HTMLElement>('.dc');
   if (root) {
@@ -81,9 +81,8 @@ const first = questions[0];
     const head = (q: Q) =>
       `<p class="over">From Notes # ${q.n} on <time datetime="${esc(q.date)}">${esc(q.dateText)}</time></p>` +
       `<p class="context">${esc(q.context)}</p>`;
-    // An issue that is on the site before its LinkedIn post has no linkedinUrl yet: then there is no LinkedIn link.
-    const linkedinLink = (q: Q) => !q.linkedin ? '' :
-      `<a href="${esc(q.linkedin)}">Share your view on LinkedIn<span class="visually-hidden"> (Notes # ${q.n} post)</span></a>`;
+    // Points to the comments at the end of the issue page.
+    const commentLink = (q: Q) => `<a href="${esc(q.comments)}">Comment On Notes # ${q.n}</a>`;
     const readLink = (q: Q) => `<a href="${esc(q.issue)}">Read Notes # ${q.n}</a>`;
 
     const renderForm = (q: Q, error = '') => {
@@ -99,7 +98,7 @@ const first = questions[0];
           `<p class="vote-error" role="alert">${esc(error)}</p>` +
           `<button type="submit" class="vote">Vote</button>` +
         `</form>` +
-        `<p class="links">${linkedinLink(q)}${readLink(q)}</p>`;
+        `<p class="links">${commentLink(q)}${readLink(q)}</p>`;
       const form = body.querySelector<HTMLFormElement>('form')!;
       form.addEventListener('submit', (e) => {
         e.preventDefault();
@@ -128,7 +127,7 @@ const first = questions[0];
         `<p class="ask">${esc(q.question)}</p>` +
         `<p class="total" tabindex="-1">${justVoted ? '<span class="visually-hidden">Your vote is saved. Results: </span>' : ''}${plural(r.total)}</p>` +
         `<ul class="res">${rows}</ul>` +
-        `<p class="thanks">${mine !== null ? 'Thanks for voting! ' : ''}${justVoted && r.total === 1 ? "You're the first one here. " : ''}${q.linkedin ? `Why did you choose this? ${linkedinLink(q)}` : ''}</p>` +
+        `<p class="thanks">${mine !== null ? 'Thanks for voting! ' : ''}${justVoted && r.total === 1 ? "You're the first one here. " : ''}Why did you choose this? ${commentLink(q)}</p>` +
         `<p class="links">${readLink(q)}</p>`;
       if (justVoted) body.querySelector<HTMLElement>('.total')!.focus();
     };
@@ -161,7 +160,7 @@ const first = questions[0];
         renderResults(q, await res.json(), mine, false);
       } catch {
         body.innerHTML = head(q) + `<p class="ask">${esc(q.question)}</p><p class="total">You voted on this question. The results could not be loaded right now.</p>` +
-          `<p class="links">${linkedinLink(q)}${readLink(q)}</p>`;
+          `<p class="links">${commentLink(q)}${readLink(q)}</p>`;
       }
     };
 
