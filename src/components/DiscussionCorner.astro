@@ -44,6 +44,15 @@ const first = questions[0];
 
     <button type="button" class="another" hidden>Show another question</button>
     <p class="visually-hidden dc-status" aria-live="polite"></p>
+
+    <details class="all">
+      <summary>See all {questions.length} questions</summary>
+      <ol>
+        {questions.map((q) => (
+          <li><a class="pick" href={`/?question=${q.id}#dc-title`} data-id={q.id}>{q.question}</a> <span class="from">Notes # {q.n}</span></li>
+        ))}
+      </ol>
+    </details>
   </section>
 )}
 
@@ -182,6 +191,18 @@ const first = questions[0];
       } else {
         show(next());
       }
+      // "See all questions": open the chosen question in the card above instead of reloading the page.
+      root.querySelectorAll<HTMLAnchorElement>('.all a.pick').forEach((a) => a.addEventListener('click', (e) => {
+        const i = all.findIndex((q) => q.id === a.dataset.id);
+        if (i < 0) return;
+        e.preventDefault();
+        last = i;
+        show(all[i]);
+        try { history.replaceState(null, '', `/?question=${encodeURIComponent(all[i].id)}#dc-title`); } catch {}
+        body.setAttribute('tabindex', '-1');
+        body.focus({ preventScroll: true });
+        root.querySelector('#dc-title')!.scrollIntoView({ block: 'start', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+      }));
       if (all.length > 1) {
         another.hidden = false;
         another.addEventListener('click', () => {
@@ -198,6 +219,14 @@ const first = questions[0];
   .dc { margin-top: 4rem; }
   .dc h2, .dc h3 { font-size: var(--step-1); margin: 0 0 0.5rem; }
   .intro { max-width: 60ch; }
+  .all { margin-top: 1.5rem; max-width: 44rem; }
+  .all summary { cursor: pointer; font-weight: 700; color: var(--notebook); min-height: 44px; padding: 0.6rem 0; width: fit-content; }
+  .all ol { padding-left: 2.2rem; margin: 0.75rem 0 0; }
+  .all li { margin: 0 0 0.8rem; }
+  .all a { font-weight: 700; }
+  .all .from { display: block; font-size: var(--step--1); color: var(--ink-soft); }
+  .q-body:focus { outline: none; }
+  .q-body:focus-visible { outline: 3px solid var(--notebook); outline-offset: 6px; }
 
   /* The question card is a speech bubble */
   .q { position: relative; max-width: 44rem; margin: 1.5rem 0 2rem; background: #fff; border: 2px solid var(--notebook); border-radius: 12px; padding: 1.5rem 1.6rem 1.4rem 4.6rem; }
