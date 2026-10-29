@@ -10,7 +10,7 @@ personalNoteTitle: "An Accessibility Roundtable at Turkish Technology"
 inDetailTitle: "Brief History Of Presidential Circular 10/2025"
 inDetailSlug: "brief-history-of-presidential-circular-10-2025"
 discussion: [{"context": "Peru's law requires certified sign language interpreters, but the government never built a system to certify them, so the law ended up creating new barriers.", "question": "Should the law come first and force the system to catch up, or should the infrastructure be built first?", "options": ["Law first, the system catches up", "Infrastructure first"], "from": "news-2"}]
-inspirationTopics: [["Resources"], ["Disability & Stories"], ["Design"]]
+inspirationTopics: [["Resources"], ["Disability & Stories"], ["Testing", "Resources"]]
 newsDates: ["2026-07-17", "2026-07-17", "2026-07-17"]
 pledges: [{"role": "Design & Content", "text": "I will write for readers with little energy or attention: short paragraphs, clear steps", "from": "inspiration-2"}]
 ---

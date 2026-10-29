@@ -9,7 +9,7 @@ linkedinUrl: "https://www.linkedin.com/pulse/notes-22-could-ai-increasing-our-ac
 personalNoteTitle: "Freeze or Melt: The Inaccessible Office Thermostat"
 inDetailTitle: "Takeaways From Deque’s “From Debt To Dividend” Report"
 inDetailSlug: "takeaways-from-deques-from-debt-to-dividend-report"
-inspirationTopics: [["Strategy"], ["Design"], ["Strategy"]]
+inspirationTopics: [["Strategy", "Legal & Standards"], ["Design"], ["Strategy"]]
 newsDates: [null, "2026-07-23", "2026-07-29"]
 pledges: [{"role": "Development", "text": "I will test AI-generated code with a screen reader before shipping", "from": "in-detail"}]
 ---

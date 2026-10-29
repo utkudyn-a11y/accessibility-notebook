@@ -7,7 +7,7 @@ cover: "/images/notes-01-cover.png"
 album: {"artist": "ROSALİA", "title": "LUX", "url": "https://open.spotify.com/intl-tr/album/3SUEJULSGgBDG1j4GQhfYY"}
 linkedinUrl: "https://www.linkedin.com/pulse/notes-digital-accessibility-1-web-almanac-sundance-film-demiryakan-mrkdf/"
 personalNoteTitle: "2026 Starts Fast: Northern Cyprus and an Invitation to Zero Project"
-inspirationTopics: [["Resources", "Disability & Stories"], ["Disability & Stories", "Design"], ["AI", "Resources"]]
+inspirationTopics: [["Resources", "Disability & Stories"], ["Disability & Stories", "Design"], ["AI", "Resources", "Development"]]
 newsDates: ["2026-01-23", "2026-01-20", "2026-01-15"]
 ---
 

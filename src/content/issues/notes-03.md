@@ -7,7 +7,7 @@ cover: "/images/notes-03-cover.jpg"
 album: {"artist": "Altın Gün", "title": "Garip", "url": "https://youtube.com/playlist?list=OLAK5uy_lz4EgT2Dm4eMLqL7QTouRbNad150ycd_E&si=FwsByEsq9I5pavd6"}
 linkedinUrl: "https://www.linkedin.com/pulse/notes-3-zerocon26-youtube-united-nations-utku-demiryakan-llsgf/"
 personalNoteTitle: "Two Panels at ZeroCon26: Accessible Aviation and Skills Development"
-inspirationTopics: [["Disability & Stories", "Strategy"], ["Design", "Disability & Stories"], ["Disability & Stories"]]
+inspirationTopics: [["Disability & Stories"], ["Design"], ["Disability & Stories"]]
 newsDates: [null, "2026-02-08", "2026-02-09", "2026-02-09"]
 pledges: [{"role": "Product", "text": "I will never put an accessibility feature behind a paywall", "from": "news-2"}]
 ---

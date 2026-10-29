@@ -9,7 +9,7 @@ linkedinUrl: "https://www.linkedin.com/pulse/notes-13-canada-progress-reports-si
 personalNoteTitle: "A Great Accessibility Guide and a Discount Nobody Told Us About"
 inDetailTitle: "Best Practices From Accessible Canada Act"
 inDetailSlug: "best-practices-from-accessible-canada-act"
-inspirationTopics: [["AI", "Development"], ["AI", "Resources"], ["Design", "Resources"]]
+inspirationTopics: [["AI", "Development"], ["AI", "Disability & Stories"], ["Design"]]
 newsDates: ["2026-05-20", "2026-05-15", "2026-05-14"]
 pledges: [{"role": "Design & Content", "text": "I will share event accessibility information in an easy-to-read format", "from": "personal-notes"}]
 ---

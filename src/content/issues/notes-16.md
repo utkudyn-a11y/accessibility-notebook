@@ -9,7 +9,7 @@ linkedinUrl: "https://www.linkedin.com/pulse/notes-16-legal-action-france-inclus
 personalNoteTitle: "Correcting Myself: FIFA's Audio Description App Just Works"
 inDetailTitle: "AI and Human Collaboration in Accessibility Work – The Binclusive Example"
 inDetailSlug: "ai-and-human-collaboration-in-accessibility-work-the-binclusive-example"
-inspirationTopics: [["Design", "Resources"], ["AI", "Testing"], ["AI"]]
+inspirationTopics: [["Resources"], ["AI", "Testing"], ["AI"]]
 newsDates: ["2026-06-02", "2026-06-02", "2026-05-21"]
 pledges: [{"role": "Testing", "text": "I will never trust a \"100% accessible\" automated score", "from": "inspiration-2"}]
 ---

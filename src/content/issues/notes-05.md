@@ -7,7 +7,7 @@ cover: "/images/notes-05-cover.jpg"
 album: {"artist": "Yahritza Y Su Esencia", "title": "Metamorfosis", "url": "https://open.spotify.com/intl-tr/album/05UjWgHQqCa8cYoMmDmUlg"}
 linkedinUrl: "https://www.linkedin.com/pulse/notes-5-italys-accessibility-guidelines-digital-euro-math-demiryakan-ynedf/"
 personalNoteTitle: "AI and Humans Describing a Documentary Together"
-inspirationTopics: [["Design", "Testing"], ["Testing", "Resources"], ["Resources", "Design"]]
+inspirationTopics: [["Design", "Development"], ["Testing", "Resources"], ["Resources", "Design"]]
 newsDates: ["2026-03-11", "2026-02-24", "2026-03-04", null]
 pledges: [{"role": "Design & Content", "text": "I will design a focus indicator everyone can see", "from": "inspiration-1"}]
 ---
