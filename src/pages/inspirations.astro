@@ -8,10 +8,10 @@ const items = issues.flatMap((i) => i.inspirations);
 const counts = Object.fromEntries(TOPICS.map((t) => [t, items.filter((it) => it.topics?.includes(t)).length]));
 const options = [{ label: 'All', slug: 'all', count: items.length }, ...TOPICS.map((t) => ({ label: t, slug: topicSlug(t), count: counts[t] }))];
 ---
-<Base title="Inspirations" description="Articles, videos and tools on digital accessibility that inspired Utku Demiryakan, newest first. Filter by AI, design, development, testing, legal and standards, disability stories, resources and strategy.">
+<Base title="Inspirations" description="Articles, videos and tools on digital accessibility that inspired Utku Demiryakan. Filter by AI, design, development, testing, legal and standards, disability stories, resources and strategy.">
   <div class="wrap page reading">
     <h1>Inspirations</h1>
-    <p class="lead">Articles, videos and tools that taught me something about accessibility. Newest first.</p>
+    <p class="lead">Articles, videos and tools that taught me something about accessibility.</p>
 
     <div class="filter-area" data-total={items.length} hidden>
       <fieldset class="filter">

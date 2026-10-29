@@ -3,10 +3,10 @@ import Base from '../../layouts/Base.astro';
 import { getIssues, formatDate } from '../../lib/issues.js';
 const issues = getIssues();
 ---
-<Base title="Full Issues" description="Every issue of Accessibility Notebook, newest first.">
+<Base title="Full Issues" description="Every issue of Accessibility Notebook.">
   <div class="wrap page">
     <h1>Full Issues</h1>
-    <p class="lead reading">Every issue of Accessibility Notebook, newest first. Each one has personal notes, accessibility news, inspirations and usually an in-depth article.</p>
+    <p class="lead reading">Every issue of Accessibility Notebook. Each one has personal notes, accessibility news, inspirations and usually an in-depth article.</p>
     <ol class="issues reading" reversed>
       {issues.map((i) => (
         <li>

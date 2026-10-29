@@ -1,5 +1,5 @@
 ---
-// "Read while listening": a random pick from the "Created While Listening" line of every issue.
+// "Listen While Reading": a random pick from the "Created While Listening" line of every issue.
 // The record sleeve is decorative; the button, the result text and the full album list carry the content.
 import { getIssues } from '../lib/issues.js';
 
@@ -11,7 +11,7 @@ const albums = getIssues()
   .map((i) => ({ n: i.number, date: i.date, dateText: new Date(`${i.date}T12:00:00Z`).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }), artist: i.album.artist, title: i.album.title, url: i.album.url, issue: `${i.url}#album` }));
 ---
 <section class="spin" aria-labelledby="spin-title" data-albums={JSON.stringify(albums)}>
-  <H id="spin-title">Read While Listening</H>
+  <H id="spin-title">Listen While Reading</H>
   <p class="intro">Every issue of Accessibility Notebook is written while listening to an album. These are the albums from the "Created While Listening" line of each issue. Press the button and find your next one.</p>
 
   <button type="button" class="pick" hidden>Pick an album</button>

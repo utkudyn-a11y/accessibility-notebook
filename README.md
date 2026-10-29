@@ -84,9 +84,9 @@ The website of [Accessibility Notebook](https://buttondown.com/accessibility-not
 
 ## Accessibility Pledge
 
-- `/pledge/` (menu: Accessibility Pledge) lets readers pick up to 3 pledges and download a 1080 × 1080 card, share it (on phones) and copy its alt text. Everything happens in the browser; nothing is stored.
+- `/pledge/` (menu: Take Action; the page was called Accessibility Pledge before) lets readers pick up to 3 pledges and download a 1080 × 1080 card, share it (on phones) and copy its alt text. Everything happens in the browser; nothing is stored.
 - Pledges live in each issue's front matter, 1–2 per issue: `pledges: [{"role": "Testing", "text": "I will test every flow with a keyboard, not only with tools", "from": "inspiration-3"}]`. `from` works as in `discussion`: the "From Notes # N" link lands on that part of the issue. Roles: Design & Content, Development, Testing, Product. Text starts with "I will", about 80 characters at most, no final period. The latest issue's pledges get a "New" label.
-- The album card in Read While Listening links to the issue's album line (`#album`).
+- The album card in Listen While Reading links to the issue's album line (`#album`).
 - Do not reword or remove a published pledge lightly: people may have shared cards with it.
 - The page's social image is `public/images/pledge-og.png`.
 
