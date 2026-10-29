@@ -129,9 +129,14 @@ export const getPersonalNotes = () =>
 export const formatDate = (d) =>
   new Date(`${d}T12:00:00Z`).toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
 
+// "New" label: Discussion Corner questions and Take Action items from the latest issue are marked "New";
+// when the next issue arrives, its items take the label over. Starts with Notes # 30.
+export const NEW_LABEL_FROM = 30;
+export const isNewIssue = (n) => n === issues[0]?.number && n >= NEW_LABEL_FROM;
+
 // Every pledge, newest issue first.
 export const getPledges = () => {
   return issues.flatMap((i) =>
-    i.pledges.map((p, k) => ({ id: `${i.number}-${k + 1}`, role: p.role, text: p.text, issue: i.number, issueUrl: p.sourceUrl }))
+    i.pledges.map((p, k) => ({ id: `${i.number}-${k + 1}`, role: p.role, text: p.text, issue: i.number, issueUrl: p.sourceUrl, isNew: isNewIssue(i.number) }))
   );
 };

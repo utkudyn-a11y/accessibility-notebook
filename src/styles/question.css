@@ -55,3 +55,6 @@
     .q-body .row { flex-direction: column; gap: 0; }
   }
 
+
+  /* "New" label on questions from the latest issue */
+  .new { display: inline-block; margin-left: 0.4rem; font-size: 0.8rem; font-weight: 800; letter-spacing: 0; text-transform: none; background: var(--highlight); color: var(--ink); border-radius: 4px; padding: 0.05rem 0.4rem; }

@@ -1,6 +1,6 @@
 // Discussion Corner voting, shared by the home page card and the questions under each issue.
 // Votes are stored by the Pages Function in functions/api/votes.js.
-export type Q = { id: string; n: number; date: string; dateText: string; issue: string; comments: string; context: string; question: string; options: string[] };
+export type Q = { id: string; n: number; date: string; dateText: string; issue: string; comments: string; context: string; question: string; options: string[]; isNew?: boolean };
 type Res = { counts: number[]; total: number };
 type Opts = {
   /** Shown above the question, e.g. "From Notes # 6 on 3 March 2026". Leave out to show nothing. */

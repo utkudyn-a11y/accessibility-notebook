@@ -3,7 +3,7 @@ import '../styles/question.css';
 // Discussion Corner: one random question at a time from the "discussion" list in each issue's
 // front matter, with a vote. There is deliberately no page that lists every question.
 // Votes are stored by the Pages Function in functions/api/votes.js.
-import { getIssues, formatDateLong } from '../lib/issues.js';
+import { getIssues, formatDateLong, isNewIssue } from '../lib/issues.js';
 import { discussionId } from '../lib/discussion.js';
 
 const { headingLevel = 2 } = Astro.props;
@@ -20,6 +20,7 @@ const questions = getIssues().flatMap((i) =>
     context: d.context,
     question: d.question,
     options: d.options || [],
+    isNew: isNewIssue(i.number),
   }))
 );
 // Without JavaScript, readers see the latest issue's question (no vote).
@@ -33,7 +34,7 @@ const first = questions[0];
     <div class="q">
       <span class="q-mark" aria-hidden="true">?</span>
       <div class="q-body">
-        <p class="over">From Notes # {first.n} on <time datetime={first.date}>{first.dateText}</time></p>
+        <p class="over">From Notes # {first.n} on <time datetime={first.date}>{first.dateText}</time>{first.isNew && <span class="new"> New</span>}</p>
         <p class="context">{first.context}</p>
         <p class="ask">{first.question}</p>
         <p class="links">
@@ -50,7 +51,7 @@ const first = questions[0];
       <summary>See all {questions.length} questions</summary>
       <ol>
         {questions.map((q) => (
-          <li><a class="pick" href={`/?question=${q.id}#dc-title`} data-id={q.id}>{q.question}</a> <span class="from">Notes # {q.n}</span></li>
+          <li><a class="pick" href={`/?question=${q.id}#dc-title`} data-id={q.id}>{q.question}</a>{q.isNew && <span class="new"> New</span>} <span class="from">Notes # {q.n}</span></li>
         ))}
       </ol>
     </details>
@@ -67,7 +68,7 @@ const first = questions[0];
     const status = root.querySelector<HTMLElement>('.dc-status')!;
     // "Comment On Notes # N" points to the comments at the end of the issue page.
     const { show } = createVoter(body, {
-      over: (q) => `From Notes # ${q.n} on <time datetime="${esc(q.date)}">${esc(q.dateText)}</time>`,
+      over: (q) => `From Notes # ${q.n} on <time datetime="${esc(q.date)}">${esc(q.dateText)}</time>${q.isNew ? '<span class="new"> New</span>' : ''}`,
       commentLink: (q) => `<a href="${esc(q.comments)}">Comment On Notes # ${q.n}</a>`,
       readLink: (q) => `<a href="${esc(q.issue)}">Read Notes # ${q.n}</a>`,
     });
