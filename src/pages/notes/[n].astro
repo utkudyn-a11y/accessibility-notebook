@@ -2,6 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import Subscribe from '../../components/Subscribe.astro';
 import Comments from '../../components/Comments.astro';
+import IssueDiscussion from '../../components/IssueDiscussion.astro';
 import { getIssues, render, formatDate } from '../../lib/issues.js';
 import { articleLd } from '../../lib/ld.js';
 import { webp } from '../../lib/images.js';
@@ -54,6 +55,7 @@ const sections = ORDER.filter((k) => issue.sections[k]).map((k) => ({ key: k, ..
           )}
         </section>
       ))}
+      <IssueDiscussion issue={issue} />
       <Comments issue={issue.number} />
     </div>
     <nav class="reading pager" aria-label="More issues">

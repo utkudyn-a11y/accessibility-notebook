@@ -1,0 +1,70 @@
+---
+// The issue's Discussion Corner question(s), just above its comments, with the same vote as the home page.
+import '../styles/question.css';
+import { formatDateLong } from '../lib/issues.js';
+import { discussionId } from '../lib/discussion.js';
+
+const { issue } = Astro.props;
+const back = (from = '') =>
+  from.startsWith('news') ? 'Back to the news story'
+  : from.startsWith('inspiration') ? 'Back to the inspiration'
+  : from === 'personal-notes' ? 'Back to Personal Notes'
+  : from === 'in-detail' ? 'Back to In Detail'
+  : from === 'article-from-me' ? 'Back to the article'
+  : '';
+const questions = (issue.discussion || []).map((d, k) => ({
+  id: discussionId(issue.number, d, k),
+  n: issue.number,
+  date: issue.date,
+  dateText: formatDateLong(issue.date),
+  issue: d.from ? `#${d.from}` : '',
+  back: back(d.from),
+  comments: '#comments',
+  context: d.context,
+  question: d.question,
+  options: d.options || [],
+}));
+const many = questions.length > 1;
+---
+{questions.length > 0 && (
+  <section class="idq" aria-labelledby="discussion" data-questions={JSON.stringify(questions)}>
+    <h2 id="discussion">Discussion Corner</h2>
+    <p class="idq-intro">{many ? `This issue raises ${questions.length} questions.` : 'This issue raises a question.'} Pick a side, then tell me why in the comments below.</p>
+    {questions.map((q) => (
+      <div class="q" id={`q-${q.id}`}>
+        <span class="q-mark" aria-hidden="true">?</span>
+        <div class="q-body" data-id={q.id}>
+          <p class="context">{q.context}</p>
+          <p class="ask">{q.question}</p>
+          <p class="links">
+            <a href="#comments">Share your view in the comments</a>
+            {q.issue && <a href={q.issue}>{q.back}</a>}
+          </p>
+        </div>
+      </div>
+    ))}
+  </section>
+)}
+
+<script>
+  import { createVoter, esc, type Q } from '../scripts/vote.ts';
+  const root = document.querySelector<HTMLElement>('.idq');
+  if (root) {
+    const all: (Q & { back: string })[] = JSON.parse(root.dataset.questions || '[]');
+    for (const q of all) {
+      const body = root.querySelector<HTMLElement>(`.q-body[data-id="${CSS.escape(q.id)}"]`);
+      if (!body) continue;
+      createVoter(body, {
+        commentLink: () => `<a href="#comments">Share your view in the comments</a>`,
+        readLink: (x) => (x.issue ? `<a href="${esc(x.issue)}">${esc((x as Q & { back: string }).back)}</a>` : ''),
+      }).show(q);
+    }
+  }
+</script>
+
+<style>
+  .idq { margin-top: 3rem; padding-top: 1.5rem; border-top: 2px solid var(--rule); max-width: var(--measure); }
+  .idq h2 { margin: 0 0 0.3rem; }
+  .idq-intro { color: var(--ink-soft); margin: 0 0 1rem; }
+  .idq .q { margin-bottom: 2.25rem; }
+</style>

@@ -70,6 +70,7 @@ The website of [Accessibility Notebook](https://buttondown.com/accessibility-not
 - Only a counter per question and option is stored; no personal data. A browser remembers its own vote in localStorage.
 - `scripts/gen-questions.mjs` runs before every build and tells the API which question ids (`<issue>-<n>`) and how many options exist.
 - Votes belong to a question id and an option position. So: never reorder options, and only remove the last option of a question. When you remove a question, every later question in the same issue keeps its old id through an explicit `"id"` (for example Notes # 28 has `"id": "28-3"` on its second question), so its votes stay attached; then delete the removed question's votes in the D1 console (`DELETE FROM votes WHERE question = '15-1';`) so a future question cannot inherit them.
+- The questions appear in two places with the same vote: one at a time on the home page (`src/components/DiscussionCorner.astro`) and under their own issue, above the comments (`src/components/IssueDiscussion.astro`, section `#discussion`). Both use `src/scripts/vote.ts` and `src/styles/question.css`.
 - Questions are written in Utku's own voice: "I wrote that…", "My design team…", never "Utku…".
 - A Cloudflare rate limiting rule ("Discussion Corner votes and comments") blocks more than 5 votes, comments or admin login attempts in 10 seconds from one IP.
 - To reset all votes: run `DELETE FROM votes;` in the D1 console.
