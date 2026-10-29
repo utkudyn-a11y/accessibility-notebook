@@ -12,7 +12,7 @@ inDetailSlug: "what-did-we-focus-on-for-alt-texts-at-turkish-airlines"
 discussion: [{"context": "Nicolas Steenhout argues that it's time to retire the idea of \"decorative images,\" because most images add context and mood even when they carry no information.", "question": "Is \"decorative\" a real category, or often just an excuse to skip alt text?", "options": ["A real category", "Often just an excuse"], "from": "inspiration-1", "id": "28-3"}]
 inspirationTopics: [["Design"], ["Legal & Standards"], ["Resources", "Disability & Stories"]]
 newsDates: ["2026-09-28", "2026-09-24", "2026-09-26"]
-pledges: [{"role": "Authoring", "text": "I will write alt text that says why the image is there", "from": "inspiration-1"}, {"role": "Authoring", "text": "I will not mark an image as decorative just to skip writing alt text", "from": "inspiration-1"}, {"role": "Administration", "text": "I will keep a non-digital way to reach essential services", "from": "news-1"}]
+pledges: [{"role": "Authoring", "text": "I will not mark an image as decorative just to skip writing alt text", "from": "inspiration-1"}, {"role": "Administration", "text": "I will keep a non-digital way to reach essential services", "from": "news-1"}]
 ---
 
 <!-- section:personal-notes -->

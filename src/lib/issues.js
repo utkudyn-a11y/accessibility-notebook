@@ -129,10 +129,9 @@ export const getPersonalNotes = () =>
 export const formatDate = (d) =>
   new Date(`${d}T12:00:00Z`).toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
 
-// Every pledge, newest issue first; the latest issue's pledges are marked as new.
+// Every pledge, newest issue first.
 export const getPledges = () => {
-  const latest = issues[0]?.number;
   return issues.flatMap((i) =>
-    i.pledges.map((p, k) => ({ id: `${i.number}-${k + 1}`, role: p.role, text: p.text, issue: i.number, issueUrl: p.sourceUrl, isNew: i.number === latest }))
+    i.pledges.map((p, k) => ({ id: `${i.number}-${k + 1}`, role: p.role, text: p.text, issue: i.number, issueUrl: p.sourceUrl }))
   );
 };

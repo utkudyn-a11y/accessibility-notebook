@@ -36,7 +36,7 @@ const SHARE_URL = 'https://accessibilitynotebook.com/take-action/';
               <div class="act">
                 <input type="checkbox" id={`p-${p.id}`} value={p.id} data-text={p.text} aria-describedby={`src-${p.id}`} />
                 <div>
-                  <label for={`p-${p.id}`}>{p.text}{p.isNew && <span class="new"> New</span>}</label>
+                  <label for={`p-${p.id}`}>{p.text}</label>
                   <a class="src" id={`src-${p.id}`} href={p.issueUrl}>From Notes # {p.issue}</a>
                 </div>
               </div>
@@ -319,7 +319,6 @@ const SHARE_URL = 'https://accessibilitynotebook.com/take-action/';
   .act.on { border-color: var(--notebook); background: var(--tint); }
   .act:has(input:focus-visible) { outline: 3px solid var(--notebook); outline-offset: 2px; }
   .act input:focus-visible { outline: none; }
-  .new { display: inline-block; margin-left: 0.4rem; font-size: 0.8rem; font-weight: 800; background: var(--highlight); color: var(--ink); border-radius: 4px; padding: 0.05rem 0.4rem; }
   .src { display: inline-flex; align-items: center; min-height: 32px; font-size: var(--step--1); }
 
   .ptitle { font-size: 1.15rem; margin: 0 0 0.6rem; }
