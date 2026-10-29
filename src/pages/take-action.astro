@@ -8,18 +8,18 @@ const byRole = PLEDGE_ROLES.map((role) => ({
   role,
   items: pledges.filter((p) => p.role === role).sort((a, b) => a.issue - b.issue),
 })).filter((g) => g.items.length);
-const SHARE_URL = 'https://accessibilitynotebook.com/pledge/';
+const SHARE_URL = 'https://accessibilitynotebook.com/take-action/';
 ---
-<Base title="Take Action" image="/images/pledge-og.png"
-      description="Turn what you read in Accessibility Notebook into action: pick up to three accessibility pledges, download your card and share it.">
+<Base title="Take Action" image="/images/take-action-og.png"
+      description="Turn what you read in Accessibility Notebook into action: pick up to three accessibility actions, download your card and share it.">
   <div class="wrap page">
     <h1>Take Action</h1>
-    <p class="lead">Turn what you read here into action. Pick up to three things you will do, then download your card and share it. Every pledge comes from an Accessibility Notebook issue.</p>
-    <noscript><p class="note">Making your card needs JavaScript. You can still read every pledge below.</p></noscript>
+    <p class="lead">Turn what you read here into action. Pick up to three things you will do, then download your card and share it. Every action comes from an Accessibility Notebook issue.</p>
+    <noscript><p class="note">Making your card needs JavaScript. You can still read every action below.</p></noscript>
 
     <div class="layout" data-max={MAX}>
       <form class="pick" aria-labelledby="pick-title">
-        <h2 id="pick-title" class="visually-hidden">Choose your pledges</h2>
+        <h2 id="pick-title" class="visually-hidden">Choose your actions</h2>
         <p class="counter"><span class="count-text">0 of {MAX} chosen</span> <a class="to-card" href="#card-title">See your card <span aria-hidden="true">↓</span></a></p>
         <p class="limit-msg" role="status"></p>
         {byRole.map((g, gi) => (
@@ -40,13 +40,13 @@ const SHARE_URL = 'https://accessibilitynotebook.com/pledge/';
 
       <aside class="preview" aria-labelledby="card-title">
         <h2 id="card-title" class="ptitle">Your card</h2>
-        <div class="card" role="img" aria-label="Your pledge card. Pick at least one pledge to fill it.">
+        <div class="card" role="img" aria-label="Your card. Pick at least one action to fill it.">
           <div class="ctop"><img src="/logo.png" alt="" width="160" height="158" /><span>Accessibility Notebook</span></div>
-          <p class="ctitle">My accessibility pledge</p>
+          <p class="ctitle">My Accessibility Actions</p>
           <ol class="clist"></ol>
-          <p class="cempty">Pick up to three pledges.</p>
+          <p class="cempty">Pick up to three actions.</p>
           <img class="fig" src="/logo.png" alt="" width="160" height="158" />
-          <p class="cfoot">Take yours at <strong>accessibilitynotebook.com/pledge</strong></p>
+          <p class="cfoot">Take yours at <strong>accessibilitynotebook.com/take-action</strong></p>
         </div>
         <div class="btns" hidden>
           <button type="button" class="b1 download">Download image</button>
@@ -81,7 +81,7 @@ const SHARE_URL = 'https://accessibilitynotebook.com/pledge/';
 
   const sentence = (t: string) => (/[.!?]$/.test(t) ? t : `${t}.`);
   const altText = () =>
-    `My accessibility pledge from Accessibility Notebook: ${chosen.map((b, i) => `${i + 1}. ${sentence(b.dataset.text!)}`).join(' ')} Take yours at accessibilitynotebook.com/pledge`;
+    `My accessibility actions from Accessibility Notebook: ${chosen.map((b, i) => `${i + 1}. ${sentence(b.dataset.text!)}`).join(' ')} Take yours at accessibilitynotebook.com/take-action`;
   const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
 
   const update = () => {
@@ -90,7 +90,7 @@ const SHARE_URL = 'https://accessibilitynotebook.com/pledge/';
     empty.hidden = chosen.length > 0;
     btns.hidden = tip.hidden = altP.hidden = chosen.length === 0;
     altSpan.textContent = chosen.length ? altText() : '';
-    card.setAttribute('aria-label', chosen.length ? `Your pledge card. ${altText()}` : 'Your pledge card. Pick at least one pledge to fill it.');
+    card.setAttribute('aria-label', chosen.length ? `Your card. ${altText()}` : 'Your card. Pick at least one action to fill it.');
     for (const b of boxes) b.closest('.act')!.classList.toggle('on', b.checked);
   };
 
@@ -160,7 +160,7 @@ const SHARE_URL = 'https://accessibilitynotebook.com/pledge/';
     x.fillStyle = '#ffd84d';
     x.font = `800 64px ${FONT}`;
     x.textBaseline = 'alphabetic';
-    x.fillText('My accessibility pledge', 80, 275);
+    x.fillText('My Accessibility Actions', 80, 275);
     // pledges
     let y = 360;
     x.font = `700 34px ${FONT}`;
@@ -185,7 +185,7 @@ const SHARE_URL = 'https://accessibilitynotebook.com/pledge/';
     const leadW = x.measureText(lead).width;
     x.font = `800 26px ${FONT}`;
     x.fillStyle = '#ffffff';
-    x.fillText('accessibilitynotebook.com/pledge', 80 + leadW, 990);
+    x.fillText('accessibilitynotebook.com/take-action', 80 + leadW, 990);
     return new Promise<Blob>((ok) => c.toBlob((bl) => ok(bl!), 'image/png'));
   };
 
@@ -193,12 +193,12 @@ const SHARE_URL = 'https://accessibilitynotebook.com/pledge/';
     const blob = await drawCard();
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
-    a.download = 'my-accessibility-pledge.png';
+    a.download = 'my-accessibility-actions.png';
     document.body.append(a);
     a.click();
     a.remove();
     setTimeout(() => URL.revokeObjectURL(a.href), 2000);
-    status.textContent = 'Your card was downloaded as my-accessibility-pledge.png.';
+    status.textContent = 'Your card was downloaded as my-accessibility-actions.png.';
   });
 
   // Native share sheet (mostly phones) when it can share an image file.
@@ -206,7 +206,7 @@ const SHARE_URL = 'https://accessibilitynotebook.com/pledge/';
   if (navigator.canShare && navigator.canShare({ files: [probe] })) {
     shareBtn.hidden = false;
     shareBtn.addEventListener('click', async () => {
-      const file = new File([await drawCard()], 'my-accessibility-pledge.png', { type: 'image/png' });
+      const file = new File([await drawCard()], 'my-accessibility-actions.png', { type: 'image/png' });
       try {
         await navigator.share({ files: [file], text: `${altText()}` });
       } catch { /* the reader closed the share sheet */ }

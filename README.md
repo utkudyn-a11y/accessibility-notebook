@@ -82,13 +82,13 @@ The website of [Accessibility Notebook](https://buttondown.com/accessibility-not
 - Results link straight to the story on its issue page (`#news-2`, `#inspiration-1`, `#personal-notes`), to the In Detail page, or to the Discussion Corner question on the home page (`/?question=23-2`).
 - The "Popular topics" on the search page are set at the top of `src/pages/search.astro`.
 
-## Accessibility Pledge
+## Take Action (formerly Accessibility Pledge)
 
-- `/pledge/` (menu: Take Action; the page was called Accessibility Pledge before) lets readers pick up to 3 pledges and download a 1080 × 1080 card, share it (on phones) and copy its alt text. Everything happens in the browser; nothing is stored.
+- `/take-action/` (menu: Take Action; `src/pages/take-action.astro`) lets readers pick up to 3 actions and download a 1080 × 1080 "My Accessibility Actions" card (`my-accessibility-actions.png`), share it (on phones) and copy its alt text. Everything happens in the browser; nothing is stored.
 - Pledges live in each issue's front matter, 1–2 per issue: `pledges: [{"role": "Testing", "text": "I will test every flow with a keyboard, not only with tools", "from": "inspiration-3"}]`. `from` works as in `discussion`: the "From Notes # N" link lands on that part of the issue. Roles: Design & Content, Development, Testing, Product. Text starts with "I will", about 80 characters at most, no final period. The latest issue's pledges get a "New" label.
 - The album card in Listen While Reading links to the issue's album line (`#album`).
 - Do not reword or remove a published pledge lightly: people may have shared cards with it.
-- The page's social image is `public/images/pledge-og.png`.
+- The page's social image is `public/images/take-action-og.png`. The old address `/pledge/` redirects to `/take-action/` (`public/_redirects`). In the code and front matter these items are still called `pledges`.
 
 ## Images
 
