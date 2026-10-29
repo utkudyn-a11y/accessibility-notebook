@@ -84,7 +84,7 @@ The website of [Accessibility Notebook](https://buttondown.com/accessibility-not
 
 ## Take Action (formerly Accessibility Pledge)
 
-- `/take-action/` (menu: Take Action; `src/pages/take-action.astro`) lets readers pick up to 3 actions and download a 1080 × 1080 "My Accessibility Actions" card (`my-accessibility-actions.png`), share it (on phones) and copy its alt text. Everything happens in the browser; nothing is stored.
+- `/take-action/` (menu: Take Action; `src/pages/take-action.astro`) lets readers pick up to 3 actions and download a "My Accessibility Actions" card as a Post (1080 × 1080, LinkedIn or Instagram: `my-accessibility-actions-post.png`) or a Story (1080 × 1920, Instagram, Facebook or WhatsApp: `my-accessibility-actions-story.png`), share it (on phones) and copy its alt text. The card is drawn on a canvas; all its text is white. Everything happens in the browser; nothing is stored.
 - Pledges live in each issue's front matter, 1–2 per issue: `pledges: [{"role": "Testing", "text": "I will test every flow with a keyboard, not only with tools", "from": "inspiration-3"}]`. `from` works as in `discussion`: the "From Notes # N" link lands on that part of the issue. Roles: Design & Content, Development, Testing, Product. Text starts with "I will", about 80 characters at most, no final period. The latest issue's pledges get a "New" label.
 - The album card in Listen While Reading links to the issue's album line (`#album`).
 - Do not reword or remove a published pledge lightly: people may have shared cards with it.
