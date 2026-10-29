@@ -1,0 +1,60 @@
+---
+// "Back to top" button, bottom right. Shown on list pages (not on issue or article pages, so it never covers text
+// someone is reading). It appears after scrolling down about two screens. On phones, where it would sit on top of the
+// content, it shows only while scrolling back up and hides again after a moment.
+---
+<a href="#main" class="to-top" aria-label="Back to top" data-shown="false">
+  <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false"><path d="M12 19V5M5 12l7-7 7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" /></svg>
+  <span class="t" aria-hidden="true">Top</span>
+</a>
+
+<script>
+  const btn = document.querySelector<HTMLAnchorElement>('.to-top');
+  const main = document.getElementById('main');
+  if (btn && main) {
+    const phone = matchMedia('(max-width: 47.99rem)');
+    const calm = matchMedia('(prefers-reduced-motion: reduce)');
+    let lastY = scrollY;
+    let timer = 0;
+    const set = (on: boolean) => { btn.dataset.shown = String(on); };
+    const onScroll = () => {
+      const y = scrollY;
+      const far = y > innerHeight * 2;
+      if (!far) set(false);
+      else if (!phone.matches) set(true);
+      else if (y < lastY - 4) {
+        // phones: show while scrolling up, hide a little after scrolling stops
+        set(true);
+        clearTimeout(timer);
+        timer = window.setTimeout(() => { if (document.activeElement !== btn) set(false); }, 2500);
+      } else if (y > lastY + 4) set(false);
+      lastY = y;
+    };
+    addEventListener('scroll', onScroll, { passive: true });
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      scrollTo({ top: 0, behavior: calm.matches ? 'auto' : 'smooth' });
+      main.focus({ preventScroll: true });
+      set(false);
+    });
+    onScroll();
+  }
+</script>
+
+<style>
+  .to-top {
+    position: fixed; right: max(1rem, env(safe-area-inset-right)); bottom: max(1rem, env(safe-area-inset-bottom)); z-index: 50;
+    display: inline-flex; align-items: center; gap: 0.35rem; min-height: 48px; min-width: 48px; padding: 0 1rem 0 0.8rem;
+    border-radius: 999px; background: var(--notebook); color: #fff; border: 2px solid #fff;
+    font-weight: 800; text-decoration: none; box-shadow: 0 4px 14px rgb(29 6 75 / 0.28);
+    transition: opacity 0.2s, transform 0.2s, visibility 0.2s;
+  }
+  .to-top[data-shown='false'] { opacity: 0; visibility: hidden; transform: translateY(0.75rem); }
+  .to-top:focus-visible { outline: 3px solid var(--notebook); outline-offset: 3px; }
+  .to-top:hover { background: #fff; color: var(--notebook); border-color: var(--notebook); }
+  @media (max-width: 47.99rem) {
+    .to-top { padding: 0; width: 48px; justify-content: center; }
+    .to-top .t { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) { .to-top { transition: none; } }
+</style>

@@ -84,6 +84,7 @@ The website of [Accessibility Notebook](https://buttondown.com/accessibility-not
 
 ## Take Action (formerly Accessibility Pledge)
 
+- A "Back to top" button (`src/components/BackToTop.astro`, added in `Base.astro`) appears at the bottom right after scrolling about two screens. It is left out of issue and article pages (`type="article"`) and noindex pages, so it never covers text being read. On phones it shows only while scrolling up.
 - `/take-action/` (menu: Take Action; `src/pages/take-action.astro`) lets readers pick up to 3 actions and download a "My Accessibility Actions" card as a Post (1080 × 1080, LinkedIn or Instagram: `my-accessibility-actions-post.png`) or a Story (1080 × 1920, Instagram, Facebook or WhatsApp: `my-accessibility-actions-story.png`), share it (on phones) and copy its alt text. The card is drawn on a canvas; all its text is white. Everything happens in the browser; nothing is stored.
 - Pledges live in each issue's front matter, 1–2 per issue: `pledges: [{"role": "Testing", "text": "I will test every flow with a keyboard, not only with tools", "from": "inspiration-3"}]`. `from` works as in `discussion`: the "From Notes # N" link lands on that part of the issue. Roles: Design & Content, Development, Testing, Product. Text starts with "I will", about 80 characters at most, no final period. The latest issue's pledges get a "New" label.
 - The album card in Listen While Reading links to the issue's album line (`#album`).
