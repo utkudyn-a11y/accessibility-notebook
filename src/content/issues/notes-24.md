@@ -11,7 +11,7 @@ inDetailTitle: "What Changed In EN 301 549 Version 4.1.1?"
 inDetailSlug: "what-changed-in-en-301-549-version-4-1-1"
 inspirationTopics: [["Design"], ["Testing", "Strategy"], ["Testing", "Strategy"]]
 newsDates: [null, "2026-08-27", "2026-08-17"]
-pledges: [{"role": "Design & Content", "text": "I will look beyond contrast ratios when I choose colors", "from": "inspiration-1"}]
+pledges: [{"role": "Design", "text": "I will look beyond contrast ratios when I choose colors", "from": "inspiration-1"}]
 ---
 
 <!-- section:personal-notes -->

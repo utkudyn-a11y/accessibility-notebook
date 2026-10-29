@@ -1,12 +1,13 @@
 ---
 import Base from '../layouts/Base.astro';
-import { getPledges, PLEDGE_ROLES } from '../lib/issues.js';
+import { getPledges, PLEDGE_GROUPS } from '../lib/issues.js';
 
 const MAX = 3;
 const pledges = getPledges();
-const byRole = PLEDGE_ROLES.map((role) => ({
-  role,
-  items: pledges.filter((p) => p.role === role).sort((a, b) => a.issue - b.issue),
+const byRole = PLEDGE_GROUPS.map((g) => ({
+  ...g,
+  key: g.role.toLowerCase(),
+  items: pledges.filter((p) => p.role === g.role).sort((a, b) => a.issue - b.issue),
 })).filter((g) => g.items.length);
 const SHARE_URL = 'https://accessibilitynotebook.com/take-action/';
 ---
@@ -15,6 +16,7 @@ const SHARE_URL = 'https://accessibilitynotebook.com/take-action/';
   <div class="wrap page">
     <h1>Take Action</h1>
     <p class="lead">Turn what you read here into action. Pick up to three things you will do, then download your card and share it. Every action comes from an Accessibility Notebook issue.</p>
+    <p class="arrm">Actions are grouped by the roles in W3C's <a href="https://www.w3.org/WAI/planning/arrm/">Accessibility Roles and Responsibilities Mapping (ARRM)</a>. Open your role, or any other.</p>
     <noscript><p class="note">Making your card needs JavaScript. You can still read every action below.</p></noscript>
 
     <div class="layout" data-max={MAX}>
@@ -22,9 +24,14 @@ const SHARE_URL = 'https://accessibilitynotebook.com/take-action/';
         <h2 id="pick-title" class="visually-hidden">Choose your actions</h2>
         <p class="counter"><span class="count-text">0 of {MAX} chosen</span> <a class="to-card" href="#card-title">See your card <span aria-hidden="true">↓</span></a></p>
         <p class="limit-msg" role="status"></p>
-        {byRole.map((g, gi) => (
-          <fieldset class="grp">
-            <legend>{g.role}</legend>
+        {byRole.map((g) => (
+          <details class="grp" data-role={g.key}>
+            <summary>
+              <span class="g-name">{g.role}</span>
+              <span class="g-meta">{g.covers} · {g.items.length} actions<span class="g-chosen"></span></span>
+            </summary>
+            <fieldset>
+            <legend class="visually-hidden">{g.role} actions</legend>
             {g.items.map((p) => (
               <div class="act">
                 <input type="checkbox" id={`p-${p.id}`} value={p.id} data-text={p.text} aria-describedby={`src-${p.id}`} />
@@ -34,7 +41,8 @@ const SHARE_URL = 'https://accessibilitynotebook.com/take-action/';
                 </div>
               </div>
             ))}
-          </fieldset>
+            </fieldset>
+          </details>
         ))}
       </form>
 
@@ -216,6 +224,10 @@ const SHARE_URL = 'https://accessibilitynotebook.com/take-action/';
     tip.textContent = fmt.tip;
     liLink.hidden = fmt !== FORMATS.post;
     for (const b of boxes) b.closest('.act')!.classList.toggle('on', b.checked);
+    for (const d of layout.querySelectorAll<HTMLElement>('details.grp')) {
+      const n = d.querySelectorAll('input:checked').length;
+      d.querySelector('.g-chosen')!.textContent = n ? ` · ${n} chosen` : '';
+    }
     render();
   };
 
@@ -287,8 +299,19 @@ const SHARE_URL = 'https://accessibilitynotebook.com/take-action/';
   @media (min-width: 64rem) { .to-card { display: none; } }
   #card-title { scroll-margin-top: 1rem; }
   .limit-msg { min-height: 1.6em; margin: 0 0 0.75rem; font-weight: 700; color: #a3123a; }
-  .grp { border: 0; padding: 0; margin: 0 0 1.5rem; min-width: 0; }
-  .grp legend { font-weight: 800; font-size: 1.15rem; padding: 0; margin-bottom: 0.5rem; }
+  .arrm { max-width: 60ch; }
+  .grp { border: 2px solid var(--rule); border-radius: 10px; background: #fff; margin: 0 0 0.75rem; }
+  .grp[open] { border-color: var(--notebook); }
+  .grp summary { display: grid; grid-template-columns: 1fr auto; column-gap: 1rem; align-items: center; padding: 0.85rem 1rem; cursor: pointer; list-style: none; min-height: 48px; }
+  .grp summary::-webkit-details-marker { display: none; }
+  .grp summary::after { content: ''; grid-column: 2; grid-row: 1 / span 2; width: 0.7rem; height: 0.7rem; border-right: 3px solid var(--notebook); border-bottom: 3px solid var(--notebook); transform: rotate(45deg); margin-top: -0.3rem; transition: transform 0.15s; }
+  .grp[open] summary::after { transform: rotate(-135deg); margin-top: 0.3rem; }
+  .grp summary:focus-visible { outline: 3px solid var(--notebook); outline-offset: 2px; border-radius: 8px; }
+  .g-name { font-weight: 800; font-size: 1.15rem; color: var(--ink); }
+  .g-meta { grid-column: 1; font-size: var(--step--1); color: var(--ink-soft); }
+  .g-chosen { font-weight: 800; color: var(--notebook); }
+  .grp fieldset { border: 0; padding: 0 0.75rem 0.5rem; margin: 0; min-width: 0; }
+  @media (prefers-reduced-motion: reduce) { .grp summary::after { transition: none; } }
   .act { display: flex; gap: 0.75rem; align-items: flex-start; padding: 0.7rem 0.9rem; border: 2px solid var(--rule); border-radius: 8px; margin-bottom: 0.5rem; background: #fff; }
   .act:hover { border-color: var(--notebook); }
   .act input { width: 1.3rem; height: 1.3rem; margin: 0.2rem 0 0; accent-color: var(--notebook); flex: none; cursor: pointer; }

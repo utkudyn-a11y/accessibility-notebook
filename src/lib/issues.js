@@ -40,8 +40,17 @@ const checkDate = (d, n) => {
 export const formatDateLong = (d) =>
   new Date(`${d}T12:00:00Z`).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
 
-// Accessibility Pledge items: front matter "pledges", 1–2 per issue.
-export const PLEDGE_ROLES = ['Design & Content', 'Development', 'Testing', 'Product'];
+// Take Action items: front matter "pledges". Roles are the six role groups of W3C's
+// Accessibility Roles and Responsibilities Mapping (ARRM), https://www.w3.org/WAI/planning/arrm/
+export const PLEDGE_GROUPS = [
+  { role: 'Business', covers: 'Business analysis' },
+  { role: 'Authoring', covers: 'Content authoring and publishing' },
+  { role: 'Design', covers: 'UX research, UX design and visual design' },
+  { role: 'Development', covers: 'Front-end and back-end development' },
+  { role: 'Testing', covers: 'Automated and manual QA testing' },
+  { role: 'Administration', covers: 'Product ownership, project management and governance' },
+];
+export const PLEDGE_ROLES = PLEDGE_GROUPS.map((g) => g.role);
 const checkPledges = (list = [], n) => {
   for (const p of list) {
     if (!PLEDGE_ROLES.includes(p.role)) throw new Error(`Notes # ${n}: unknown pledge role "${p.role}". Use one of: ${PLEDGE_ROLES.join(', ')}`);

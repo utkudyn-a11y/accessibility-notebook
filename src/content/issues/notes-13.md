@@ -11,7 +11,7 @@ inDetailTitle: "Best Practices From Accessible Canada Act"
 inDetailSlug: "best-practices-from-accessible-canada-act"
 inspirationTopics: [["AI", "Development"], ["AI", "Disability & Stories"], ["Design"]]
 newsDates: ["2026-05-20", "2026-05-15", "2026-05-14"]
-pledges: [{"role": "Design & Content", "text": "I will share event accessibility information in an easy-to-read format", "from": "personal-notes"}]
+pledges: [{"role": "Business", "text": "I will gather requirements from disabled users, not only from standards", "from": "in-detail"}, {"role": "Business", "text": "I will cover internal tools for employees in our accessibility plans", "from": "in-detail"}]
 ---
 
 <!-- section:personal-notes -->

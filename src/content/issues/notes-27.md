@@ -12,7 +12,7 @@ inDetailSlug: "accessibility-insights-from-england"
 discussion: [{"context": "Almost no organization targets WCAG AAA, because no law requires it.", "question": "Are AAA criteria still useful, or have they become a \"nice to have\" that no one reads?", "options": ["Still useful", "A \"nice to have\" no one reads"], "from": "inspiration-2", "id": "27-2"}]
 inspirationTopics: [["Legal & Standards"], ["Legal & Standards"], ["Strategy"]]
 newsDates: ["2026-09-25", "2026-09-16", "2026-09-29"]
-pledges: [{"role": "Product", "text": "I will never buy an accessibility overlay", "from": "inspiration-1"}]
+pledges: [{"role": "Administration", "text": "I will never buy an accessibility overlay", "from": "inspiration-1"}]
 ---
 
 <!-- section:personal-notes -->

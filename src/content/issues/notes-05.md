@@ -9,7 +9,7 @@ linkedinUrl: "https://www.linkedin.com/pulse/notes-5-italys-accessibility-guidel
 personalNoteTitle: "AI and Humans Describing a Documentary Together"
 inspirationTopics: [["Design", "Development"], ["Testing", "Resources"], ["Resources", "Design"]]
 newsDates: ["2026-03-11", "2026-02-24", "2026-03-04", null]
-pledges: [{"role": "Design & Content", "text": "I will design a focus indicator everyone can see", "from": "inspiration-1"}]
+pledges: [{"role": "Design", "text": "I will design a focus indicator everyone can see", "from": "inspiration-1"}]
 ---
 
 <!-- section:personal-notes -->

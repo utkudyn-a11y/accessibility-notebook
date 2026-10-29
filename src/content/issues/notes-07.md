@@ -11,7 +11,7 @@ inDetailTitle: "Takeaways From WebAIM Million"
 inDetailSlug: "takeaways-from-webaim-million"
 inspirationTopics: [["Legal & Standards"], ["Disability & Stories"], ["Legal & Standards"]]
 newsDates: ["2026-03-30", "2026-03-26", "2026-04-02"]
-pledges: [{"role": "Testing", "text": "I will include people with disabilities in usability tests", "from": "news-2"}]
+pledges: [{"role": "Design", "text": "I will include people with disabilities in usability tests", "from": "news-2"}]
 ---
 
 <!-- section:personal-notes -->

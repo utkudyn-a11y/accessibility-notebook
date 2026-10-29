@@ -11,7 +11,7 @@ inDetailTitle: "What Else Can A Redesign Project Improve Accessibility? – The 
 inDetailSlug: "what-else-can-a-redesign-project-improve-accessibility-the-case-of-ajet"
 inspirationTopics: [["Design"], ["AI", "Development"], ["Design"]]
 newsDates: [null, "2026-04-13", "2026-04-15"]
-pledges: [{"role": "Design & Content", "text": "I will publish tagged, accessible PDFs or HTML pages", "from": "news-1"}]
+pledges: [{"role": "Design", "text": "I will ask if a 75-year-old with low vision could use what I design", "from": "inspiration-1"}]
 ---
 
 <!-- section:personal-notes -->

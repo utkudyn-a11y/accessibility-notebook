@@ -11,7 +11,7 @@ inDetailTitle: "Common Accessibility Failures In The Seat Maps"
 inDetailSlug: "common-accessibility-failures-in-the-seat-maps"
 inspirationTopics: [["Resources"], ["AI", "Development"], ["Strategy"]]
 newsDates: ["2026-05-21", "2026-05-25", "2026-05-21"]
-pledges: [{"role": "Design & Content", "text": "I will never use color alone to show meaning", "from": "in-detail"}]
+pledges: [{"role": "Design", "text": "I will never use color alone to show meaning", "from": "in-detail"}]
 ---
 
 <!-- section:personal-notes -->

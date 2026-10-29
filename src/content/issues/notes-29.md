@@ -9,7 +9,7 @@ personalNoteTitle: "Why Hill Dickinson Stadium Made Me An Evertonian"
 discussion: [{"context": "A small candy shop faced a five-figure ADA settlement over its website. Most of the 1,250+ comments on the owner's video asked \"What is ADA?\"", "question": "Who should make sure small business websites are accessible?", "options": ["The business owner", "Shopify, its apps and the developer they hire", "Governments, with clear guidance"], "from": "news-3"}]
 inspirationTopics: [["Resources", "Strategy", "Design"], ["Design"], ["Development", "Resources"]]
 newsDates: ["2026-10-13", "2026-09-16", "2026-10-04"]
-pledges: [{"role": "Design & Content", "text": "I will put text on a plain background, not on top of images", "from": "inspiration-2"}]
+pledges: [{"role": "Design", "text": "I will put text on a plain background, not on top of images", "from": "inspiration-2"}, {"role": "Development", "text": "I will check how well our AI and biometric features work for disabled people", "from": "news-1"}, {"role": "Administration", "text": "I will date our accessibility statement and list its known issues", "from": "news-2"}]
 ---
 
 <!-- section:personal-notes -->

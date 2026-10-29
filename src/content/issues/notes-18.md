@@ -11,7 +11,7 @@ inDetailTitle: "Norway Font For The 2026 FIFA World Cup"
 inDetailSlug: "norway-font-for-the-2026-fifa-world-cup"
 inspirationTopics: [["AI"], ["Strategy"], ["Design"]]
 newsDates: ["2026-06-21", "2026-05-18", "2026-06-24"]
-pledges: [{"role": "Product", "text": "I will make accessibility features easy to find, not hidden in a separate corner", "from": "news-1"}]
+pledges: [{"role": "Administration", "text": "I will make accessibility features easy to find, not hidden in a separate corner", "from": "news-1"}, {"role": "Testing", "text": "I will test error states, the mobile site and PDFs, not only the happy path", "from": "inspiration-2"}]
 ---
 
 <!-- section:personal-notes -->

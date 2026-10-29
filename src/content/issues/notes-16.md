@@ -11,7 +11,7 @@ inDetailTitle: "AI and Human Collaboration in Accessibility Work – The Binclus
 inDetailSlug: "ai-and-human-collaboration-in-accessibility-work-the-binclusive-example"
 inspirationTopics: [["Resources"], ["AI", "Testing"], ["AI"]]
 newsDates: ["2026-06-02", "2026-06-02", "2026-05-21"]
-pledges: [{"role": "Testing", "text": "I will never trust a \"100% accessible\" automated score", "from": "inspiration-2"}]
+pledges: [{"role": "Testing", "text": "I will never trust a \"100% accessible\" automated score", "from": "inspiration-2"}, {"role": "Authoring", "text": "I will send emails with real text and headings, not one big image", "from": "news-3"}]
 ---
 
 <!-- section:personal-notes -->

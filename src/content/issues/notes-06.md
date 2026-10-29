@@ -12,7 +12,7 @@ inDetailSlug: "what-are-assertions"
 discussion: [{"context": "In the 2025 AppleVis Report Card, blind, low-vision and deaf-blind users rated Apple's accessibility lower than the year before, and many asked Apple to fix bugs before shipping new features.", "question": "Should big tech pause new features until accessibility bugs are fixed?", "options": ["Yes, fix accessibility bugs first", "No, ship features and fix bugs in parallel"], "from": "news-1"}]
 inspirationTopics: [["Legal & Standards"], ["Strategy"], ["Legal & Standards"]]
 newsDates: ["2026-03-17", "2026-03-13", "2026-03-11"]
-pledges: [{"role": "Product", "text": "I will add accessibility acceptance criteria to every ticket", "from": "inspiration-2"}]
+pledges: [{"role": "Business", "text": "I will add accessibility acceptance criteria to every ticket", "from": "inspiration-2"}, {"role": "Authoring", "text": "I will add captions and a transcript to every video I publish", "from": "in-detail"}, {"role": "Administration", "text": "I will ask for accessibility in every procurement contract", "from": "news-3"}]
 ---
 
 <!-- section:personal-notes -->

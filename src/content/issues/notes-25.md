@@ -9,6 +9,7 @@ linkedinUrl: "https://www.linkedin.com/pulse/notes-25-how-select-meaningful-samp
 personalNoteTitle: "Finalists at Travel For Every Body: An Aviation Sign Language Dictionary"
 inspirationTopics: [["Strategy"], ["Testing"], ["Testing"]]
 newsDates: ["2026-09-10", "2026-09-01", "2026-09-08"]
+pledges: [{"role": "Testing", "text": "I will not claim full conformance from an audit of a few sample pages", "from": "inspiration-3"}]
 ---
 
 <!-- section:personal-notes -->

@@ -11,7 +11,7 @@ inDetailTitle: "Bonus: What W3C Says on CAPTCHAs?"
 inDetailSlug: "what-w3c-says-on-captchas"
 inspirationTopics: [["Legal & Standards", "Design"], ["Resources", "Strategy"], ["Testing"]]
 newsDates: ["2026-08-21", "2026-08-14", "2026-08-12"]
-pledges: [{"role": "Testing", "text": "I will test every flow with a keyboard, not only with tools", "from": "inspiration-3"}, {"role": "Product", "text": "I will never add a CAPTCHA without an equally easy alternative", "from": "in-detail"}]
+pledges: [{"role": "Testing", "text": "I will test every flow with a keyboard, not only with tools", "from": "inspiration-3"}, {"role": "Business", "text": "I will never add a CAPTCHA without an equally easy alternative", "from": "in-detail"}, {"role": "Administration", "text": "I will include accessibility work in every estimate", "from": "inspiration-2"}]
 ---
 
 <!-- section:personal-notes -->

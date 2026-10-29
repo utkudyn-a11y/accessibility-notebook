@@ -12,7 +12,7 @@ inDetailSlug: "is-the-use-of-accessibility-overlays-for-dyslexia-meaningful"
 discussion: [{"context": "Accessibility overlays cause usability, legal and technical problems, including the ones that promise to help people with dyslexia. Funka says there's no \"magic dyslexia font\" and that users should get tools to adjust things themselves.", "question": "Who should provide those tools: the website, or the browser and the operating system?", "options": ["The website", "The browser and the operating system", "Both of them"], "from": "in-detail"}]
 inspirationTopics: [["Strategy"], ["Development", "Design"], ["Design", "Disability & Stories"]]
 newsDates: ["2026-06-11", "2026-06-08", null]
-pledges: [{"role": "Design & Content", "text": "I will let users adjust text instead of choosing one \"dyslexia font\" for them", "from": "inspiration-3"}]
+pledges: [{"role": "Development", "text": "I will keep selected states and icons visible in high contrast mode", "from": "inspiration-2"}]
 ---
 
 <!-- section:personal-notes -->

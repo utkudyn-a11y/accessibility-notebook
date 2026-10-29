@@ -11,7 +11,7 @@ inDetailTitle: "What We Considered While Creating AJet’s Accessibility Page?"
 inDetailSlug: "what-we-considered-while-creating-ajets-accessibility-page"
 inspirationTopics: [["Disability & Stories"], ["Development", "Design"], ["Disability & Stories"]]
 newsDates: ["2026-05-29", "2026-06-04", "2026-05-21"]
-pledges: [{"role": "Product", "text": "I will publish an accessibility page that says what's done and what's still missing", "from": "in-detail"}]
+pledges: [{"role": "Administration", "text": "I will publish an accessibility page that says what's done and what's still missing", "from": "in-detail"}, {"role": "Development", "text": "I will build flexible layouts, not ones tuned to a few screen sizes", "from": "inspiration-2"}]
 ---
 
 <!-- section:personal-notes -->
