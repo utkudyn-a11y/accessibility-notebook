@@ -15,4 +15,7 @@ export const SYNONYMS = [
   ['en 301 549', 'harmonised standard', 'harmonized standard'],
   ['bsl', 'british sign language'],
   ['cogai', 'cognitive accessibility institute'],
+  ['dpo', 'dpos', 'disabled persons organisations', 'organisations of persons with disabilities'],
+  ['mcp', 'model context protocol'],
+  ['ict', 'information and communication technology'],
 ];
