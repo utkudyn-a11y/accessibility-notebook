@@ -16,7 +16,7 @@ const BODY_MAX = 2000;
 
   <form class="form" method="post" action="/api/comments" novalidate aria-labelledby="cm-form-title">
     <h3 id="cm-form-title">I Have Something To Say</h3>
-    <p class="hint" id="cm-hint">Comments appear after Utku reads them. Please keep it kind and on topic.</p>
+    <p class="hint" id="cm-hint">Comments appear after I read them. Please keep it kind and on topic.</p>
     <input type="hidden" name="issue" value={issue} />
     <div class="field">
       <label for="cm-name">Name</label>
@@ -80,7 +80,7 @@ const BODY_MAX = 2000;
     const showSent = (name: string) => {
       form.hidden = true;
       sent.hidden = false;
-      sent.innerHTML = `<p><strong>Thanks${name ? `, ${esc(name)}` : ''}!</strong> Your comment was sent. It will appear here after Utku reads it.</p>`;
+      sent.innerHTML = `<p><strong>Thanks${name ? `, ${esc(name)}` : ''}!</strong> Your comment was sent. It will appear here after I read it.</p>`;
       sent.focus();
     };
 
