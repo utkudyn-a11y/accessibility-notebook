@@ -38,14 +38,14 @@ for (const it of items) {
         <ul class="grid" id={`p-${m.key}`}>
           {m.items.map((it) => (
             <li>
-              <article class="card">
+              <article class="card" aria-labelledby={`n-${it.issue}-${it.anchor}`}>
                 <p class="meta">
                   {it.published
                     ? <>Published <time datetime={it.published}>{formatDateLong(it.published)}</time></>
                     : <>Shared <time datetime={it.date}>{formatDateLong(it.date)}</time></>}
                   {it.source && <> · {it.source.name}</>}
                 </p>
-                <h3>{it.url ? <a href={it.url}>{it.title}</a> : it.title}</h3>
+                <h3 id={`n-${it.issue}-${it.anchor}`}>{it.url ? <a href={it.url}>{it.title}</a> : it.title}</h3>
                 <p class="ex">{plainText(it.markdown, 170)}</p>
                 <a class="go" href={`${it.issueUrl}#${it.anchor}`}>Read on Notes # {it.issue}<span class="visually-hidden">: {it.title}</span> <span aria-hidden="true">→</span></a>
               </article>

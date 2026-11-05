@@ -22,9 +22,9 @@ const sections = ORDER.filter((k) => issue.sections[k]).map((k) => ({ key: k, ..
 <Base title={issue.title} description={issue.description} image={issue.cover} type="article"
       published={`${issue.date}T09:00:00+03:00`}
       jsonLd={articleLd({ title: issue.title, description: issue.description, url: issue.url, image: issue.cover, date: issue.date })}>
-  <article class="wrap issue">
+  <article class="wrap issue" aria-labelledby="issue-title">
     <header class="reading">
-      <h1>{issue.title}</h1>
+      <h1 id="issue-title">{issue.title}</h1>
       <p class="meta"><time datetime={issue.date}>{formatDate(issue.date)}</time></p>
     </header>
     <picture>

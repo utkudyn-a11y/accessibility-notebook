@@ -8,9 +8,9 @@ const { issues, field, showTopics = false } = Astro.props;
   <section class="group" aria-labelledby={`g-${i.number}`}>
     <h2 id={`g-${i.number}`}><time datetime={i.date}>{formatDate(i.date)}</time></h2>
     <p class="from">From <a href={i.url}>{i.title}</a></p>
-    {i[field].map((it) => (
-      <article class="item" data-topics={showTopics ? (it.topics || []).map(topicSlug).join(' ') : undefined}>
-        <h3>{it.url ? <a href={it.url}>{it.title}</a> : it.title}</h3>
+    {i[field].map((it, k) => (
+      <article class="item" aria-labelledby={`${field}-${i.number}-${k + 1}`} data-topics={showTopics ? (it.topics || []).map(topicSlug).join(' ') : undefined}>
+        <h3 id={`${field}-${i.number}-${k + 1}`}>{it.url ? <a href={it.url}>{it.title}</a> : it.title}</h3>
         {it.source && <p class="source">Source: {it.source.name}</p>}
         {showTopics && it.topics?.length > 0 && (
           <p class="tags"><span class="visually-hidden">Topics: </span>{it.topics.map((t, k) => (

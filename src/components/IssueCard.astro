@@ -4,19 +4,20 @@ import { webp } from '../lib/images.js';
 const { issue, size = 'small', headingLevel = 3 } = Astro.props;
 const H = `h${headingLevel}`;
 const big = size === 'large';
+const hid = `issue-card-${issue.number}`;
 const w = webp(issue.cover);
 // Displayed widths (measured): large card is full width below 56rem, then about half (max 35rem);
 // small cards are 1–3 per row, at most about 23rem.
 const sizes = big ? '(min-width: 56rem) min(47vw, 35rem), calc(100vw - 2rem)' : '(min-width: 72rem) 23rem, (min-width: 34rem) 45vw, calc(100vw - 2rem)';
 ---
-<article class:list={['issue-card', { big }]}>
+<article class:list={['issue-card', { big }]} aria-labelledby={hid}>
   <picture>
     {w && <source type="image/webp" srcset={w.srcset} sizes={sizes} />}
     <img src={issue.cover} alt="" width={w?.width ?? 1280} height={w?.height ?? 720} loading={big ? 'eager' : 'lazy'} fetchpriority={big ? 'high' : undefined} decoding="async" />
   </picture>
   <div class="text">
     <p class="date"><time datetime={issue.date}>{formatDate(issue.date)}</time></p>
-    <H class="title"><a href={issue.url}>{issue.title}</a></H>
+    <H class="title" id={hid}><a href={issue.url}>{issue.title}</a></H>
     {big && <p class="desc">{issue.description}</p>}
     {big && issue.album && (
       <p class="album">Created while listening: <a href={issue.album.url}>{issue.album.artist} – {issue.album.title}</a></p>
