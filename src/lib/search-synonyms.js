@@ -17,5 +17,8 @@ export const SYNONYMS = [
   ['cogai', 'cognitive accessibility institute'],
   ['dpo', 'dpos', 'disabled persons organisations', 'organisations of persons with disabilities'],
   ['mcp', 'model context protocol'],
+  ['das', 'digital accessibility standard'],
+  ['nca', 'national communications authority'],
+  ['nfc', 'near field communication'],
   ['ict', 'information and communication technology'],
 ];
