@@ -119,4 +119,4 @@ The website of [Accessibility Notebook](https://buttondown.com/accessibility-not
   - `{ "source": { "href", "text" } }` for the original article; it shows "(not in Easy Read)" after the link.
   - `{ "vote": { "question": 1, "over", "ask", "options" } }`: the issue's Discussion Corner question number 1 with easier words. It uses the same vote counters, so `options` must have the same number of answers in the same order (the build checks this).
 - Icons: `src/assets/easy-read-icons/` (inline SVG in `currentColor`, hidden from screen readers because the text beside them says the same). `c` icons are used in every issue, `n` icons belong to one issue. They are drawn by `scripts/easy-read-icons.mjs` (see its first lines); the Icon dictionary lists what each one means. Use the same icon for the same idea every time.
-- Feedback goes to the full issue's comments; links to pages that are not Easy Read say "(not in Easy Read)".
+- Feedback goes to the full issue's comments. Links to articles and pages that are not Easy Read say "(not in Easy Read)"; links to the comments do not.

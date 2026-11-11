@@ -4,7 +4,7 @@
     { "icon": "c08", "lines": ["My name is Utku.", "I write the Accessibility Notebook.", "The Accessibility Notebook has news about accessibility."] },
     { "icon": "c01", "lines": ["**Accessibility** means everyone can use something.", "This includes disabled people."] },
     { "icon": "c10", "lines": ["This page is the Easy Read version of Notebook issue number 30.", "Issue number 30 came out on Sunday 1 November 2026.", "This page tells you the main things in the issue.", "It does not tell you everything."] },
-    { "icon": "c11", "lines": ["I want to test this page with real readers.", "Please tell me what is easy and what is hard to understand."], "link": { "href": "/notes/30/#comments", "text": "Tell me what you think", "notEasyRead": true } }
+    { "icon": "c11", "lines": ["I want to test this page with real readers.", "Please tell me what is easy and what is hard to understand."], "link": { "href": "/notes/30/#comments", "text": "Tell me what you think" } }
   ],
   "sections": [
     { "id": "buttons", "title": "Small Buttons On A Book App", "blocks": [
@@ -64,7 +64,7 @@
       { "icon": "c12", "lines": ["Do you make websites?", "Then you can make this promise:", "“I will follow the settings people choose on their phone or computer.", "I will not add a special accessibility button.”"], "link": { "href": "/take-action/", "text": "Make a promise on the Take Action page", "notEasyRead": true } }
     ]},
     { "id": "feedback", "title": "Tell Me What You Think", "blocks": [
-      { "icon": "c11", "lines": ["I want to test this page with real readers.", "Please tell me what is easy and what is hard to understand."], "link": { "href": "/notes/30/#comments", "text": "Tell me what you think", "notEasyRead": true } },
+      { "icon": "c11", "lines": ["I want to test this page with real readers.", "Please tell me what is easy and what is hard to understand."], "link": { "href": "/notes/30/#comments", "text": "Tell me what you think" } },
       { "icon": "c10", "lines": ["Do you want to read more?"], "link": { "href": "/notes/30/", "text": "Read the full version of issue number 30", "notEasyRead": true } }
     ]},
     { "id": "about", "title": "About This Page", "menu": false, "blocks": [

@@ -69,7 +69,7 @@ const votes = er.sections.flatMap((s) => s.blocks.filter((b) => b.vote).map((b) 
                 <div class="q-body" data-id={b.vote.id}>
                   <p class="over">{b.vote.over}</p>
                   <p class="ask">{b.vote.ask}</p>
-                  <p class="links"><span><a href={`${fullUrl}#comments`}>Tell me why in the comments</a> (not in Easy Read)</span></p>
+                  <p class="links"><a href={`${fullUrl}#comments`}>Tell me why in the comments</a></p>
                 </div>
               </div>
             ) : b.source ? (
@@ -107,7 +107,7 @@ const votes = er.sections.flatMap((s) => s.blocks.filter((b) => b.vote).map((b) 
     if (!body) continue;
     createVoter(body, {
       over: (x) => esc((x as Q & { over: string }).over),
-      commentLink: () => `<span><a href="${esc(full)}#comments">Tell me why in the comments</a> (not in Easy Read)</span>`,
+      commentLink: () => `<a href="${esc(full)}#comments">Tell me why in the comments</a>`,
       readLink: () => '',
     }).show(q);
   }
