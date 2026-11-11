@@ -95,6 +95,7 @@ const issues = Object.entries(files)
         published: checkDate(data.newsDates?.[idx], data.number),
       })),
       inspirations: splitItems(parts['inspirations']?.markdown).map((it, idx) => ({ ...it, issue: data.number, date: data.date, anchor: `inspiration-${idx + 1}`, topics: checkTopics(data.inspirationTopics?.[idx], data.number) })),
+      oneMinute: checkFrom(data.oneMinute ? [{ from: data.oneMinute }] : [], anchors, data.number)[0]?.from || null,
       pledges: checkFrom(checkPledges(data.pledges, data.number), anchors, data.number).map((p) => ({ ...p, sourceUrl: at(p.from) })),
       body: content,
     };
@@ -139,4 +140,26 @@ export const getPledges = () => {
   return issues.flatMap((i) =>
     i.pledges.map((p, k) => ({ id: `${i.number}-${k + 1}`, role: p.role, text: p.text, issue: i.number, issueUrl: p.sourceUrl, isNew: isNewIssue(i.number) }))
   );
+};
+
+// "I have just 1 minute: What should I read?" on the home page: one short piece of the latest issue.
+// Front matter oneMinute ("news-2", "inspiration-3", "personal-notes") picks it; otherwise the shortest
+// news story, inspiration or personal note is used.
+const wordCount = (md) => plainText(md, Infinity).split(' ').filter(Boolean).length;
+export const getOneMinute = (issue) => {
+  const pick = [
+    ...(issue.sections['personal-notes'] ? [{ anchor: 'personal-notes', kind: 'Personal Notes', title: issue.personalNoteTitle || 'Personal Notes', markdown: issue.sections['personal-notes'].markdown }] : []),
+    ...issue.news.map((x) => ({ ...x, kind: 'News' })),
+    ...issue.inspirations.map((x) => ({ ...x, kind: 'Inspiration' })),
+  ].map((x) => ({ ...x, words: wordCount(x.markdown) }));
+  if (!pick.length) return null;
+  const x = pick.find((p) => p.anchor === issue.oneMinute) || [...pick].sort((a, b) => a.words - b.words)[0];
+  return {
+    kind: x.kind,
+    title: x.title,
+    url: `${issue.url}#${x.anchor}`,
+    minutes: Math.max(1, Math.round(x.words / 200)),
+    excerpt: plainText(x.markdown, 170),
+    issue: issue.number,
+  };
 };

@@ -70,3 +70,18 @@ a:hover { text-decoration-thickness: 0.16em; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
 }
+
+/* Visual kit: hand-drawn chalk underline for section headings, highlighter for key phrases */
+.chalk { position: relative; width: fit-content; max-width: 100%; padding-bottom: 0.5rem; }
+.chalk::after { content: ''; position: absolute; left: -2%; right: -6%; bottom: -0.15rem; height: 0.75rem; background: url(/images/figures/underline.svg) no-repeat center / 100% 100%; }
+.hl {
+  background: linear-gradient(104deg, transparent 0.2em, rgb(255 216 77 / 0.85) 0.25em, rgb(255 216 77 / 0.7) calc(100% - 0.3em), transparent calc(100% - 0.2em));
+  padding: 0.05em 0.25em; margin: 0 -0.1em; -webkit-box-decoration-break: clone; box-decoration-break: clone; border-radius: 0.3em 0.15em 0.35em 0.2em;
+}
+@media (forced-colors: active) { .chalk::after { display: none; } .chalk { text-decoration: underline; } .hl { background: Mark; color: MarkText; } }
+/* A figure pinned to the page on a small ruled note with a strip of tape (decorative) */
+.note-card { position: relative; display: block; background: #fff repeating-linear-gradient(to bottom, transparent 0 1.35rem, #ece6f9 1.35rem calc(1.35rem + 1px)); border: 1px solid var(--rule); border-radius: 3px; padding: 1rem 0.9rem 0.8rem; box-shadow: 0 3px 10px rgb(29 6 75 / 0.08); transform: rotate(-2.5deg); }
+.note-card::before { content: ''; position: absolute; top: -0.6rem; left: 50%; width: 4.5rem; height: 1.2rem; transform: translateX(-50%) rotate(3deg); background: rgb(255 216 77 / 0.75); border-radius: 2px; }
+.note-card img { display: block; width: 100%; height: auto; }
+.note-card.tilt-right { transform: rotate(2deg); }
+@media (forced-colors: active) { .note-card { border-color: CanvasText; } }

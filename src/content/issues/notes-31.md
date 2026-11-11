@@ -9,6 +9,7 @@ personalNoteTitle: "Stuck In An NFC Loop"
 inDetailTitle: "What Can We Learn From New Zealand's Digital Accessibility Standard (DAS)?"
 inDetailSlug: "what-can-we-learn-from-new-zealands-digital-accessibility-standard"
 discussion: [{"context": "Ghana's NCA met basic accessibility standards first, then invited disabled users to test its website. I think asking disabled users to test a system that doesn't meet basic criteria is an awful idea.", "question": "When should disabled users test a product?", "options": ["After it meets basic standards", "From day one"], "from": "news-2"}]
+oneMinute: "inspiration-1"
 inspirationTopics: [["Strategy"], ["Testing"], ["Design", "Development", "Resources"]]
 newsDates: ["2026-07-06", "2026-10-28", "2026-10-27"]
 pledges: [{"role": "Administration", "text": "I will name an accessibility champion in every product team", "from": "inspiration-1"}, {"role": "Design", "text": "I will check my designs against a dark mode checklist", "from": "inspiration-3"}]

@@ -28,7 +28,7 @@ const first = questions[0];
 ---
 {first && (
   <section class="dc" aria-labelledby="dc-title" data-questions={JSON.stringify(questions)}>
-    <H id="dc-title">Discussion Corner</H>
+    <H id="dc-title" class="chalk">Discussion Corner</H>
     <p class="intro">Every issue raises a question worth arguing about. Read it, pick a side and tell me why in the comments of the issue.</p>
 
     <div class="q">
@@ -125,7 +125,7 @@ const first = questions[0];
 
 <style>
   .dc { margin-top: 4rem; }
-  .dc h2, .dc h3 { font-size: var(--step-1); margin: 0 0 0.5rem; }
+  .dc h2, .dc h3 { font-size: var(--step-1); margin: 0 0 1rem; }
   .intro { max-width: 60ch; }
   .all { margin-top: 1.5rem; max-width: 44rem; }
   .all summary { cursor: pointer; font-weight: 700; color: var(--notebook); min-height: 44px; padding: 0.6rem 0; width: fit-content; }
