@@ -1,0 +1,74 @@
+{
+  "issue": 30,
+  "intro": [
+    { "icon": "c08", "lines": ["My name is Utku.", "I write the Accessibility Notebook.", "The Accessibility Notebook has news about accessibility."] },
+    { "icon": "c01", "lines": ["**Accessibility** means everyone can use something.", "This includes disabled people."] },
+    { "icon": "c10", "lines": ["This page is the Easy Read version of Notebook issue number 30.", "Issue number 30 came out on Sunday 1 November 2026.", "This page tells you the main things in the issue.", "It does not tell you everything."] },
+    { "icon": "c11", "lines": ["I want to test this page with real readers.", "Please tell me what is easy and what is hard to understand."], "link": { "href": "/notes/30/#comments", "text": "Tell me what you think", "notEasyRead": true } }
+  ],
+  "sections": [
+    { "id": "buttons", "title": "Small Buttons On A Book App", "blocks": [
+      { "icon": "c04", "lines": ["I use an app called Goodreads.", "In Goodreads, I write notes about the books I read.", "I like Goodreads because it is simple."] },
+      { "icon": "n02", "lines": ["In Goodreads, you give a book 1 to 5 stars.", "More stars means you like the book more.", "Goodreads changed a short time ago.", "Now you can also give a part of a star.", "For example, you can give 3 and a half stars."] },
+      { "icon": "n01", "lines": ["Now the parts of the stars are very small.", "It is easy to press the wrong one.", "I often press the wrong part by mistake.", "Then I have to change my stars again."] },
+      { "icon": "c07", "lines": ["Small buttons are a problem for many people.", "For example, for people who find it hard to move their hands.", "Apps must make buttons big enough to press."] }
+    ]},
+    { "id": "europe", "title": "Europe Looks At Accessibility In Each Country", "blocks": [
+      { "icon": "c14", "lines": ["The **European Union** is a group of 27 countries in Europe.", "They make some laws together."] },
+      { "icon": "n03", "lines": ["**AccessibleEU** is a centre of the European Union.", "It helps countries make things accessible."] },
+      { "icon": "n04", "lines": ["AccessibleEU has shared new reports.", "There is 1 report for each of the 27 countries.", "Each report tells you how accessible things are in that country."] },
+      { "icon": "c08", "lines": ["AccessibleEU says things are getting better.", "I read the reports.", "I think things are not getting better.", "I think things are staying the same."], "link": { "href": "#countries", "text": "Read more: What Countries In Europe Are Doing" } },
+      { "source": { "href": "https://accessible-eu-centre.ec.europa.eu/content-corner/news/accessibleeus-2025-monitoring-reports-show-steady-progress-advancing-accessibility-eu-2026-10-26_en", "text": "Read the original news on AccessibleEU" } }
+    ]},
+    { "id": "dubai", "title": "Hotels In Dubai", "blocks": [
+      { "icon": "n05", "lines": ["Dubai is a city.", "Many people travel to Dubai and stay in hotels."] },
+      { "icon": "c03", "lines": ["Hotels in Dubai made their websites and apps more accessible.", "The hotels got better marks for accessibility than before."] },
+      { "icon": "c08", "lines": ["I think the marks are not the most important news.", "The important news is this:", "Dubai thinks accessibility is very important for visitors.", "2 offices of the Dubai government work together on accessibility.", "They also work with the hotels."] },
+      { "icon": "c06", "lines": ["We do not know how the websites were checked.", "Maybe a computer program checked them.", "Maybe people checked them too.", "But I think working together is a good start."] },
+      { "source": { "href": "https://hotelandcatering.com/news/dubai-hotels-make-strong-progress-in-digital-services-accessibility", "text": "Read the original news on Hotel & Catering" } }
+    ]},
+    { "id": "glasses", "title": "AI Glasses And Guide Dogs", "blocks": [
+      { "icon": "n07", "lines": ["Heidi Biggin is a woman from Australia.", "She is legally blind.", "This means she can see very little."] },
+      { "icon": "n08", "lines": ["Heidi uses smart glasses.", "**Smart glasses** are glasses with a small camera.", "They use AI to tell you what is around you."] },
+      { "icon": "c13", "lines": ["**AI** is a computer program.", "It can answer questions and describe pictures."] },
+      { "icon": "n06", "lines": ["Before, Heidi had a guide dog.", "A **guide dog** is a dog that helps a blind person walk safely.", "Heidi says she does not want a new guide dog.", "She says the smart glasses are enough for her.", "She has 1 worry.", "The glasses have a small light.", "Some people think she is filming them."] },
+      { "icon": "n07", "lines": ["Guide Dogs Victoria trains guide dogs in Australia.", "They say blind people should always use a guide dog or a white cane first.", "A **white cane** is a long white stick.", "Blind people use it to feel the way in front of them.", "Training 1 guide dog takes almost 2 years.", "It also costs a lot of money."] },
+      { "icon": "c08", "lines": ["I do not think technology alone can keep people safe when they walk."] },
+      { "source": { "href": "https://www.abc.net.au/news/2026-10-27/blind-woman-says-smart-glasses-have-replaced-her-guide-dog/107266650", "text": "Read the original news on ABC" } },
+      { "vote": { "question": 1, "over": "What do you think?", "ask": "Can AI glasses do the job of a guide dog or a white cane?", "options": ["Yes, they can do the job.", "No, they can only help a little extra."] } }
+    ]},
+    { "id": "articles", "title": "3 Articles I Like", "blocks": [
+      { "heading": "Article 1: AI Programs And Websites" },
+      { "icon": "c13", "lines": ["Some AI programs can now use websites for you.", "These programs work better on accessible websites."] },
+      { "icon": "n09", "lines": ["For example, they use the headings on a page.", "**Headings** are the titles on a page.", "They help you find your way.", "The programs also use the text that tells you what is in a picture.", "So accessible websites help people and AI programs."] },
+      { "source": { "href": "https://itwire.com/it-industry-news/development/accessibility-goes-mainstream-and-ai-agents-are-next", "text": "Read article 1 on ITWire" } },
+      { "heading": "Article 2: Follow The Settings People Choose" },
+      { "icon": "c12", "lines": ["Your phone or computer has settings.", "For example, you can choose stronger colours.", "Or you can choose less movement on the screen.", "A website should follow these settings.", "It should not add its own special accessibility button.", "This article tells website makers how to do this."] },
+      { "source": { "href": "https://www.tempertemper.net/blog/respecting-your-users-preferences", "text": "Read article 2 on Tempertemper" } },
+      { "heading": "Article 3: Flashy Gadgets That Do Not Help" },
+      { "icon": "c07", "lines": ["Some companies make expensive gadgets for disabled people.", "Many of these gadgets look good.", "But they do not fix the real problem."] },
+      { "icon": "c02", "lines": ["The writer of this article is blind.", "The writer says: simple things help more.", "For example, good headings on a website."] },
+      { "source": { "href": "https://sightlessscribbles.com/posts/disability-dongle/", "text": "Read article 3 on Sightless Scribbles" } }
+    ]},
+    { "id": "countries", "title": "What Countries In Europe Are Doing", "blocks": [
+      { "icon": "n04", "lines": ["I read the reports from AccessibleEU for all 27 countries.", "Here are the main things I found."] },
+      { "icon": "c05", "heading": "1. New Laws", "lines": ["The European Union made a law about accessible products and services.", "This law is called the **European Accessibility Act**.", "All 27 countries put this law into their own laws.", "Now the European Union checks if these laws are right.", "We do not know when it will finish."] },
+      { "icon": "c06", "heading": "2. Checks", "lines": ["All 27 countries check public websites and apps.", "But in every country with numbers, many public websites and apps are still not accessible.", "Only 5 countries say things are better than before."] },
+      { "icon": "c02", "heading": "3. Disabled People", "lines": ["Disabled people should help with the checks.", "Only 2 countries give a real example of this.", "Only 9 countries say it must happen."] },
+      { "icon": "c11", "heading": "4. Complaints", "lines": ["13 countries write down complaints about websites and apps.", "Only 2 countries say how many complaints they got."] },
+      { "heading": "5. Money And Training", "lines": ["Only 2 countries show money they spend on digital accessibility.", "All 27 countries say there is training about accessibility.", "But disabled people still have little say in the training."] },
+      { "heading": "6. Different Ways To Measure", "lines": ["The countries measure accessibility in different ways.", "So it is hard to compare the countries."] },
+      { "icon": "c08", "lines": ["On paper, many countries look good.", "But websites and apps are still far behind."] }
+    ]},
+    { "id": "do", "title": "What Can You Do?", "blocks": [
+      { "icon": "c12", "lines": ["Do you make websites?", "Then you can make this promise:", "“I will follow the settings people choose on their phone or computer.", "I will not add a special accessibility button.”"], "link": { "href": "/take-action/", "text": "Make a promise on the Take Action page", "notEasyRead": true } }
+    ]},
+    { "id": "feedback", "title": "Tell Me What You Think", "blocks": [
+      { "icon": "c11", "lines": ["I want to test this page with real readers.", "Please tell me what is easy and what is hard to understand."], "link": { "href": "/notes/30/#comments", "text": "Tell me what you think", "notEasyRead": true } },
+      { "icon": "c10", "lines": ["Do you want to read more?"], "link": { "href": "/notes/30/", "text": "Read the full version of issue number 30", "notEasyRead": true } }
+    ]},
+    { "id": "about", "title": "About This Page", "menu": false, "blocks": [
+      { "icon": "c08", "lines": ["I wrote this page.", "An AI program helped me with the first version.", "I checked every sentence."] }
+    ]}
+  ]
+}

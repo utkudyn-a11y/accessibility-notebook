@@ -1,0 +1,156 @@
+---
+// Easy Read version of an issue. Content: src/data/easy-read/notes-NN.json. Rules: the Easy Read checklist.
+import Base from '../../../layouts/Base.astro';
+import { getEasyReads, easyReadIcon, easyLine } from '../../../lib/easy-read.js';
+import { formatDateLong } from '../../../lib/issues.js';
+import '../../../styles/question.css';
+
+export function getStaticPaths() {
+  return getEasyReads().map((er) => ({ params: { n: String(er.issue) }, props: { er } }));
+}
+const { er } = Astro.props;
+const issue = er.issueData;
+const n = er.issue;
+const weekday = new Date(`${issue.date}T12:00:00Z`).toLocaleDateString('en-GB', { weekday: 'long', timeZone: 'UTC' });
+const dateText = `${weekday} ${formatDateLong(issue.date)}`;
+const title = `Easy Read: Notebook Issue Number ${n}`;
+const fullUrl = `/notes/${n}/`;
+const menu = er.sections.filter((s) => s.menu !== false);
+const votes = er.sections.flatMap((s) => s.blocks.filter((b) => b.vote).map((b) => ({
+  id: b.vote.id, n, date: issue.date, dateText: '', issue: '', comments: '', context: '',
+  question: b.vote.ask, options: b.vote.options, over: b.vote.over,
+})));
+---
+<Base title={title} description={`The Easy Read version of Accessibility Notebook issue number ${n}. Simple words and pictures.`}
+      image={issue.cover} type="article" published={`${issue.date}T09:00:00+03:00`}>
+  <link slot="head" rel="alternate" href={fullUrl} title={`Full version of Notes # ${n}`} />
+  <article class="wrap er" aria-labelledby="er-title" data-votes={JSON.stringify(votes)}>
+    <header class="reading">
+      <h1 id="er-title">{title}</h1>
+      <p class="meta"><time datetime={issue.date}>{dateText}</time></p>
+      <p class="er-switch"><span class="er-switch-icon" set:html={easyReadIcon('c10')} /><a href={fullUrl}>Read the full version</a></p>
+    </header>
+
+    <div class="reading">
+      <section class="er-intro-wrap" aria-label="About this page and what is on it">
+        <details class="er-intro">
+          <summary>
+            <span class="er-intro-text">
+              <span class="er-intro-title">What Is This Page?</span>
+              <span class="er-intro-hint">Is this your first time here? Then open this part.</span>
+            </span>
+            <svg class="er-chev" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" /></svg>
+          </summary>
+          <div class="er-intro-body">
+            {er.intro.map((b) => (
+              <div class="er-row">
+                <span class="er-icon" set:html={easyReadIcon(b.icon)} />
+                <div class="er-text">
+                  {b.lines.map((l) => <p set:html={easyLine(l)} />)}
+                  {b.link && <p><a href={b.link.href}>{b.link.text}</a>{b.link.notEasyRead && ' (not in Easy Read)'}</p>}
+                </div>
+              </div>
+            ))}
+          </div>
+        </details>
+        <nav class="er-menu" aria-labelledby="er-menu-title">
+          <p id="er-menu-title"><strong>On This Page:</strong></p>
+          <ul>{menu.map((s) => <li><a href={`#${s.id}`}>{s.title}</a></li>)}</ul>
+        </nav>
+      </section>
+
+      {er.sections.map((s) => (
+        <section aria-labelledby={s.id}>
+          <h2 id={s.id}>{s.title}</h2>
+          {s.blocks.map((b) =>
+            b.vote ? (
+              <div class="q er-vote">
+                <span class="q-mark" aria-hidden="true">?</span>
+                <div class="q-body" data-id={b.vote.id}>
+                  <p class="over">{b.vote.over}</p>
+                  <p class="ask">{b.vote.ask}</p>
+                  <p class="links"><span><a href={`${fullUrl}#comments`}>Tell me why in the comments</a> (not in Easy Read)</span></p>
+                </div>
+              </div>
+            ) : b.source ? (
+              <div class="er-row er-src">
+                <span class="er-icon" />
+                <div class="er-text"><p><a href={b.source.href}>{b.source.text}</a> (not in Easy Read)</p></div>
+              </div>
+            ) : b.lines ? (
+              <div class="er-row">
+                <span class="er-icon" set:html={easyReadIcon(b.icon)} />
+                <div class="er-text">
+                  {b.heading && <h3>{b.heading}</h3>}
+                  {b.lines.map((l) => <p set:html={easyLine(l)} />)}
+                  {b.link && <p><a href={b.link.href}>{b.link.text}</a>{b.link.notEasyRead && ' (not in Easy Read)'}</p>}
+                </div>
+              </div>
+            ) : (
+              <h3 class="er-h3">{b.heading}</h3>
+            )
+          )}
+        </section>
+      ))}
+      <p class="er-top"><a href="#er-title">Back to top</a></p>
+    </div>
+  </article>
+</Base>
+
+<script>
+  import { createVoter, esc, type Q } from '../../../scripts/vote.ts';
+  const root = document.querySelector<HTMLElement>('.er');
+  const all: (Q & { over: string })[] = JSON.parse(root?.dataset.votes || '[]');
+  const full = location.pathname.replace(/easy-read\/$/, '');
+  for (const q of all) {
+    const body = root!.querySelector<HTMLElement>(`.q-body[data-id="${CSS.escape(q.id)}"]`);
+    if (!body) continue;
+    createVoter(body, {
+      over: (x) => esc((x as Q & { over: string }).over),
+      commentLink: () => `<span><a href="${esc(full)}#comments">Tell me why in the comments</a> (not in Easy Read)</span>`,
+      readLink: () => '',
+    }).show(q);
+  }
+</script>
+
+<style>
+  .er { padding-top: 2.5rem; padding-bottom: 3rem; hyphens: none; text-align: left; }
+  .er-switch { display: flex; align-items: center; gap: 0.9rem; margin: 0.5rem 0 1rem; padding: 0.8rem 1.1rem; background: var(--tint); border: 2px solid var(--rule); border-radius: 10px; font-weight: 700; }
+  .er-switch-icon { display: block; width: 2.75rem; height: 2.75rem; flex: none; color: var(--notebook); }
+  .er-switch a { display: inline-flex; align-items: center; min-height: 44px; }
+  .er h2 { margin-top: 2.2em; padding-top: 1.2rem; border-top: 2px solid var(--rule); scroll-margin-top: 1rem; }
+  .er-row { display: grid; grid-template-columns: 4.5rem 1fr; gap: 1.4rem; align-items: start; margin: 0 0 2.25rem; }
+  .er-icon { display: block; width: 4.5rem; height: 4.5rem; color: var(--notebook); }
+  .er-icon:empty { height: 0; }
+  .er-icon :global(svg), .er-switch-icon :global(svg) { width: 100%; height: 100%; display: block; }
+  .er-text p { margin: 0 0 0.3em; font-size: 1.3125rem; line-height: 1.6; }
+  .er-text h3, .er-h3 { margin: 0 0 0.4em; font-size: var(--step-1); }
+  .er-h3 { margin: 2rem 0 1rem; }
+  .er-src { margin-top: -1rem; }
+  .er-intro { margin: 2rem 0 1.5rem; border: 2px solid var(--notebook); border-radius: 10px; background: #fff; }
+  .er-intro summary { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 48px; padding: 1rem 1.2rem; cursor: pointer; list-style: none; border-radius: 8px; }
+  .er-intro summary::-webkit-details-marker { display: none; }
+  .er-intro summary:hover { background: var(--tint); }
+  .er-intro-text { display: grid; gap: 0.2rem; }
+  .er-intro-title { font-weight: 800; font-size: var(--step-1); line-height: 1.25; color: var(--ink); }
+  .er-intro-hint { font-size: 1.3125rem; color: var(--ink); }
+  .er-chev { width: 2rem; height: 2rem; flex: none; color: var(--notebook); transition: transform 0.2s; }
+  .er-intro[open] .er-chev { transform: rotate(180deg); }
+  .er-intro[open] .er-intro-hint { display: none; }
+  .er-intro[open] summary { border-bottom: 2px solid var(--rule); border-radius: 8px 8px 0 0; }
+  .er-intro-body { padding: 1.5rem 1.2rem 0.5rem; }
+  .er-menu ul { padding-left: 1.2rem; }
+  .er-menu li { font-size: 1.3125rem; }
+  .er-vote { margin: 0 0 2.5rem; }
+  .er-vote :global(.context:empty) { display: none; }
+  .er-vote :global(.over) { text-transform: none; letter-spacing: 0; font-size: 1.1875rem; color: var(--ink); }
+  .er-top { margin-top: 3rem; }
+  @media (max-width: 30rem) {
+    .er-row { grid-template-columns: 3rem 1fr; gap: 0.9rem; }
+    .er-icon { width: 3rem; height: 3rem; }
+    .er-text p, .er-menu li { font-size: 1.1875rem; }
+  }
+  @media (forced-colors: active) {
+    .er-icon, .er-switch-icon, .er-chev { color: CanvasText; }
+  }
+</style>

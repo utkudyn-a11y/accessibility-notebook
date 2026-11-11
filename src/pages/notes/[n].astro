@@ -6,6 +6,7 @@ import IssueDiscussion from '../../components/IssueDiscussion.astro';
 import { getIssues, render, formatDate } from '../../lib/issues.js';
 import { articleLd } from '../../lib/ld.js';
 import { webp } from '../../lib/images.js';
+import { hasEasyRead, easyReadIcon } from '../../lib/easy-read.js';
 
 export function getStaticPaths() {
   const all = getIssues();
@@ -17,15 +18,20 @@ export function getStaticPaths() {
 const { issue, newer, older } = Astro.props;
 const ORDER = ['personal-notes', 'news', 'inspirations', 'in-detail', 'article-from-me'];
 const cover = webp(issue.cover);
+const easyRead = hasEasyRead(issue.number) ? `/notes/${issue.number}/easy-read/` : null;
 const sections = ORDER.filter((k) => issue.sections[k]).map((k) => ({ key: k, ...issue.sections[k] }));
 ---
 <Base title={issue.title} description={issue.description} image={issue.cover} type="article"
       published={`${issue.date}T09:00:00+03:00`}
       jsonLd={articleLd({ title: issue.title, description: issue.description, url: issue.url, image: issue.cover, date: issue.date })}>
+  {easyRead && <link slot="head" rel="alternate" href={easyRead} title={`Easy Read version of Notes # ${issue.number}`} />}
   <article class="wrap issue" aria-labelledby="issue-title">
     <header class="reading">
       <h1 id="issue-title">{issue.title}</h1>
       <p class="meta"><time datetime={issue.date}>{formatDate(issue.date)}</time></p>
+      {easyRead && (
+        <p class="er-link"><span class="er-link-icon" set:html={easyReadIcon('c15')} /><a href={easyRead}>Read this issue in Easy Read</a></p>
+      )}
     </header>
     <picture>
       {cover && <source type="image/webp" srcset={cover.srcset} sizes="(min-width: 56rem) 52rem, calc(100vw - 2rem)" />}
@@ -68,6 +74,12 @@ const sections = ORDER.filter((k) => issue.sections[k]).map((k) => ({ key: k, ..
 
 <style>
   .issue { padding-top: 2.5rem; }
+  /* Link to the Easy Read version, under the title (only when the issue has one) */
+  .er-link { display: flex; align-items: center; gap: 0.9rem; margin: 0.5rem 0 1rem; padding: 0.8rem 1.1rem; background: var(--tint); border: 2px solid var(--rule); border-radius: 10px; font-weight: 700; }
+  .er-link-icon { display: block; width: 2.75rem; height: 2.75rem; flex: none; color: var(--notebook); }
+  .er-link-icon :global(svg) { width: 100%; height: 100%; display: block; }
+  .er-link a { display: inline-flex; align-items: center; min-height: 44px; }
+  @media (forced-colors: active) { .er-link-icon { color: CanvasText; } }
   .cover { display: block; width: min(100%, 52rem); border-radius: 10px; border: 1px solid var(--rule); margin: 0.5rem 0 2rem; }
   .album { color: var(--ink-soft); }
   .news-item, .album { scroll-margin-top: 1rem; }

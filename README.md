@@ -108,3 +108,15 @@ The website of [Accessibility Notebook](https://buttondown.com/accessibility-not
 - `/admin/` asks for a password. The password is the encrypted Pages secret `ADMIN_PASSWORD` (Cloudflare → Workers & Pages → accessibility-notebook → Settings → Variables and Secrets, type Secret, Production). It must be at least 16 characters; until it is set, the admin page stays locked and comments simply wait. A correct password gives a signed cookie for 7 days; changing the password logs everyone out. Wrong passwords are slowed down and `/api/admin/login` is covered by the rate limiting rule. Code: `functions/_lib/session.js`, `functions/api/admin/login.js`.
 - The `comments` table is in `schema.sql` (database notebook-votes).
 - Local testing: temporary `wrangler.toml` with the D1 binding, `wrangler d1 execute notebook-votes --local --file schema.sql`, then `wrangler pages dev dist --binding ADMIN_DEV=1` (opens /admin/ on localhost without a password; or pass `--binding ADMIN_PASSWORD=<a local test password>` to test the login). Never set `ADMIN_DEV` in Cloudflare and never commit `wrangler.toml`.
+
+## Easy Read
+
+- Some issues have an Easy Read version at `/notes/N/easy-read/` (Notes # 30 is the pilot). It follows the Easy Read checklist (based on Inclusion Europe's *Information for all*): short sentences, each on its own line, an icon on the left of each block, hard words explained in **bold** where they first appear, no initials, no percentages.
+- Content: `src/data/easy-read/notes-NN.json`. Page: `src/pages/notes/[n]/easy-read.astro`. Loader and checks: `src/lib/easy-read.js`. Adding a new file is enough; the full issue then shows a "Read this issue in Easy Read" box under its title, and both pages point to each other with `<link rel="alternate">`.
+- File format: `issue`, `intro` (blocks inside the "What Is This Page?" box, closed by default) and `sections` (`id`, `title` in the site's heading style, `blocks`, optional `"menu": false` to leave a section out of "On This Page"). A block is one of:
+  - `{ "icon": "c08", "heading"?: "…", "lines": ["…"], "link"?: { "href", "text", "notEasyRead"?: true } }`. Only `**bold**` is allowed in lines.
+  - `{ "heading": "…" }` for a heading with no text block.
+  - `{ "source": { "href", "text" } }` for the original article; it shows "(not in Easy Read)" after the link.
+  - `{ "vote": { "question": 1, "over", "ask", "options" } }`: the issue's Discussion Corner question number 1 with easier words. It uses the same vote counters, so `options` must have the same number of answers in the same order (the build checks this).
+- Icons: `src/assets/easy-read-icons/` (inline SVG in `currentColor`, hidden from screen readers because the text beside them says the same). `c` icons are used in every issue, `n` icons belong to one issue. They are drawn by `scripts/easy-read-icons.mjs` (see its first lines); the Icon dictionary lists what each one means. Use the same icon for the same idea every time.
+- Feedback goes to the full issue's comments; links to pages that are not Easy Read say "(not in Easy Read)".
