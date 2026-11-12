@@ -18,15 +18,21 @@ for (const it of items) {
   }
   m.items.push(it);
 }
+
+// A doodle beside each month, about one of its stories (inline SVG, decorative)
+import fs from 'node:fs';
+const MONTH_DOODLES = { '2026-10': 'dog', '2026-09': 'tv', '2026-08': 'sign', '2026-07': 'popcorn', '2026-06': 'gavel', '2026-05': 'ball', '2026-04': 'pledge', '2026-03': 'laptop', '2026-02': 'coin', '2026-01': 'kiosk' };
+const doodle = (key) => MONTH_DOODLES[key] && fs.readFileSync(`public/images/figures/dd-${MONTH_DOODLES[key]}.svg`, 'utf8').replace('<svg ', '<svg aria-hidden="true" focusable="false" ');
 ---
 <Base title="Digital Accessibility News" description="Digital accessibility news from around the world, collected and commented on by Utku Demiryakan. Grouped by the month each story was first published.">
   <div class="wrap page">
-    <div class="sheet">
+    <div class="sheet head">
     <h1>Digital Accessibility News</h1>
+    <span class="fig note-card"><img src="/images/figures/news-reader.svg" alt="" width="311" height="497" /></span>
     <p class="lead">News I found and commented on each week: laws, enforcement, research and products from around the world. Grouped by the month each story was first published.</p>
 
     </div>
-    <div class="sheet">
+    <div class="sheet months">
     <div class="tools"><button type="button" class="toggle-all" hidden>Expand all months</button></div>
 
     {months.map((m, i) => (
@@ -38,7 +44,9 @@ for (const it of items) {
             <span class="chev" aria-hidden="true"></span>
           </button>
         </h2>
-        <ul class="grid" id={`p-${m.key}`}>
+        <div class="panel" id={`p-${m.key}`}>
+        {doodle(m.key) && <span class="doodle" set:html={doodle(m.key)} />}
+        <ul class="grid">
           {m.items.map((it) => (
             <li>
               <article class="card" aria-labelledby={`n-${it.issue}-${it.anchor}`}>
@@ -55,6 +63,7 @@ for (const it of items) {
             </li>
           ))}
         </ul>
+        </div>
       </section>
     ))}
     </div>
@@ -92,7 +101,7 @@ for (const it of items) {
 <style>
   .page { padding-top: 2.5rem; }
   .lead { font-size: var(--step-1); line-height: 1.45; max-width: 60ch; }
-  .tools { display: flex; justify-content: flex-end; margin: 1.5rem 0 0.5rem; min-height: 44px; }
+  .tools { display: flex; justify-content: flex-end; margin: 0 0 0.5rem; min-height: 44px; }
   .toggle-all { font: inherit; font-weight: 700; color: var(--notebook); background: none; border: 0; padding: 0; min-height: 44px; text-decoration: underline; text-underline-offset: 0.18em; cursor: pointer; }
   .toggle-all:hover { text-decoration-thickness: 0.16em; }
 
@@ -109,7 +118,7 @@ for (const it of items) {
   .grid { list-style: none; padding: 0.25rem 0 2rem; margin: 0; display: grid; gap: 1.25rem; grid-template-columns: minmax(0, 1fr); }
   @media (min-width: 40rem) { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   @media (min-width: 64rem) { .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
-  .grid[hidden] { display: none; }
+  .panel[hidden] { display: none; }
   .grid li { margin: 0; }
   .card { height: 100%; display: flex; flex-direction: column; background: #fff; border: 2px solid var(--rule); border-radius: 10px; padding: 1.1rem 1.2rem 1.2rem; }
   .card .meta { margin: 0 0 0.5rem; }
@@ -120,4 +129,17 @@ for (const it of items) {
   .go { margin-top: auto; align-self: flex-start; display: inline-flex; align-items: center; gap: 0.4rem; min-height: 44px; padding: 0.45rem 1rem; border: 2px solid var(--notebook); border-radius: 6px; color: var(--notebook); font-weight: 800; text-decoration: none; }
   .go:hover { background: var(--notebook); color: #fff; }
   @media (forced-colors: active) { .chev::before { border-color: CanvasText; } }
+
+  .head { display: flow-root; }
+  .head .fig { float: right; width: 7.5rem; margin: -4.75rem 0.5rem 0 2rem; }
+  /* keep the title clear of the figure, which is pulled up beside it */
+  @media (min-width: 40.01rem) { .head h1 { margin-right: 10rem; } }
+  @media (max-width: 40rem) { .head .fig { width: 5rem; margin: 0.4rem 0 0.5rem 0.9rem; padding: 0.5rem 0.4rem 0.4rem; } }
+
+  /* Month doodles in the left margin, beside the open month */
+  @media (min-width: 40.01rem) { .months { --pad-l: 8.5rem; } }
+  .panel { position: relative; }
+  .doodle { position: absolute; top: 0.25rem; right: calc(100% + 1.6rem); width: 6.2rem; clip-path: inset(-1rem -1rem -1rem calc(7.8rem - var(--pad-l))); pointer-events: none; }
+  .doodle :global(svg) { display: block; width: 100%; height: auto; }
+  @media (max-width: 40rem) { .doodle { display: none; } }
 </style>
