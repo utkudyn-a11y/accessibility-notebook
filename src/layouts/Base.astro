@@ -60,11 +60,13 @@ const ld = jsonLd ?? {
     <meta name="twitter:card" content="summary_large_image" />
     <slot name="head" />
     <script is:inline>
-      // Paper sheets are thrown in on a page's first view in this session; never with reduced motion.
+      // Paper sheets are thrown in on the first page of a visit (once per page per session); never with reduced motion.
       // Runs in the head so the sheets never flash before the animation.
       (function () {
         try {
           if (matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
+          // Moving between pages of the site has its own page turn, so sheets are thrown only where a visit starts
+          if (document.referrer && new URL(document.referrer).origin === location.origin) return;
           var k = 'thrown:' + location.pathname;
           if (sessionStorage.getItem(k)) return;
           sessionStorage.setItem(k, '1');
