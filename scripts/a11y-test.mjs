@@ -22,7 +22,8 @@ const pages = ['/404.html', '/admin/', ...[...fs.readFileSync(path.join(DIST, 's
 const browser = await chromium.launch(process.env.CHROME_PATH ? { executablePath: process.env.CHROME_PATH } : {});
 let failed = 0;
 for (const [w, label] of [[1280, 'desktop'], [390, 'mobile']]) {
-  const ctx = await browser.newContext({ viewport: { width: w, height: 900 } });
+  // Reduced motion: check the settled page, not paper sheets caught mid-throw (they wait off-place until scrolled to)
+  const ctx = await browser.newContext({ viewport: { width: w, height: 900 }, reducedMotion: 'reduce' });
   const page = await ctx.newPage();
   for (const p of pages) {
     await page.goto(base + p, { waitUntil: 'load' });
