@@ -3,7 +3,7 @@ import Base from '../../layouts/Base.astro';
 import { getIssues, formatDate } from '../../lib/issues.js';
 const issues = getIssues();
 // Square, text-free crop of each cover's drawing (made by scripts/cover-squares.py)
-// Milestone strips between issues: shown just before (above) the issue they belong to
+// Milestone strips between issues: shown just after (below) the issue they belong to
 const MILESTONES = {
   28: { fig: 'ms-home', w: 542, h: 535, text: 'Accessibility Notebook got its own home.' },
   17: { fig: 'ms-design', w: 372, h: 485, text: 'I finally learned to design something.' },
@@ -12,9 +12,11 @@ const MILESTONES = {
 const monthYear = (d) => new Date(`${d}T12:00:00Z`).toLocaleDateString('en-GB', { month: 'long', year: 'numeric', timeZone: 'UTC' });
 // the list is split at each milestone, so a strip is never read as an issue
 const chunks = [];
+let open = null;
 for (const i of issues) {
-  if (MILESTONES[i.number] || !chunks.length) chunks.push({ milestone: MILESTONES[i.number] && { ...MILESTONES[i.number], date: i.date }, issues: [] });
-  chunks.at(-1).issues.push(i);
+  if (!open) chunks.push(open = { issues: [] });
+  open.issues.push(i);
+  if (MILESTONES[i.number]) { open.milestone = { ...MILESTONES[i.number], date: i.date }; open = null; }
 }
 const square = (n) => `/images/squares/notes-${String(n).padStart(2, '0')}.webp`;
 ---
@@ -27,12 +29,6 @@ const square = (n) => `/images/squares/notes-${String(n).padStart(2, '0')}.webp`
     </div>
     <div class="sheet">
     {chunks.map((c, ci) => (<>
-    {c.milestone && (
-      <aside class="milestone" aria-label={`Milestone, ${monthYear(c.milestone.date)}`}>
-        <span class="fig note-card"><img src={`/images/figures/${c.milestone.fig}.svg`} alt="" width={c.milestone.w} height={c.milestone.h} loading="lazy" /></span>
-        <p><time datetime={c.milestone.date}>{monthYear(c.milestone.date)}</time> <span class="say">{c.milestone.text}</span></p>
-      </aside>
-    )}
     <ol class="issues" start={c.issues[0].number} reversed>
       {c.issues.map((i, k) => (
         <li>
@@ -47,6 +43,12 @@ const square = (n) => `/images/squares/notes-${String(n).padStart(2, '0')}.webp`
         </li>
       ))}
     </ol>
+    {c.milestone && (
+      <aside class="milestone" aria-label={`Milestone, ${monthYear(c.milestone.date)}`}>
+        <span class="fig note-card"><img src={`/images/figures/${c.milestone.fig}.svg`} alt="" width={c.milestone.w} height={c.milestone.h} loading="lazy" /></span>
+        <p><time datetime={c.milestone.date}>{monthYear(c.milestone.date)}</time> <span class="say">{c.milestone.text}</span></p>
+      </aside>
+    )}
     </>))}
     </div>
   </div>
