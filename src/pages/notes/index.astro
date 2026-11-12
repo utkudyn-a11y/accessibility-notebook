@@ -3,6 +3,19 @@ import Base from '../../layouts/Base.astro';
 import { getIssues, formatDate } from '../../lib/issues.js';
 const issues = getIssues();
 // Square, text-free crop of each cover's drawing (made by scripts/cover-squares.py)
+// Milestone strips between issues: shown just before (above) the issue they belong to
+const MILESTONES = {
+  28: { fig: 'ms-home', w: 542, h: 535, text: 'Accessibility Notebook got its own home.' },
+  17: { fig: 'ms-design', w: 372, h: 485, text: 'I finally learned to design something.' },
+  1: { fig: 'ms-start', w: 541, h: 532, text: 'It all started here.' },
+};
+const monthYear = (d) => new Date(`${d}T12:00:00Z`).toLocaleDateString('en-GB', { month: 'long', year: 'numeric', timeZone: 'UTC' });
+// the list is split at each milestone, so a strip is never read as an issue
+const chunks = [];
+for (const i of issues) {
+  if (MILESTONES[i.number] || !chunks.length) chunks.push({ milestone: MILESTONES[i.number] && { ...MILESTONES[i.number], date: i.date }, issues: [] });
+  chunks.at(-1).issues.push(i);
+}
 const square = (n) => `/images/squares/notes-${String(n).padStart(2, '0')}.webp`;
 ---
 <Base title="Full Issues" description="Every issue of Accessibility Notebook.">
@@ -13,11 +26,18 @@ const square = (n) => `/images/squares/notes-${String(n).padStart(2, '0')}.webp`
     <p class="lead reading">Every issue of Accessibility Notebook. Each one has personal notes, accessibility news, inspirations and usually an in-depth article.</p>
     </div>
     <div class="sheet">
-    <ol class="issues" reversed>
-      {issues.map((i, k) => (
+    {chunks.map((c, ci) => (<>
+    {c.milestone && (
+      <aside class="milestone" aria-label={`Milestone, ${monthYear(c.milestone.date)}`}>
+        <span class="fig note-card"><img src={`/images/figures/${c.milestone.fig}.svg`} alt="" width={c.milestone.w} height={c.milestone.h} loading="lazy" /></span>
+        <p><time datetime={c.milestone.date}>{monthYear(c.milestone.date)}</time> <span class="say">{c.milestone.text}</span></p>
+      </aside>
+    )}
+    <ol class="issues" start={c.issues[0].number} reversed>
+      {c.issues.map((i, k) => (
         <li>
           <article class="issue" aria-labelledby={`i-${i.number}`}>
-            <img src={square(i.number)} alt="" width="640" height="640" loading={k < 6 ? 'eager' : 'lazy'} decoding="async" />
+            <img src={square(i.number)} alt="" width="640" height="640" loading={ci === 0 && k < 6 ? 'eager' : 'lazy'} decoding="async" />
             <div class="text">
               <p class="meta"><time datetime={i.date}>{formatDate(i.date)}</time></p>
               <h2 id={`i-${i.number}`}><a href={i.url}>{i.title}</a></h2>
@@ -27,6 +47,7 @@ const square = (n) => `/images/squares/notes-${String(n).padStart(2, '0')}.webp`
         </li>
       ))}
     </ol>
+    </>))}
     </div>
   </div>
 </Base>
@@ -57,5 +78,11 @@ const square = (n) => `/images/squares/notes-${String(n).padStart(2, '0')}.webp`
     .issue img { width: 6.5rem; flex: none; margin: 1rem 0 1rem 1rem; border-radius: 6px; }
     .text { padding: 0.9rem 1rem 1rem; }
   }
+  .milestone { display: flex; align-items: center; gap: 1.5rem; margin: 2.25rem 0; padding: 1.25rem 0; border-block: 2px dashed var(--notebook); }
+  .milestone .fig { flex: none; width: 7rem; }
+  .milestone p { margin: 0; display: flex; flex-direction: column; gap: 0.2rem; }
+  .milestone time { font-size: var(--step--1); font-weight: 700; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.04em; }
+  .say { font-size: var(--step-2); font-weight: 800; line-height: 1.2; color: var(--notebook); }
+  @media (max-width: 40rem) { .milestone { gap: 1rem; } .milestone .fig { width: 5rem; padding: 0.5rem 0.4rem 0.4rem; } .say { font-size: var(--step-1); } }
   @media (forced-colors: active) { .issue { border-color: CanvasText; } }
 </style>
