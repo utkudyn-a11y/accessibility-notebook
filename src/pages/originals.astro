@@ -27,8 +27,7 @@ const DOODLES = {
 const doodle = (url) => {
   const name = DOODLES[url];
   if (!name) return null;
-  // inline, so its lines can be drawn in; pathLength lets one dash length fit every line
-  return fs.readFileSync(`public/images/figures/dd-${name}.svg`, 'utf8').replace(/<path /g, '<path pathLength="1" ').replace('<svg ', '<svg aria-hidden="true" focusable="false" ');
+  return fs.readFileSync(`public/images/figures/dd-${name}.svg`, 'utf8').replace('<svg ', '<svg aria-hidden="true" focusable="false" ');
 };
 ---
 <Base title="Originals" description="Everything Utku Demiryakan wrote himself for Accessibility Notebook: in-depth articles and personal notes on digital accessibility.">
@@ -79,7 +78,7 @@ const doodle = (url) => {
 </Base>
 
 <script>
-  // Margin doodles: never two on the same row when the columns sit side by side; drawn in as they scroll into view
+  // Margin doodles: never two on the same row when the columns sit side by side
   const all = [...document.querySelectorAll<HTMLElement>('.doodle')];
   const separate = () => {
     all.forEach((d) => (d.hidden = false));
@@ -93,11 +92,6 @@ const doodle = (url) => {
   };
   separate();
   addEventListener('resize', separate);
-  if (!matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window) {
-    document.documentElement.classList.add('doodle-anim');
-    const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('drawn'); io.unobserve(e.target); } }), { threshold: 0.5 });
-    all.forEach((d) => io.observe(d));
-  }
 </script>
 <style>
   .page { padding-top: 2.5rem; }
@@ -115,10 +109,6 @@ const doodle = (url) => {
   .doodle { position: absolute; top: 0.4rem; right: calc(100% + 1.6rem); width: 6.2rem; clip-path: inset(-1rem -1rem -1rem calc(7.8rem - var(--pad-l))); pointer-events: none; }
   .doodle :global(svg) { display: block; width: 100%; height: auto; }
   .doodle[hidden] { display: none; }
-  :global(.doodle-anim) .doodle :global(path) { stroke-dasharray: 1; stroke-dashoffset: 1; }
-  :global(.doodle-anim) .doodle :global(circle) { opacity: 0; }
-  :global(.doodle-anim) .doodle.drawn :global(path) { stroke-dashoffset: 0; transition: stroke-dashoffset 1.6s ease-out; }
-  :global(.doodle-anim) .doodle.drawn :global(circle) { opacity: 1; transition: opacity 0.4s 1s; }
   @media (max-width: 40rem) {
     .doodle { position: static; float: right; width: 4.5rem; margin: 0 0 0.5rem 0.75rem; clip-path: none; }
   }
