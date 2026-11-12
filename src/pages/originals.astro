@@ -6,17 +6,20 @@ const notes = getPersonalNotes();
 ---
 <Base title="Originals" description="Everything Utku Demiryakan wrote himself for Accessibility Notebook: in-depth articles and personal notes on digital accessibility.">
   <div class="wrap page">
-    <div class="sheet">
+    <div class="sheet head">
+    <span class="fig note-card"><img src="/images/figures/writer.svg" alt="" width="481" height="630" /></span>
     <h1>Originals</h1>
     <p class="lead reading">Everything I wrote myself: in-depth articles on standards, research and practice, and personal notes from my life as a partially sighted accessibility specialist.</p>
 
     <p class="jump"><a href="#personal-notes">See Personal Notes <span class="arrow" aria-hidden="true">↓</span></a></p>
 
     </div>
-    <div class="sheet">
     <div class="cols">
-      <section aria-labelledby="in-detail-title">
-        <h2 id="in-detail-title">In Detail</h2>
+      <section class="sheet" aria-labelledby="in-detail-title">
+        <div class="sec-head">
+          <img src="/images/figures/indetail.svg" alt="" width="257" height="357" />
+          <h2 id="in-detail-title" class="chalk">In Detail</h2>
+        </div>
         <ul class="entries">
           {articles.map((a) => (
             <li>
@@ -27,8 +30,11 @@ const notes = getPersonalNotes();
           ))}
         </ul>
       </section>
-      <section id="personal-notes" aria-labelledby="notes-title">
-        <h2 id="notes-title">Personal Notes</h2>
+      <section class="sheet" id="personal-notes" aria-labelledby="notes-title">
+        <div class="sec-head">
+          <img src="/images/figures/pnotes.svg" alt="" width="250" height="296" />
+          <h2 id="notes-title" class="chalk">Personal Notes</h2>
+        </div>
         <ul class="entries">
           {notes.map((n) => (
             <li>
@@ -40,14 +46,20 @@ const notes = getPersonalNotes();
         </ul>
       </section>
     </div>
-    </div>
   </div>
 </Base>
 <style>
   .page { padding-top: 2.5rem; }
   .lead { font-size: var(--step-1); line-height: 1.45; }
-  .cols { display: grid; gap: 1rem 4rem; }
+  .head { display: flow-root; }
+  .head .fig { float: right; width: 10rem; margin: 0 0.5rem 0.5rem 2rem; }
+  @media (max-width: 40rem) { .head .fig { width: 7.5rem; margin: 0.25rem 0 0.75rem 1rem; padding: 0.6rem 0.5rem 0.5rem; } }
+  /* In Detail and Personal Notes: two sheets, side by side on wide screens */
+  .cols { display: grid; gap: 0 2.25rem; align-items: start; }
   @media (min-width: 64rem) { .cols { grid-template-columns: 1fr 1fr; } }
+  .sec-head { display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem; }
+  .sec-head img { width: 4.5rem; height: auto; flex: none; }
+  .sec-head h2 { margin: 0; font-size: var(--step-1); }
   /* Shortcut to Personal Notes, only when the two lists sit one under the other */
   .jump { margin: 1rem 0 0; }
   .jump a { display: inline-flex; align-items: center; gap: 0.4rem; min-height: 44px; font-weight: 800; }
@@ -55,7 +67,6 @@ const notes = getPersonalNotes();
   @media (min-width: 64rem) { .jump { display: none; } }
   #personal-notes { scroll-margin-top: 1rem; }
   @media (prefers-reduced-motion: no-preference) { :global(html) { scroll-behavior: smooth; } }
-  h2 { margin-top: 2rem; padding-bottom: 0.4rem; border-bottom: 3px solid var(--notebook); }
   .entries { list-style: none; padding: 0; margin: 0; }
   .entries li { padding: 1.25rem 0; border-bottom: 2px solid var(--rule); }
   .entries li + li { margin-top: 0; }
