@@ -14,11 +14,14 @@ const SHARE_URL = 'https://accessibilitynotebook.com/take-action/';
 <Base title="Take Action" image="/images/take-action-og.png"
       description="Turn what you read in Accessibility Notebook into action: pick up to three accessibility actions, download your card and share it.">
   <div class="wrap page">
+    <div class="sheet">
     <h1>Take Action</h1>
     <p class="lead">Turn what you read here into action. Pick up to three things you will do, then download your card and share it. Every action comes from an Accessibility Notebook issue.</p>
     <p class="arrm">Actions are grouped by the roles in W3C's <a href="https://www.w3.org/WAI/planning/arrm/">Accessibility Roles and Responsibilities Mapping (ARRM)</a>. Open your role, or any other.</p>
     <noscript><p class="note">Making your card needs JavaScript. You can still read every action below.</p></noscript>
 
+    </div>
+    <div class="sheet">
     <div class="layout" data-max={MAX}>
       <form class="pick" aria-labelledby="pick-title">
         <h2 id="pick-title" class="visually-hidden">Choose your actions</h2>
@@ -66,6 +69,7 @@ const SHARE_URL = 'https://accessibilitynotebook.com/take-action/';
         <p class="alt" hidden><strong>Alt text:</strong> <span class="alt-text"></span></p>
         <p class="visually-hidden" role="status" id="action-status"></p>
       </aside>
+    </div>
     </div>
   </div>
 </Base>

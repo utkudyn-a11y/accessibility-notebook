@@ -21,9 +21,12 @@ for (const it of items) {
 ---
 <Base title="Digital Accessibility News" description="Digital accessibility news from around the world, collected and commented on by Utku Demiryakan. Grouped by the month each story was first published.">
   <div class="wrap page">
+    <div class="sheet">
     <h1>Digital Accessibility News</h1>
     <p class="lead">News I found and commented on each week: laws, enforcement, research and products from around the world. Grouped by the month each story was first published.</p>
 
+    </div>
+    <div class="sheet">
     <div class="tools"><button type="button" class="toggle-all" hidden>Expand all months</button></div>
 
     {months.map((m, i) => (
@@ -54,6 +57,7 @@ for (const it of items) {
         </ul>
       </section>
     ))}
+    </div>
   </div>
 </Base>
 

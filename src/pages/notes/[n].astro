@@ -26,6 +26,7 @@ const sections = ORDER.filter((k) => issue.sections[k]).map((k) => ({ key: k, ..
       jsonLd={articleLd({ title: issue.title, description: issue.description, url: issue.url, image: issue.cover, date: issue.date })}>
   {easyRead && <link slot="head" rel="alternate" href={easyRead} title={`Easy Read version of Notes # ${issue.number}`} />}
   <article class="wrap issue" aria-labelledby="issue-title">
+    <div class="sheet">
     <header class="reading">
       <h1 id="issue-title">{issue.title}</h1>
       <p class="meta"><time datetime={issue.date}>{formatDate(issue.date)}</time></p>
@@ -69,6 +70,7 @@ const sections = ORDER.filter((k) => issue.sections[k]).map((k) => ({ key: k, ..
       {newer && <a rel="next" href={newer.url}><span>Next issue</span>{newer.title}</a>}
     </nav>
     <div class="reading"><Subscribe /></div>
+    </div>
   </article>
 </Base>
 
@@ -85,6 +87,7 @@ const sections = ORDER.filter((k) => issue.sections[k]).map((k) => ({ key: k, ..
   .news-item, .album { scroll-margin-top: 1rem; }
   .news-item:target h3, .album:target, .issue :global(.prose h2:target) { background: var(--highlight); box-shadow: 0 0 0 0.3rem var(--highlight); }
   .standalone { font-size: var(--step--1); }
+  .standalone a { display: inline-block; min-height: 24px; padding-block: 0.15rem; }
   .pager { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); margin: 2rem 0 3rem; }
   .pager a { display: block; padding: 1rem 1.2rem; border: 2px solid var(--rule); border-radius: 8px; text-decoration: none; color: var(--ink); font-weight: 700; }
   .pager a:hover { border-color: var(--notebook); }

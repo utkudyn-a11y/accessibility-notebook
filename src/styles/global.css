@@ -85,3 +85,40 @@ a:hover { text-decoration-thickness: 0.16em; }
 .note-card img { display: block; width: 100%; height: auto; }
 .note-card.tilt-right { transform: rotate(2deg); }
 @media (forced-colors: active) { .note-card { border-color: CanvasText; } }
+
+/* ---- Paper sheets on a dotted notebook page ---- */
+body { background-color: #f1edf9; background-image: radial-gradient(circle, #d6cdeb 1.3px, transparent 1.6px); background-size: 22px 22px; }
+.sheet { position: relative; isolation: isolate; margin: 0 0 2.25rem; padding: clamp(1.5rem, 4vw, 2.75rem) clamp(1.25rem, 4vw, 2.75rem) clamp(1.5rem, 4vw, 2.75rem) clamp(2.25rem, 6vw, 4.5rem); }
+/* the paper is drawn behind the content */
+.sheet::before {
+  content: ''; position: absolute; inset: 0; z-index: -1; border-radius: 4px;
+  background:
+    radial-gradient(circle at 1.15rem 3.5rem, #f1edf9 0 0.42rem, #ddd5ee 0.42rem 0.5rem, transparent 0.52rem) no-repeat,
+    radial-gradient(circle at 1.15rem 50%, #f1edf9 0 0.42rem, #ddd5ee 0.42rem 0.5rem, transparent 0.52rem) no-repeat,
+    radial-gradient(circle at 1.15rem calc(100% - 3.5rem), #f1edf9 0 0.42rem, #ddd5ee 0.42rem 0.5rem, transparent 0.52rem) no-repeat,
+    linear-gradient(to right, transparent calc(clamp(2.25rem, 6vw, 4.5rem) - 1rem), #e6dcf7 calc(clamp(2.25rem, 6vw, 4.5rem) - 1rem) calc(clamp(2.25rem, 6vw, 4.5rem) - 1rem + 2px), transparent 0) no-repeat,
+    #fff;
+  box-shadow: 0 1px 2px rgb(29 6 75 / 0.08), 0 10px 28px rgb(29 6 75 / 0.1);
+}
+.sheet > :first-child { margin-top: 0 !important; }
+.sheet > :last-child { margin-bottom: 0 !important; }
+.sheet--bare { padding: 0; }
+.sheet--bare::before { display: none; }
+@media (max-width: 40rem) {
+  .sheet { margin-inline: -0.5rem; padding: 1.5rem 1rem 1.5rem 1.6rem; }
+  .sheet::before { background: linear-gradient(to right, transparent 0.85rem, #e6dcf7 0.85rem calc(0.85rem + 2px), transparent 0) no-repeat, #fff; }
+  .sheet--bare { margin-inline: 0; padding: 0; }
+}
+@media (forced-colors: active) { .sheet::before { border: 1px solid CanvasText; } }
+
+/* Thrown-in sheets: only on a page's first view in a session, never with reduced motion (set by a script in the page) */
+.throw-on .sheet:not(.landed) { opacity: 0; transform: translateY(-8rem) rotate(var(--from, -6deg)); }
+.throw-on .sheet.landed { animation: sheet-land 0.9s cubic-bezier(0.2, 0.75, 0.25, 1.15) both; animation-delay: var(--d, 0ms); }
+.sheet:nth-of-type(2n) { --from: 4deg; }
+@keyframes sheet-land {
+  from { opacity: 0; transform: translateY(-8rem) rotate(var(--from, -6deg)); }
+  35% { opacity: 1; }
+  to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) { .throw-on .sheet:not(.landed) { opacity: 1; transform: none; } .throw-on .sheet.landed { animation: none; } }
+@media print { .throw-on .sheet:not(.landed) { opacity: 1; transform: none; } }

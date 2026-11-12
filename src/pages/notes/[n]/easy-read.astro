@@ -25,6 +25,7 @@ const votes = er.sections.flatMap((s) => s.blocks.filter((b) => b.vote).map((b) 
       image={issue.cover} type="article" published={`${issue.date}T09:00:00+03:00`}>
   <link slot="head" rel="alternate" href={fullUrl} title={`Full version of Notes # ${n}`} />
   <article class="wrap er" aria-labelledby="er-title" data-votes={JSON.stringify(votes)}>
+    <div class="sheet">
     <header class="reading">
       <h1 id="er-title">{title}</h1>
       <p class="meta"><time datetime={issue.date}>{dateText}</time></p>
@@ -93,6 +94,7 @@ const votes = er.sections.flatMap((s) => s.blocks.filter((b) => b.vote).map((b) 
         </section>
       ))}
       <p class="er-top"><a href="#er-title">Back to top</a></p>
+    </div>
     </div>
   </article>
 </Base>

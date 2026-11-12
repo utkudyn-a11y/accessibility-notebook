@@ -14,6 +14,7 @@ const description = plainText(a.markdown, 155);
       published={`${a.issue.date}T09:00:00+03:00`}
       jsonLd={articleLd({ title: a.title, description, url: a.url, image: a.issue.cover, date: a.issue.date })}>
   <article class="wrap page" aria-labelledby="article-title">
+    <div class="sheet">
     <div class="reading">
       <p class="kind">In Detail</p>
       <h1 id="article-title">{a.title}</h1>
@@ -23,6 +24,7 @@ const description = plainText(a.markdown, 155);
       <div class="prose" set:html={render(a.markdown)} />
       <p class="discuss"><a href={`${a.issue.url}#comments`}>Comments on Notes # {a.issue.number}</a></p>
       <Subscribe />
+    </div>
     </div>
   </article>
 </Base>

@@ -15,6 +15,7 @@ const previous = rest.slice(0, 3);
 <Base>
   <div class="wrap home">
     <h1 class="visually-hidden">Accessibility Notebook</h1>
+    <div class="sheet">
     <OneMinute issue={latest} first />
 
     <section aria-labelledby="latest-title">
@@ -29,28 +30,31 @@ const previous = rest.slice(0, 3);
       </ul>
       <p><a href="/notes/">All issues</a></p>
     </section>
+    </div>
 
-    <SpinAlbum />
+    <div class="sheet"><SpinAlbum /></div>
 
-    <DiscussionCorner />
+    <div class="sheet"><DiscussionCorner /></div>
 
-    <Subscribe />
+    <div class="sheet sheet--bare"><Subscribe /></div>
 
+    <div class="sheet">
     <section aria-labelledby="ai-title" class="ai-policy reading">
       <span class="fig note-card"><img src="/images/figures/handshake.svg" alt="" width="463" height="555" /></span>
       <h2 id="ai-title" class="chalk">AI Policy</h2>
       <div class="prose" set:html={render(aiPolicy)} />
     </section>
+    </div>
   </div>
 </Base>
 
+
 <style>
-  .home { padding-top: 2rem; }
+  .home { padding-top: 2.5rem; padding-bottom: 1rem; }
   .section-title { font-size: var(--step-1); margin: 3rem 0 1rem; }
   section:first-of-type .section-title { margin-top: 0; }
   .previous { list-style: none; padding: 0; margin: 0 0 1rem; display: grid; gap: 2rem 1.5rem; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); }
   .previous li + li { margin-top: 0; }
-  :global(.subscribe) { margin-top: 4rem; }
   .ai-policy { margin-top: 3rem; }
   .ai-policy { display: flow-root; }
   .ai-policy h2 { font-size: var(--step-1); display: flow-root; }

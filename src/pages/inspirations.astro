@@ -10,9 +10,12 @@ const options = [{ label: 'All', slug: 'all', count: items.length }, ...TOPICS.m
 ---
 <Base title="Inspirations" description="Articles, videos and tools on digital accessibility that inspired Utku Demiryakan. Filter by AI, design, development, testing, legal and standards, disability stories, resources and strategy.">
   <div class="wrap page reading">
+    <div class="sheet">
     <h1>Inspirations</h1>
     <p class="lead">Articles, videos and tools that taught me something about accessibility.</p>
 
+    </div>
+    <div class="sheet">
     <div class="filter-area" data-total={items.length} hidden>
       <fieldset class="filter">
         <legend>Filter by topic</legend>
@@ -32,6 +35,7 @@ const options = [{ label: 'All', slug: 'all', count: items.length }, ...TOPICS.m
     </div>
 
     <ItemFeed issues={issues} field="inspirations" showTopics />
+    </div>
   </div>
 </Base>
 

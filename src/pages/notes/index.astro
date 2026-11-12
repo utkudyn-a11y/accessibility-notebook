@@ -5,8 +5,11 @@ const issues = getIssues();
 ---
 <Base title="Full Issues" description="Every issue of Accessibility Notebook.">
   <div class="wrap page">
+    <div class="sheet">
     <h1>Full Issues</h1>
     <p class="lead reading">Every issue of Accessibility Notebook. Each one has personal notes, accessibility news, inspirations and usually an in-depth article.</p>
+    </div>
+    <div class="sheet">
     <ol class="issues reading" reversed>
       {issues.map((i) => (
         <li>
@@ -16,6 +19,7 @@ const issues = getIssues();
         </li>
       ))}
     </ol>
+    </div>
   </div>
 </Base>
 <style>

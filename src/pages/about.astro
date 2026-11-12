@@ -5,8 +5,10 @@ import about from '../content/site/about.md?raw';
 ---
 <Base title="About Me" description="About Utku Demiryakan, the author of Accessibility Notebook.">
   <div class="wrap page reading">
+    <div class="sheet">
     <h1>About Me</h1>
     <div class="prose" set:html={render(about)} />
+    </div>
   </div>
 </Base>
 <style>.page { padding-top: 2.5rem; }</style>

@@ -59,6 +59,19 @@ const ld = jsonLd ?? {
     {published && <meta property="article:published_time" content={published} />}
     <meta name="twitter:card" content="summary_large_image" />
     <slot name="head" />
+    <script is:inline>
+      // Paper sheets are thrown in on a page's first view in this session; never with reduced motion.
+      // Runs in the head so the sheets never flash before the animation.
+      (function () {
+        try {
+          if (matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
+          var k = 'thrown:' + location.pathname;
+          if (sessionStorage.getItem(k)) return;
+          sessionStorage.setItem(k, '1');
+          document.documentElement.classList.add('throw-on');
+        } catch (e) {}
+      })();
+    </script>
     <script type="application/ld+json" set:html={JSON.stringify(ld)} />
     {CF_ANALYTICS_TOKEN && (
       <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon={JSON.stringify({ token: CF_ANALYTICS_TOKEN })}></script>
@@ -72,5 +85,21 @@ const ld = jsonLd ?? {
     </main>
     <Footer />
     {backToTop && <BackToTop />}
+    <script>
+      // Sheets land as they scroll into view; the ones arriving together come one after another
+      if (document.documentElement.classList.contains('throw-on')) {
+        const io = new IntersectionObserver((entries) => {
+          let k = 0;
+          for (const e of entries) {
+            if (!e.isIntersecting) continue;
+            const el = e.target as HTMLElement;
+            el.style.setProperty('--d', `${k++ * 160}ms`);
+            el.classList.add('landed');
+            io.unobserve(el);
+          }
+        }, { rootMargin: '0px 0px -8% 0px' });
+        document.querySelectorAll('.sheet').forEach((s) => io.observe(s));
+      }
+    </script>
   </body>
 </html>
