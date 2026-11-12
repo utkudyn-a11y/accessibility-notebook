@@ -5,10 +5,13 @@ const articles = getInDetail();
 const notes = getPersonalNotes();
 
 // Doodles in the margin next to a few entries, as if drawn on the edge of the notebook page.
-// Keyed by the entry's link; keep them few and never on the same row in both columns.
+// Keyed by the entry's link; about one every two or three entries in each column.
 import fs from 'node:fs';
 const DOODLES = {
+  '/in-detail/what-can-we-learn-from-new-zealands-digital-accessibility-standard/': 'kiwi',
   '/in-detail/what-did-we-focus-on-for-alt-texts-at-turkish-airlines/': 'plane',
+  '/in-detail/5-key-takeaways-from-sodar-2026/': 'chart',
+  '/in-detail/takeaways-from-webaim-million/': 'laptop',
   '/in-detail/norway-font-for-the-2026-fifa-world-cup/': 'ball',
   '/in-detail/why-i-choose-six-hands-marker-typeface-in-accessibility-notebook/': 'marker',
   '/in-detail/museums-and-digital-accessibility/': 'museum',
@@ -20,9 +23,18 @@ const DOODLES = {
   '/notes/29/#personal-notes': 'scarf',
   '/notes/27/#personal-notes': 'music',
   '/notes/26/#personal-notes': 'card',
+  '/notes/24/#personal-notes': 'comic',
+  '/notes/22/#personal-notes': 'thermo',
+  '/notes/20/#personal-notes': 'column',
+  '/notes/18/#personal-notes': 'car',
+  '/notes/16/#personal-notes': 'phone',
   '/notes/14/#personal-notes': 'ticket',
+  '/notes/12/#personal-notes': 'calendar',
+  '/notes/10/#personal-notes': 'barricade',
   '/notes/8/#personal-notes': 'disco',
   '/notes/6/#personal-notes': 'walk',
+  '/notes/4/#personal-notes': 'clipboard',
+  '/notes/2/#personal-notes': 'menu',
 };
 const doodle = (url) => {
   const name = DOODLES[url];
@@ -77,22 +89,6 @@ const doodle = (url) => {
   </div>
 </Base>
 
-<script>
-  // Margin doodles: never two on the same row when the columns sit side by side
-  const all = [...document.querySelectorAll<HTMLElement>('.doodle')];
-  const separate = () => {
-    all.forEach((d) => (d.hidden = false));
-    const cols = [...document.querySelectorAll('.cols > .sheet')];
-    if (cols.length < 2 || (cols[0] as HTMLElement).offsetTop !== (cols[1] as HTMLElement).offsetTop) return;
-    const left = [...cols[0].querySelectorAll<HTMLElement>('.doodle')].map((d) => d.getBoundingClientRect());
-    for (const d of cols[1].querySelectorAll<HTMLElement>('.doodle')) {
-      const r = d.getBoundingClientRect();
-      if (left.some((l) => l.top < r.bottom + 60 && r.top < l.bottom + 60)) d.hidden = true;
-    }
-  };
-  separate();
-  addEventListener('resize', separate);
-</script>
 <style>
   .page { padding-top: 2.5rem; }
   .lead { font-size: var(--step-1); line-height: 1.45; }
@@ -108,7 +104,6 @@ const doodle = (url) => {
   /* drawn on the page edge: it may not fit, the paper edge cuts it */
   .doodle { position: absolute; top: 0.4rem; right: calc(100% + 1.6rem); width: 6.2rem; clip-path: inset(-1rem -1rem -1rem calc(7.8rem - var(--pad-l))); pointer-events: none; }
   .doodle :global(svg) { display: block; width: 100%; height: auto; }
-  .doodle[hidden] { display: none; }
   @media (max-width: 40rem) {
     .doodle { position: static; float: right; width: 4.5rem; margin: 0 0 0.5rem 0.75rem; clip-path: none; }
   }
