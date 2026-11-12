@@ -132,6 +132,8 @@ const doodle = (key) => MONTH_DOODLES[key] && fs.readFileSync(`public/images/fig
 
   .head { display: flow-root; }
   .head .fig { float: right; width: 7.5rem; margin: -4.75rem 0.5rem 0 2rem; }
+  /* keep the title clear of the figure, which is pulled up beside it */
+  @media (min-width: 40.01rem) { .head h1 { margin-right: 10rem; } }
   @media (max-width: 40rem) { .head .fig { width: 5rem; margin: 0.4rem 0 0.5rem 0.9rem; padding: 0.5rem 0.4rem 0.4rem; } }
 
   /* Month doodles in the left margin, beside the open month */
