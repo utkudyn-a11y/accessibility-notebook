@@ -88,7 +88,7 @@ a:hover { text-decoration-thickness: 0.16em; }
 
 /* ---- Paper sheets on a dotted notebook page ---- */
 body { background-color: #f1edf9; background-image: radial-gradient(circle, #d6cdeb 1.3px, transparent 1.6px); background-size: 22px 22px; }
-.sheet { position: relative; isolation: isolate; margin: 0 0 2.25rem; padding: clamp(1.5rem, 4vw, 2.75rem) clamp(1.25rem, 4vw, 2.75rem) clamp(1.5rem, 4vw, 2.75rem) clamp(2.25rem, 6vw, 4.5rem); }
+.sheet { --pad-l: clamp(2.25rem, 6vw, 4.5rem); --line-gap: 1rem; position: relative; isolation: isolate; margin: 0 0 2.25rem; padding: clamp(1.5rem, 4vw, 2.75rem) clamp(1.25rem, 4vw, 2.75rem) clamp(1.5rem, 4vw, 2.75rem) var(--pad-l); }
 /* the paper is drawn behind the content */
 .sheet::before {
   content: ''; position: absolute; inset: 0; z-index: -1; border-radius: 4px;
@@ -96,7 +96,7 @@ body { background-color: #f1edf9; background-image: radial-gradient(circle, #d6c
     radial-gradient(circle at 1.15rem 3.5rem, #f1edf9 0 0.42rem, #ddd5ee 0.42rem 0.5rem, transparent 0.52rem) no-repeat,
     radial-gradient(circle at 1.15rem 50%, #f1edf9 0 0.42rem, #ddd5ee 0.42rem 0.5rem, transparent 0.52rem) no-repeat,
     radial-gradient(circle at 1.15rem calc(100% - 3.5rem), #f1edf9 0 0.42rem, #ddd5ee 0.42rem 0.5rem, transparent 0.52rem) no-repeat,
-    linear-gradient(to right, transparent calc(clamp(2.25rem, 6vw, 4.5rem) - 1rem), #e6dcf7 calc(clamp(2.25rem, 6vw, 4.5rem) - 1rem) calc(clamp(2.25rem, 6vw, 4.5rem) - 1rem + 2px), transparent 0) no-repeat,
+    linear-gradient(to right, transparent calc(var(--pad-l) - var(--line-gap)), #e6dcf7 calc(var(--pad-l) - var(--line-gap)) calc(var(--pad-l) - var(--line-gap) + 2px), transparent 0) no-repeat,
     #fff;
   box-shadow: 0 1px 2px rgb(29 6 75 / 0.08), 0 10px 28px rgb(29 6 75 / 0.1);
 }
