@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import ItemFeed from '../components/ItemFeed.astro';
+import InspireGame from '../components/InspireGame.astro';
 import { getIssues, TOPICS, topicSlug } from '../lib/issues.js';
 
 const issues = getIssues();
@@ -10,12 +11,14 @@ const options = [{ label: 'All', slug: 'all', count: items.length }, ...TOPICS.m
 ---
 <Base title="Inspirations" description="Articles, videos and tools on digital accessibility that inspired Utku Demiryakan. Filter by AI, design, development, testing, legal and standards, disability stories, resources and strategy.">
   <div class="wrap page reading">
-    <div class="sheet">
+    <div class="sheet head">
     <h1>Inspirations</h1>
+    <div class="fig"><InspireGame /></div>
     <p class="lead">Articles, videos and tools that taught me something about accessibility.</p>
 
     </div>
     <div class="sheet">
+    <div class="side-track"><InspireGame /></div>
     <div class="filter-area" data-total={items.length} hidden>
       <fieldset class="filter">
         <legend>Filter by topic</legend>
@@ -80,6 +83,18 @@ const options = [{ label: 'All', slug: 'all', count: items.length }, ...TOPICS.m
 <style>
   .page { padding-top: 2.5rem; }
   .lead { font-size: var(--step-1); line-height: 1.45; }
+  .head { display: flow-root; }
+  .head .fig { float: right; width: 11rem; margin: -4.75rem 0.5rem 0 2rem; }
+  @media (min-width: 40.01rem) { .head h1 { margin-right: 13.5rem; } }
+  /* wide screens: the game sits beside the list and stays in view while reading */
+  .side-track { display: none; }
+  @media (min-width: 72rem) {
+    .head .fig { display: none; }
+    .head h1 { margin-right: 0; }
+    .side-track { display: block; position: absolute; top: 0; bottom: 2rem; left: calc(100% + 2.5rem); width: 11rem; }
+    .side-track :global(.inspire) { position: sticky; top: 2rem; }
+  }
+  @media (max-width: 40rem) { .head .fig { width: 8.5rem; margin: 0.4rem 0 0.5rem 0.9rem; } .head .fig :global(.note-card) { padding: 0.6rem 0.5rem 0.4rem; } }
 
   .filter { border: 0; padding: 0; margin: 1.5rem 0 0; min-width: 0; }
   .filter legend { font-weight: 800; padding: 0; margin-bottom: 0.6rem; }
