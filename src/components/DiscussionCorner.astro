@@ -28,8 +28,11 @@ const first = questions[0];
 ---
 {first && (
   <section class="dc" aria-labelledby="dc-title" data-questions={JSON.stringify(questions)}>
-    <H id="dc-title" class="chalk">Discussion Corner</H>
-    <p class="intro">Every issue raises a question worth arguing about. Read it, pick a side and tell me why in the comments of the issue.</p>
+    <div class="dc-top">
+      <span class="fig note-card"><img src="/images/figures/discuss.svg" alt="" width="658" height="709" /></span>
+      <H id="dc-title" class="chalk">Discussion Corner</H>
+      <p class="intro">Every issue raises a question worth arguing about. Read it, pick a side and tell me why in the comments of the issue.</p>
+    </div>
 
     <div class="q">
       <span class="q-mark" aria-hidden="true">?</span>
@@ -127,6 +130,11 @@ const first = questions[0];
   .dc { margin-top: 4rem; }
   .dc h2, .dc h3 { font-size: var(--step-1); margin: 0 0 1rem; }
   .intro { max-width: 60ch; }
+  /* the figure sits next to the intro, not at the far edge of the page */
+  .dc-top { max-width: 54rem; display: flow-root; }
+  .dc-top .chalk { display: flow-root; }
+  .dc .fig { float: right; width: 11rem; margin: 0.5rem 0.5rem 1rem 2rem; }
+  @media (max-width: 40rem) { .dc .fig { width: 6.5rem; margin: 0.25rem 0.25rem 0.75rem 1rem; padding: 0.6rem 0.5rem 0.5rem; } }
   .all { margin-top: 1.5rem; max-width: 44rem; }
   .all summary { cursor: pointer; font-weight: 700; color: var(--notebook); min-height: 44px; padding: 0.6rem 0; width: fit-content; }
   .all ol { padding-left: 2.2rem; margin: 0.75rem 0 0; }

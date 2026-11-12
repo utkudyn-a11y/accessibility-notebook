@@ -3,11 +3,11 @@
 // The running figure is decorative.
 import { getOneMinute } from '../lib/issues.js';
 
-const { issue } = Astro.props;
+const { issue, first = false } = Astro.props;
 const pick = getOneMinute(issue);
 ---
 {pick && (
-  <section class="one-minute" aria-labelledby="one-minute-title">
+  <section class:list={["one-minute", { first }]} aria-labelledby="one-minute-title">
     <span class="fig note-card"><img src="/images/figures/run.svg" alt="" width="719" height="621" /></span>
     <div class="body">
       <h2 id="one-minute-title" class="section-title chalk">I have just 1 minute: What should I read?</h2>
@@ -20,6 +20,7 @@ const pick = getOneMinute(issue);
 
 <style>
   .one-minute { display: grid; grid-template-columns: 12rem minmax(0, 1fr); gap: 1.5rem 2rem; align-items: center; margin-top: 3.5rem; }
+  .one-minute.first { margin-top: 0; }
   .body .section-title { font-size: var(--step-1); margin: 0 0 1rem; }
   .meta { margin: 0 0 0.25rem; font-size: var(--step--1); font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-soft); }
   .title { margin: 0 0 0.4rem; font-size: var(--step-1); font-weight: 800; line-height: 1.25; }

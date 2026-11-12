@@ -15,14 +15,12 @@ const previous = rest.slice(0, 3);
 <Base>
   <div class="wrap home">
     <h1 class="visually-hidden">Accessibility Notebook</h1>
-    <p class="lead">Weekly notes on digital accessibility by <a href="/about/">Utku Demiryakan</a>: news, inspirations, original articles and album recommendations.</p>
+    <OneMinute issue={latest} first />
 
     <section aria-labelledby="latest-title">
       <h2 id="latest-title" class="section-title chalk">Latest Issue</h2>
       <IssueCard issue={latest} size="large" headingLevel={3} />
     </section>
-
-    <OneMinute issue={latest} />
 
     <section aria-labelledby="previous-title">
       <h2 id="previous-title" class="section-title chalk">Previous Issues</h2>
@@ -39,6 +37,7 @@ const previous = rest.slice(0, 3);
     <Subscribe />
 
     <section aria-labelledby="ai-title" class="ai-policy reading">
+      <span class="fig note-card"><img src="/images/figures/handshake.svg" alt="" width="463" height="555" /></span>
       <h2 id="ai-title" class="chalk">AI Policy</h2>
       <div class="prose" set:html={render(aiPolicy)} />
     </section>
@@ -47,12 +46,14 @@ const previous = rest.slice(0, 3);
 
 <style>
   .home { padding-top: 2rem; }
-  .lead { font-size: var(--step-1); line-height: 1.45; max-width: 46ch; margin: 0 0 2rem; color: var(--ink); }
   .section-title { font-size: var(--step-1); margin: 3rem 0 1rem; }
   section:first-of-type .section-title { margin-top: 0; }
   .previous { list-style: none; padding: 0; margin: 0 0 1rem; display: grid; gap: 2rem 1.5rem; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); }
   .previous li + li { margin-top: 0; }
   :global(.subscribe) { margin-top: 4rem; }
   .ai-policy { margin-top: 3rem; }
-  .ai-policy h2 { font-size: var(--step-1); }
+  .ai-policy { display: flow-root; }
+  .ai-policy h2 { font-size: var(--step-1); display: flow-root; }
+  .ai-policy .fig { float: right; width: 10rem; margin: 0.5rem 0.5rem 1rem 2rem; }
+  @media (max-width: 40rem) { .ai-policy .fig { width: 6.5rem; margin: 0.25rem 0.25rem 0.75rem 1rem; padding: 0.6rem 0.5rem 0.5rem; } }
 </style>
