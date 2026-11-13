@@ -10,12 +10,18 @@ const byRole = PLEDGE_GROUPS.map((g) => ({
   items: pledges.filter((p) => p.role === g.role).sort((a, b) => a.issue - b.issue),
 })).filter((g) => g.items.length);
 const SHARE_URL = 'https://accessibilitynotebook.com/take-action/';
+// A stick figure doing each role's job (decorative)
+const ROLE_FIG = {
+  Business: ['role-business', 571, 485], Authoring: ['role-authoring', 571, 485], Design: ['role-design', 571, 485],
+  Development: ['role-dev', 490, 485], Testing: ['search', 200, 523], Administration: ['role-admin', 571, 648],
+};
 ---
 <Base title="Take Action" image="/images/take-action-og.png"
       description="Turn what you read in Accessibility Notebook into action: pick up to three accessibility actions, download your card and share it.">
   <div class="wrap page">
-    <div class="sheet">
+    <div class="sheet head">
     <h1>Take Action</h1>
+    <span class="fig note-card"><img src="/images/figures/ta-act.svg" alt="" width="571" height="626" /></span>
     <p class="lead">Turn what you read here into action. Pick up to three things you will do, then download your card and share it. Every action comes from an Accessibility Notebook issue.</p>
     <p class="arrm">Actions are grouped by the roles in W3C's <a href="https://www.w3.org/WAI/planning/arrm/">Accessibility Roles and Responsibilities Mapping (ARRM)</a>. Open your role, or any other.</p>
     <noscript><p class="note">Making your card needs JavaScript. You can still read every action below.</p></noscript>
@@ -30,6 +36,7 @@ const SHARE_URL = 'https://accessibilitynotebook.com/take-action/';
         {byRole.map((g) => (
           <details class="grp" data-role={g.key}>
             <summary>
+              <span class="g-fig"><img src={`/images/figures/${ROLE_FIG[g.role][0]}.svg`} alt="" width={ROLE_FIG[g.role][1]} height={ROLE_FIG[g.role][2]} loading="lazy" /></span>
               <span class="g-name">{g.role}</span>
               <span class="g-meta">{g.covers} · {g.items.length} actions<span class="g-chosen"></span></span>
             </summary>
@@ -306,9 +313,9 @@ const SHARE_URL = 'https://accessibilitynotebook.com/take-action/';
   .arrm { max-width: 60ch; }
   .grp { border: 2px solid var(--rule); border-radius: 10px; background: #fff; margin: 0 0 0.75rem; }
   .grp[open] { border-color: var(--notebook); }
-  .grp summary { display: grid; grid-template-columns: 1fr auto; column-gap: 1rem; align-items: center; padding: 0.85rem 1rem; cursor: pointer; list-style: none; min-height: 48px; }
+  .grp summary { display: grid; grid-template-columns: 5.75rem 1fr auto; column-gap: 1rem; align-items: center; padding: 0.85rem 1rem; cursor: pointer; list-style: none; min-height: 48px; }
   .grp summary::-webkit-details-marker { display: none; }
-  .grp summary::after { content: ''; grid-column: 2; grid-row: 1 / span 2; width: 0.7rem; height: 0.7rem; border-right: 3px solid var(--notebook); border-bottom: 3px solid var(--notebook); transform: rotate(45deg); margin-top: -0.3rem; transition: transform 0.15s; }
+  .grp summary::after { content: ''; grid-column: 3; grid-row: 1 / span 2; width: 0.7rem; height: 0.7rem; border-right: 3px solid var(--notebook); border-bottom: 3px solid var(--notebook); transform: rotate(45deg); margin-top: -0.3rem; transition: transform 0.15s; }
   .grp[open] summary::after { transform: rotate(-135deg); margin-top: 0.3rem; }
   .grp summary:focus-visible { outline: 3px solid var(--notebook); outline-offset: 2px; border-radius: 8px; }
   .g-name { font-weight: 800; font-size: 1.15rem; color: var(--ink); }
@@ -348,4 +355,10 @@ const SHARE_URL = 'https://accessibilitynotebook.com/take-action/';
   .b2:hover { background: var(--tint); }
   .tip { font-size: var(--step--1); margin: 1rem 0 0; }
   .alt { font-size: var(--step--1); color: var(--ink-soft); margin-top: 0.75rem; }
+  .g-fig { grid-row: 1 / span 2; grid-column: 1; align-self: center; }
+  .g-fig img { display: block; width: 5.25rem; height: 4.5rem; object-fit: contain; object-position: left center; }
+  .g-name, .g-meta { grid-column: 2; }
+  .head { display: flow-root; }
+  .head .fig { float: right; width: 8.5rem; margin: -4.75rem 0.5rem 0 2rem; }
+  @media (max-width: 40rem) { .head .fig { width: 5.5rem; margin: 0.4rem 0 0.5rem 0.9rem; padding: 0.5rem 0.4rem 0.4rem; } .grp summary { grid-template-columns: 4.25rem 1fr auto; column-gap: 0.75rem; } .g-fig img { width: 4rem; height: 3.5rem; } }
 </style>
