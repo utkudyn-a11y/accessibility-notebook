@@ -5,10 +5,21 @@ import about from '../content/site/about.md?raw';
 ---
 <Base title="About Me" description="About Utku Demiryakan, the author of Accessibility Notebook.">
   <div class="wrap page reading">
-    <div class="sheet">
+    <div class="sheet head">
     <h1>About Me</h1>
+    <figure class="fig note-card me"><img src="/images/figures/about-me.svg" alt="" width="248" height="286" /><figcaption>Hi, I’m Utku</figcaption></figure>
     <div class="prose" set:html={render(about)} />
     </div>
   </div>
 </Base>
-<style>.page { padding-top: 2.5rem; }</style>
+<style>
+  .page { padding-top: 2.5rem; }
+  .head { display: flow-root; }
+  .head .fig { float: right; width: 9rem; margin: -4.75rem 0.5rem 0 2rem; }
+  @media (min-width: 40.01rem) { .head h1 { margin-right: 11.5rem; } }
+  @media (max-width: 40rem) { .head .fig { width: 6.5rem; margin: 0.4rem 0 0.5rem 0.9rem; padding: 0.5rem 0.4rem 0.4rem; } }
+  .me { text-align: center; }
+  .me img { display: block; width: 100%; height: auto; }
+  .me figcaption { margin-top: 0.4rem; font-weight: 800; color: var(--notebook); line-height: 1.2; }
+  @media (max-width: 40rem) { .me figcaption { font-size: 0.85rem; } }
+</style>
