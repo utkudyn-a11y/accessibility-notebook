@@ -3,10 +3,17 @@ import Base from '../layouts/Base.astro';
 ---
 <Base title="Page not found">
   <div class="wrap page reading">
-    <div class="sheet">
+    <div class="sheet head">
     <h1>This page doesn't exist</h1>
+    <span class="fig note-card"><img src="/images/figures/shrug.svg" alt="" width="257" height="588" /></span>
     <p>The link may be old or mistyped. Try the <a href="/notes/">list of all issues</a> or go to the <a href="/">home page</a>.</p>
     </div>
   </div>
 </Base>
-<style>.page { padding-top: 2.5rem; }</style>
+<style>
+  .page { padding-top: 2.5rem; }
+  .head { display: flow-root; }
+  .head .fig { float: right; width: 8rem; margin: -4.75rem 0.5rem 0 2rem; }
+  @media (min-width: 40.01rem) { .head h1 { margin-right: 10.5rem; } }
+  @media (max-width: 40rem) { .head .fig { width: 5.5rem; margin: 0.4rem 0 0.5rem 0.9rem; padding: 0.5rem 0.4rem 0.4rem; } }
+</style>

@@ -6,8 +6,9 @@ const GROUPS = ['Originals', 'News', 'Inspirations', 'Discussion', 'Full Issues'
 ---
 <Base title="Search" description="Search every Accessibility Notebook issue, news story, inspiration and original article.">
   <div class="wrap page">
-    <div class="sheet">
+    <div class="sheet head">
     <h1>Search</h1>
+    <span class="fig note-card"><img src="/images/figures/search.svg" alt="" width="200" height="523" /></span>
 
     <form class="sform" role="search" action="/search/" method="get">
       <label for="q">Search all issues, news and inspirations</label>
@@ -212,6 +213,10 @@ const GROUPS = ['Originals', 'News', 'Inspirations', 'Discussion', 'Full Issues'
 
 <style>
   .page { padding-top: 2.5rem; padding-bottom: 2rem; }
+  .head { display: flow-root; }
+  .head .fig { float: right; width: 7rem; margin: -4.75rem 0.5rem 0 2rem; }
+  /* phones: the tall detective would squeeze the search box, so he only shows on wider screens */
+  @media (max-width: 40rem) { .head .fig { display: none; } }
   .sform { max-width: 44rem; margin: 0.5rem 0 1.5rem; }
   .sform label { display: block; font-weight: 800; margin-bottom: 0.5rem; }
   .srow { display: flex; flex-wrap: wrap; gap: 0.6rem; }
