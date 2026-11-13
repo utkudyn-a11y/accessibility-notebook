@@ -13,13 +13,13 @@ type Opts = {
 export const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
 const plural = (n: number) => `${n} ${n === 1 ? 'vote' : 'votes'}`;
 
-// Remember which option this browser voted for (only a convenience; it may be unavailable).
+// Remember which option was voted for in this tab only (sessionStorage; gone when the tab closes).
 const store = {
   get(id: string): number | null {
-    try { const v = localStorage.getItem(`an-vote-${id}`); return v === null ? null : Number(v); } catch { return null; }
+    try { const v = sessionStorage.getItem(`an-vote-${id}`); return v === null ? null : Number(v); } catch { return null; }
   },
   set(id: string, option: number) {
-    try { localStorage.setItem(`an-vote-${id}`, String(option)); } catch {}
+    try { sessionStorage.setItem(`an-vote-${id}`, String(option)); } catch {}
   },
 };
 
