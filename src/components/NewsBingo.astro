@@ -88,6 +88,8 @@ const tick = `<svg viewBox="0 0 40 40" aria-hidden="true" focusable="false" fill
   }
   @media (forced-colors: active) {
     .cells, .cells li { border-color: CanvasText; }
-    .done { background: Mark; color: MarkText; }
+    /* no fill (a Mark background sits under the black text backplate and hides the words): a thick inner frame and a tick in the highlight colour */
+    .done { background: Canvas; color: CanvasText; outline: 4px solid Highlight; outline-offset: -6px; }
+    .mark :global(svg) { stroke: Highlight; }
   }
 </style>
