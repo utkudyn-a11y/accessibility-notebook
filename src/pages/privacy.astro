@@ -1,0 +1,14 @@
+---
+import Base from '../layouts/Base.astro';
+import { render } from '../lib/issues.js';
+import privacy from '../content/site/privacy.md?raw';
+---
+<Base title="Privacy" description="What Accessibility Notebook keeps about you: almost nothing. No ads, no tracking, no cookies for readers.">
+  <div class="wrap page reading">
+    <div class="sheet">
+    <h1>Privacy</h1>
+    <div class="prose" set:html={render(privacy)} />
+    </div>
+  </div>
+</Base>
+<style>.page { padding-top: 2.5rem; }</style>
