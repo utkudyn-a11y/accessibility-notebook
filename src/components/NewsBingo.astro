@@ -1,0 +1,93 @@
+---
+// News page game: five hunts around the world. Opening any one of a hunt's stories (its title link or
+// "Read on Notes") ticks it off. Progress lives in this tab only (sessionStorage) and never leaves the
+// browser. Shown only with JavaScript.
+const QUESTS = [
+  { id: 'africa', text: 'Find out what’s happening in Africa’s accessibility ecosystem.', stories: ['n-31-news-2', 'n-16-news-2', 'n-6-news-2'] },
+  { id: 'asia', text: 'Find out what’s on Asia’s accessibility agenda.', stories: ['n-13-news-2', 'n-10-news-1', 'n-2-news-2', 'n-8-news-2', 'n-18-news-2', 'n-20-news-1', 'n-11-news-1', 'n-22-news-3', 'n-3-news-4', 'n-30-news-2'] },
+  { id: 'eaa', text: 'Find out where the European Accessibility Act went to court.', stories: ['n-17-news-1', 'n-16-news-1', 'n-28-news-1'] },
+  { id: 'latam', text: 'Find the South American law that ended up creating new barriers.', stories: ['n-21-news-2'] },
+  { id: 'oceania', text: 'Find out what’s new on the other side of the world, in Oceania.', stories: ['n-31-news-1', 'n-19-news-3', 'n-30-news-3'] },
+];
+const tick = `<svg viewBox="0 0 40 40" aria-hidden="true" focusable="false" fill="none" stroke="#2d0a72" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7,21.5 Q11.5,25 16.2,31.5 Q23,16.5 34.5,7.5"/></svg>`;
+---
+<div class="sheet bingo" hidden data-quests={JSON.stringify(QUESTS.map((q) => [q.id, q.stories]))}>
+  <h2 id="bingo-title">News bingo</h2>
+  <p class="ask">Accessibility is being talked about all over the world. But can you find out what’s on the agenda, and where?</p>
+  <ul class="cells">
+    {QUESTS.map((q) => (
+      <li data-q={q.id}>
+        <span class="mark" set:html={tick} />
+        <span class="text">{q.text}</span>
+        <span class="visually-hidden state">Not found yet</span>
+      </li>
+    ))}
+  </ul>
+  <p class="score" aria-live="polite"></p>
+  <div class="win" hidden>
+    <p>Now you know what’s going on in the world. Time to think outside the box: go to <a href="/inspirations/">Inspirations</a>.</p>
+    <a class="act" href="/inspirations/">Go to Inspirations <span aria-hidden="true">→</span></a>
+  </div>
+</div>
+
+<script>
+  const box = document.querySelector<HTMLElement>('.bingo');
+  if (box) {
+    const KEY = 'news-bingo';
+    const quests: [string, string[]][] = JSON.parse(box.dataset.quests!);
+    let done: string[] = [];
+    try { done = JSON.parse(sessionStorage.getItem(KEY) || '[]'); } catch {}
+    const score = box.querySelector<HTMLElement>('.score')!;
+    const show = () => {
+      for (const li of box.querySelectorAll<HTMLElement>('li[data-q]')) {
+        const ok = done.includes(li.dataset.q!);
+        li.classList.toggle('done', ok);
+        li.querySelector('.state')!.textContent = ok ? 'Found' : 'Not found yet';
+      }
+      const n = done.length;
+      box.querySelector<HTMLElement>('.win')!.hidden = n < quests.length;
+      score.textContent = n >= quests.length ? 'Bingo! All 5 found.' : `${n} of ${quests.length} found.`;
+    };
+    box.hidden = false;
+    show();
+    const open = (e: Event) => {
+      const a = (e.target as Element).closest('.card h3 a, .card .go');
+      if (!a) return;
+      const id = a.closest('.card')!.getAttribute('aria-labelledby')!;
+      const q = quests.find(([, ids]) => ids.includes(id));
+      if (!q || done.includes(q[0])) return;
+      done.push(q[0]);
+      try { sessionStorage.setItem(KEY, JSON.stringify(done)); } catch {}
+      show();
+    };
+    document.addEventListener('click', open);
+    document.addEventListener('auxclick', open);
+  }
+</script>
+
+<style>
+  .bingo h2 { margin: 0 0 0.4rem; font-size: var(--step-1); }
+  .ask { margin: 0 0 1.25rem; max-width: 60ch; }
+  .cells { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); border: 2.5px solid var(--notebook); border-radius: 10px; overflow: hidden; }
+  .cells li { position: relative; margin: 0; min-height: 8.5rem; padding: 0.9rem 0.85rem 1rem; border-left: 2px solid var(--notebook); font-weight: 700; line-height: 1.35; }
+  .cells li:first-child { border-left: 0; }
+  .mark { position: absolute; right: 0.4rem; bottom: 0.3rem; width: 2.6rem; height: 2.6rem; display: none; }
+  .mark :global(svg) { width: 100%; height: 100%; }
+  .done { background: #f1ecfb; }
+  .done .mark { display: block; }
+  .score { margin: 0.75rem 0 0; font-weight: 800; color: var(--notebook); }
+  .win p { margin: 0.75rem 0 0; font-size: var(--step-1); font-weight: 700; max-width: 55ch; }
+  .act { display: inline-flex; align-items: center; gap: 0.4rem; margin-top: 0.75rem; min-height: 44px; padding: 0.45rem 1.1rem; background: var(--notebook); color: #fff; border: 2px solid var(--notebook); border-radius: 6px; font-weight: 800; text-decoration: none; }
+  .act:hover { background: #fff; color: var(--notebook); }
+  .act:focus-visible { outline: 3px solid var(--notebook); outline-offset: 3px; }
+  @media (max-width: 64rem) {
+    .cells { grid-template-columns: minmax(0, 1fr); }
+    .cells li { min-height: 0; border-left: 0; border-top: 2px solid var(--notebook); padding-right: 3.4rem; }
+    .cells li:first-child { border-top: 0; }
+    .mark { top: 50%; bottom: auto; transform: translateY(-50%); }
+  }
+  @media (forced-colors: active) {
+    .cells, .cells li { border-color: CanvasText; }
+    .done { background: Mark; color: MarkText; }
+  }
+</style>
