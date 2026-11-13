@@ -8,7 +8,7 @@ const figure = fs.readFileSync('src/assets/inspire-figure.svg', 'utf8');
 ---
 <div class="inspire note-card" hidden>
   <div class="stage" set:html={figure} />
-  <p class="msg" aria-live="polite">You can’t be an accessibility-stickman without inspiration. So, open 5 inspirations to be completed.</p>
+  <p class="msg" aria-live="polite">You can’t be an accessibility-stickperson without inspiration. So, open 5 inspirations to be completed.</p>
   <a class="act" href="/take-action/" hidden>Take action <span aria-hidden="true">→</span></a>
 </div>
 
@@ -35,7 +35,7 @@ const figure = fs.readFileSync('src/assets/inspire-figure.svg', 'utf8');
       ghost.style.display = finished ? 'none' : '';
       card.classList.toggle('finished', finished);
       if (finished) msg.innerHTML = 'You are inspired. It’s time to <a href="/take-action/">take action</a>.';
-      else msg.textContent = n === 0 ? 'You can’t be an accessibility-stickman without inspiration. So, open 5 inspirations to be completed.' : `${n} of 5 opened. Keep going.`;
+      else msg.textContent = n === 0 ? 'You can’t be an accessibility-stickperson without inspiration. So, open 5 inspirations to be completed.' : `${n} of 5 opened. Keep going.`;
       act.hidden = !finished;
       }
     };
