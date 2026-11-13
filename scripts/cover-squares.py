@@ -30,5 +30,6 @@ for n in sorted(int(re.search(r"notes-(\d+)-cover", p).group(1)) for p in glob.g
     t = min(max(cy - s / 2, top), H - s)
     c = im.crop((int(l), int(t), int(l + s), int(t + s))).resize((T, T), Image.LANCZOS)
     c.save(f'{out}/notes-{n:02d}.webp', quality=82)
+    c.resize((T // 2, T // 2), Image.LANCZOS).save(f'{out}/notes-{n:02d}-320.webp', quality=82)  # phones
 
 

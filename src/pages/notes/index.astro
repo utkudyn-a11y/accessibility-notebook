@@ -18,7 +18,9 @@ for (const i of issues) {
   open.issues.push(i);
   if (MILESTONES[i.number]) { open.milestone = { ...MILESTONES[i.number], date: i.date }; open = null; }
 }
-const square = (n) => `/images/squares/notes-${String(n).padStart(2, '0')}.webp`;
+const square = (n, small = false) => `/images/squares/notes-${String(n).padStart(2, '0')}${small ? '-320' : ''}.webp`;
+// phones show the square at 6.5rem, so they get the 320 px file; the grid cards get 640 px
+const SIZES = '(max-width: 40rem) 6.5rem, (max-width: 64rem) 45vw, 21rem';
 ---
 <Base title="Full Issues" description="Every issue of Accessibility Notebook.">
   <div class="wrap page">
@@ -33,7 +35,7 @@ const square = (n) => `/images/squares/notes-${String(n).padStart(2, '0')}.webp`
       {c.issues.map((i, k) => (
         <li>
           <article class="issue" aria-labelledby={`i-${i.number}`}>
-            <img src={square(i.number)} alt="" width="640" height="640" loading={ci === 0 && k < 6 ? 'eager' : 'lazy'} decoding="async" />
+            <img src={square(i.number)} srcset={`${square(i.number, true)} 320w, ${square(i.number)} 640w`} sizes={SIZES} alt="" width="640" height="640" loading={ci === 0 && k < 6 ? 'eager' : 'lazy'} decoding="async" />
             <div class="text">
               <p class="meta"><time datetime={i.date}>{formatDate(i.date)}</time></p>
               <h2 id={`i-${i.number}`}><a href={i.url}>{i.title}</a></h2>
