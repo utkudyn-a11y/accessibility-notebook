@@ -139,3 +139,13 @@ body { background-color: #f1edf9; background-image: radial-gradient(circle, #d6c
 @media (prefers-reduced-motion: reduce) {
   ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
 }
+
+/* Windows High Contrast: drawn inline figures take the system text colour; figure images and the logo
+   keep their own colours on a small white tile, so dark purple lines never sit on a black page. */
+@media (forced-colors: active) {
+  svg [stroke="#2d0a72"] { stroke: CanvasText; }
+  svg [fill="#2d0a72"] { fill: CanvasText; }
+  svg [fill="#fcfbff"] { fill: Canvas; }
+  img[src^="/images/figures/"] { forced-color-adjust: none; background: #fff; border-radius: 4px; }
+  .brand img { forced-color-adjust: none; background: #fff; border-radius: 50%; }
+}
