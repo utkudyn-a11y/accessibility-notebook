@@ -3,27 +3,27 @@
 // "Read on Notes") ticks it off. Progress lives in this tab only (sessionStorage) and never leaves the
 // browser. Shown only with JavaScript.
 const QUESTS = [
-  { id: 'africa', text: 'Find out what’s happening in Africa’s accessibility ecosystem.', stories: ['n-31-news-2', 'n-16-news-2', 'n-6-news-2'] },
-  { id: 'asia', text: 'Find out what’s on Asia’s accessibility agenda.', stories: ['n-13-news-2', 'n-10-news-1', 'n-2-news-2', 'n-8-news-2', 'n-18-news-2', 'n-20-news-1', 'n-11-news-1', 'n-22-news-3', 'n-3-news-4', 'n-30-news-2'] },
-  { id: 'eaa', text: 'Find out where the European Accessibility Act went to court.', stories: ['n-17-news-1', 'n-16-news-1', 'n-28-news-1'] },
-  { id: 'usa', text: 'Find out why the ADA keeps making headlines in the United States.', stories: ['n-29-news-3', 'n-19-news-2', 'n-9-news-1', 'n-4-news-3', 'n-14-news-3', 'n-12-news-3', 'n-1-news-1', 'n-4-news-4', 'n-20-news-2', 'n-7-news-3', 'n-2-news-3'] },
-  { id: 'oceania', text: 'Find out what’s new in Oceania’s accessibility scene.', stories: ['n-31-news-1', 'n-19-news-3', 'n-30-news-3'] },
+  { id: 'africa', name: 'Africa', text: 'Find out what’s happening in Africa’s accessibility ecosystem.', stories: ['n-31-news-2', 'n-16-news-2', 'n-6-news-2'] },
+  { id: 'asia', name: 'Asia', text: 'Find out what’s on Asia’s accessibility agenda.', stories: ['n-13-news-2', 'n-10-news-1', 'n-2-news-2', 'n-8-news-2', 'n-18-news-2', 'n-20-news-1', 'n-11-news-1', 'n-22-news-3', 'n-3-news-4', 'n-30-news-2'] },
+  { id: 'eaa', name: 'the European Accessibility Act in court', text: 'Find out where the European Accessibility Act went to court.', stories: ['n-17-news-1', 'n-16-news-1', 'n-28-news-1'] },
+  { id: 'usa', name: 'the ADA in the United States', text: 'Find out why the ADA keeps making headlines in the United States.', stories: ['n-29-news-3', 'n-19-news-2', 'n-9-news-1', 'n-4-news-3', 'n-14-news-3', 'n-12-news-3', 'n-1-news-1', 'n-4-news-4', 'n-20-news-2', 'n-7-news-3', 'n-2-news-3'] },
+  { id: 'oceania', name: 'Oceania', text: 'Find out what’s new in Oceania’s accessibility scene.', stories: ['n-31-news-1', 'n-19-news-3', 'n-30-news-3'] },
 ];
 const tick = `<svg viewBox="0 0 40 40" aria-hidden="true" focusable="false" fill="none" stroke="#2d0a72" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7,21.5 Q11.5,25 16.2,31.5 Q23,16.5 34.5,7.5"/></svg>`;
 ---
-<div class="sheet bingo" hidden data-quests={JSON.stringify(QUESTS.map((q) => [q.id, q.stories]))}>
+<div class="sheet bingo" hidden data-quests={JSON.stringify(QUESTS.map((q) => [q.id, q.stories, q.name]))}>
   <h2 id="bingo-title">News bingo</h2>
   <p class="ask">Accessibility is being talked about all over the world. But can you find out what’s on the agenda, and where?</p>
-  <ul class="cells">
+  <ul class="cells" aria-label="5 hunts">
     {QUESTS.map((q) => (
       <li data-q={q.id}>
+        <span class="visually-hidden state">Not found yet:</span>
         <span class="mark" set:html={tick} />
         <span class="text">{q.text}</span>
-        <span class="visually-hidden state">Not found yet</span>
       </li>
     ))}
   </ul>
-  <p class="score" aria-live="polite"></p>
+  <p class="score"></p>
   <div class="win" hidden>
     <p>Now you know what’s going on in the world. Time to think outside the box: go to <a href="/inspirations/">Inspirations</a>.</p>
     <a class="act" href="/inspirations/">Go to Inspirations <span aria-hidden="true">→</span></a>
@@ -34,7 +34,14 @@ const tick = `<svg viewBox="0 0 40 40" aria-hidden="true" focusable="false" fill
   const box = document.querySelector<HTMLElement>('.bingo');
   if (box) {
     const KEY = 'news-bingo';
-    const quests: [string, string[]][] = JSON.parse(box.dataset.quests!);
+    const SAY = 'news-bingo-say';
+    const quests: [string, string[], string][] = JSON.parse(box.dataset.quests!);
+    const status = document.createElement('p');
+    status.setAttribute('role', 'status');
+    status.className = 'visually-hidden';
+    document.body.append(status);
+    const say = (text: string) => { status.textContent = ''; setTimeout(() => { status.textContent = text; }, 150); };
+    const keep = (k: string, v: string | null) => { try { v === null ? sessionStorage.removeItem(k) : sessionStorage.setItem(k, v); } catch {} };
     let done: string[] = [];
     try { done = JSON.parse(sessionStorage.getItem(KEY) || '[]'); } catch {}
     const score = box.querySelector<HTMLElement>('.score')!;
@@ -42,7 +49,7 @@ const tick = `<svg viewBox="0 0 40 40" aria-hidden="true" focusable="false" fill
       for (const li of box.querySelectorAll<HTMLElement>('li[data-q]')) {
         const ok = done.includes(li.dataset.q!);
         li.classList.toggle('done', ok);
-        li.querySelector('.state')!.textContent = ok ? 'Found' : 'Not found yet';
+        li.querySelector('.state')!.textContent = ok ? 'Found:' : 'Not found yet:';
       }
       const n = done.length;
       box.querySelector<HTMLElement>('.win')!.hidden = n < quests.length;
@@ -50,6 +57,10 @@ const tick = `<svg viewBox="0 0 40 40" aria-hidden="true" focusable="false" fill
     };
     box.hidden = false;
     show();
+    // a find made just before the reader left for the story is spoken when they come back
+    const pending = () => { let t = null; try { t = sessionStorage.getItem(SAY); } catch {} if (t) { keep(SAY, null); setTimeout(() => say(t!), 700); } };
+    pending();
+    addEventListener('pageshow', (e) => { if (e.persisted) pending(); });
     const open = (e: Event) => {
       const a = (e.target as Element).closest('.card h3 a, .card .go');
       if (!a) return;
@@ -59,6 +70,12 @@ const tick = `<svg viewBox="0 0 40 40" aria-hidden="true" focusable="false" fill
       done.push(q[0]);
       try { sessionStorage.setItem(KEY, JSON.stringify(done)); } catch {}
       show();
+      const t = done.length >= quests.length
+        ? `Found: ${q[2]}. Bingo! All 5 found. Now you know what’s going on in the world. Time to think outside the box: go to Inspirations.`
+        : `Found: ${q[2]}. ${done.length} of ${quests.length} found.`;
+      keep(SAY, t);
+      say(t);
+      setTimeout(() => keep(SAY, null), 3000);
     };
     document.addEventListener('click', open);
     document.addEventListener('auxclick', open);

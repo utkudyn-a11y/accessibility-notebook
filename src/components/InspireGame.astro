@@ -2,46 +2,67 @@
 // Inspirations header game: hangman in reverse. Every inspiration the reader opens draws one more
 // part of a stick figure; at five he is done (static, no animation). Progress lives in this tab only
 // (sessionStorage): it is gone when the tab closes and never leaves the browser.
-// Shown only with JavaScript; the figure itself is decorative, the score line is real text.
+// Shown only with JavaScript. The drawing has a text alternative that follows its state, and every change
+// is spoken through one status region (also after the reader comes back from an opened inspiration).
 import fs from 'node:fs';
 const figure = fs.readFileSync('src/assets/inspire-figure.svg', 'utf8');
 ---
 <div class="inspire note-card" hidden>
-  <div class="stage" set:html={figure} />
-  <p class="msg" aria-live="polite">You can’t be an accessibility-stickperson without inspiration. So, open 5 inspirations to be completed.</p>
+  <div class="stage" role="img" aria-label="An empty drawing of a stickperson: only dashed outlines." set:html={figure} />
+  <p class="msg">You can’t be an accessibility-stickperson without inspiration. So, open 5 inspirations to be completed.</p>
   <a class="act" href="/take-action/" hidden>Take action <span aria-hidden="true">→</span></a>
 </div>
 
 <script>
   const cards = [...document.querySelectorAll<HTMLElement>('.inspire')];
   if (cards.length) {
-    const KEY = 'inspired', GOAL = 5;
+    const KEY = 'inspired', SAY = 'inspired-say', GOAL = 5;
     const read = (k: string) => { try { return sessionStorage.getItem(k); } catch { return null; } };
     const write = (k: string, v: string | null) => { try { v === null ? sessionStorage.removeItem(k) : sessionStorage.setItem(k, v); } catch {} };
     let opened: string[] = [];
     try { opened = JSON.parse(read(KEY) || '[]'); } catch {}
+
+    // one polite status region for the page (the game shows in two places, one of them hidden)
+    const status = document.createElement('p');
+    status.setAttribute('role', 'status');
+    status.className = 'visually-hidden';
+    document.body.append(status);
+    const say = (text: string) => { status.textContent = ''; setTimeout(() => { status.textContent = text; }, 150); };
+
+    const PARTS = ['a head', 'a body', 'arms', 'one leg'];
+    const listOf = (xs: string[]) => xs.length < 2 ? xs.join('') : `${xs.slice(0, -1).join(', ')} and ${xs.at(-1)}`;
+    const drawing = (n: number) => n >= GOAL ? 'A finished stickperson with both arms raised and a big smile.'
+      : n === 0 ? 'An empty drawing of a stickperson: only dashed outlines.'
+      : `A stickperson drawing, ${n} of 5 parts drawn: ${listOf(PARTS.slice(0, n))}.`;
+    const news = (n: number) => n >= GOAL ? '5 of 5 opened. The stickperson is complete. You are inspired. It’s time to take action.'
+      : `${n} of 5 opened. The stickperson now has ${listOf(PARTS.slice(0, n))}. Keep going.`;
 
     const show = () => {
       const n = Math.min(opened.length, GOAL);
       const finished = n >= GOAL;
       for (const card of cards) {
         const parts = [...card.querySelectorAll<SVGGElement>('.part')];
-      const done = card.querySelector<SVGGElement>('.done')!;
-      const ghost = card.querySelector<SVGGElement>('.ghost')!;
-      const msg = card.querySelector<HTMLElement>('.msg')!;
-      const act = card.querySelector<HTMLElement>('.act')!;
-      parts.forEach((p, i) => { p.style.display = !finished && i < n ? '' : 'none'; });
-      done.style.display = finished ? '' : 'none';
-      ghost.style.display = finished ? 'none' : '';
-      card.classList.toggle('finished', finished);
-      if (finished) msg.innerHTML = 'You are inspired. It’s time to <a href="/take-action/">take action</a>.';
-      else msg.textContent = n === 0 ? 'You can’t be an accessibility-stickperson without inspiration. So, open 5 inspirations to be completed.' : `${n} of 5 opened. Keep going.`;
-      act.hidden = !finished;
+        const done = card.querySelector<SVGGElement>('.done')!;
+        const ghost = card.querySelector<SVGGElement>('.ghost')!;
+        const msg = card.querySelector<HTMLElement>('.msg')!;
+        const act = card.querySelector<HTMLElement>('.act')!;
+        parts.forEach((p, i) => { p.style.display = !finished && i < n ? '' : 'none'; });
+        done.style.display = finished ? '' : 'none';
+        ghost.style.display = finished ? 'none' : '';
+        card.querySelector('.stage')!.setAttribute('aria-label', drawing(n));
+        card.classList.toggle('finished', finished);
+        if (finished) msg.innerHTML = 'You are inspired. It’s time to <a href="/take-action/">take action</a>.';
+        else msg.textContent = n === 0 ? 'You can’t be an accessibility-stickperson without inspiration. So, open 5 inspirations to be completed.' : `${n} of 5 opened. Keep going.`;
+        act.hidden = !finished;
       }
     };
 
     for (const card of cards) card.hidden = false;
     show();
+    // a change made just before the reader left for an inspiration is spoken when they come back
+    const pending = () => { const t = read(SAY); if (t) { write(SAY, null); setTimeout(() => say(t), 700); } };
+    pending();
+    addEventListener('pageshow', (e) => { if (e.persisted) pending(); });
 
     const count = (e: Event) => {
       const a = (e.target as Element).closest('.item h3 a');
@@ -52,6 +73,10 @@ const figure = fs.readFileSync('src/assets/inspire-figure.svg', 'utf8');
       opened.push(id);
       write(KEY, JSON.stringify(opened));
       show();
+      const t = news(opened.length);
+      write(SAY, t);   // spoken on return if this tab navigates away
+      say(t);          // spoken now if it opened in a new tab
+      setTimeout(() => write(SAY, null), 3000);
     };
     document.addEventListener('click', count);
     document.addEventListener('auxclick', count);
