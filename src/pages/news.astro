@@ -19,6 +19,29 @@ for (const it of items) {
   m.items.push(it);
 }
 
+// Month header pieces (decorative, hand-drawn, one colour): a desk-calendar sheet and tally marks for the story count
+const C = '#2d0a72';
+const calendar = `<svg viewBox="0 0 64 70" aria-hidden="true" focusable="false" fill="none" stroke="${C}" stroke-linecap="round" stroke-linejoin="round"><path d="M7.5,13 Q6,12.5 7,11.2 L56.6,10.6 Q58.6,11 58.2,13.4 L58.8,63.6 Q58.4,66.2 55.8,65.9 L8.6,66.4 Q6.4,66.1 6.6,63.8 Z" fill="#fff" stroke-width="2.6"/><path d="M7.2,25.6 Q30,24.6 58.4,25.2" stroke-width="2"/><path d="M20.5,3.5 L20.3,14 M43.8,3.3 L44,14.2" stroke-width="3.6"/></svg>`;
+const tally = (n) => {
+  let d = '', x = 2;
+  const j = (k) => (Math.sin(n * 7.3 + k * 2.1) * 0.9).toFixed(1);
+  for (let g = 0; g < Math.ceil(n / 5); g++) {
+    const inGroup = Math.min(5, n - g * 5);
+    for (let k = 0; k < Math.min(4, inGroup); k++) d += `M${(x + k * 6 + +j(k)).toFixed(1)},3 L${(x + k * 6 - +j(k + 1)).toFixed(1)},21 `;
+    if (inGroup === 5) d += `M${x - 3},16 L${x + 22},7 `;
+    x += 32;
+  }
+  return `<svg viewBox="0 0 ${x - 4} 24" width="${(x - 4) * 0.8}" height="19" aria-hidden="true" focusable="false" fill="none" stroke="${C}" stroke-width="2.4" stroke-linecap="round"><path d="${d}"/></svg>`;
+};
+for (const m of months) {
+  const d = new Date(`${m.key}-15T12:00:00Z`);
+  m.short = d.toLocaleDateString('en-GB', { month: 'short', timeZone: 'UTC' }).slice(0, 3);
+  m.year = m.key.slice(0, 4);
+}
+// Newspaper masthead line under the title
+const allIssues = getIssues();
+const latestIssue = allIssues[0];
+
 // A doodle beside each month, about one of its stories (inline SVG, decorative)
 import fs from 'node:fs';
 const MONTH_DOODLES = { '2026-10': 'dog', '2026-09': 'tv', '2026-08': 'sign', '2026-07': 'popcorn', '2026-06': 'gavel', '2026-05': 'ball', '2026-04': 'pledge', '2026-03': 'laptop', '2026-02': 'coin', '2026-01': 'kiosk' };
@@ -30,6 +53,7 @@ const doodle = (key) => MONTH_DOODLES[key] && fs.readFileSync(`public/images/fig
     <h1>Digital Accessibility News</h1>
     <span class="fig note-card"><img src="/images/figures/news-reader.svg" alt="" width="311" height="497" /></span>
     <p class="lead">News I found and commented on each week: laws, enforcement, research and products from around the world. Grouped by the month each story was first published.</p>
+    <p class="masthead"><span>No. {latestIssue.number}</span><span><time datetime={latestIssue.date}>{formatDateLong(latestIssue.date)}</time></span><span>{items.length} stories, {months.length} months</span></p>
 
     </div>
     <div class="sheet months">
@@ -39,8 +63,10 @@ const doodle = (key) => MONTH_DOODLES[key] && fs.readFileSync(`public/images/fig
       <section class="month" aria-labelledby={`m-${m.key}`}>
         <h2 id={`m-${m.key}`}>
           <button type="button" class="disclosure" aria-expanded="true" aria-controls={`p-${m.key}`} data-first={i === 0 ? 'true' : undefined}>
+            <span class="cal" aria-hidden="true"><Fragment set:html={calendar} /><b>{m.short}</b><small>{m.year}</small></span>
             <span class="label">{m.label}</span>
             <span class="count">{m.items.length} {m.items.length === 1 ? 'story' : 'stories'}</span>
+            <span class="tally" set:html={tally(m.items.length)} />
             <span class="chev" aria-hidden="true"></span>
           </button>
         </h2>
@@ -70,6 +96,10 @@ const doodle = (key) => MONTH_DOODLES[key] && fs.readFileSync(`public/images/fig
   </div>
 </Base>
 
+<script is:inline>
+  // demo only: ?v=b shows the second variant
+  if (new URLSearchParams(location.search).get('v') === 'b') document.documentElement.dataset.newsV = 'b';
+</script>
 <script>
   const buttons = [...document.querySelectorAll<HTMLButtonElement>('.month .disclosure')];
   const toggleAll = document.querySelector<HTMLButtonElement>('.toggle-all');
@@ -142,4 +172,23 @@ const doodle = (key) => MONTH_DOODLES[key] && fs.readFileSync(`public/images/fig
   .doodle { position: absolute; top: 0.25rem; right: calc(100% + 1.6rem); width: 6.2rem; clip-path: inset(-1rem -1rem -1rem calc(7.8rem - var(--pad-l))); pointer-events: none; }
   .doodle :global(svg) { display: block; width: 100%; height: auto; }
   @media (max-width: 40rem) { .doodle { display: none; } }
+
+  /* Calendar sheet beside each month name */
+  .cal { position: relative; flex: none; width: 4rem; height: 4.375rem; margin-right: 0.35rem; color: var(--notebook); }
+  .cal :global(svg) { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .cal b { position: absolute; left: 0; right: 0; top: 2.05rem; text-align: center; font-size: 1.15rem; line-height: 1; font-weight: 800; letter-spacing: 0.03em; text-transform: uppercase; }
+  .cal small { position: absolute; left: 0; right: 0; top: 1.02rem; text-align: center; font-size: 0.6rem; line-height: 1; font-weight: 800; letter-spacing: 0.06em; }
+  .tally { display: inline-flex; align-items: center; }
+  .tally :global(svg) { display: block; }
+
+  /* Newspaper masthead line */
+  .masthead { clear: both; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.25rem 1.5rem; margin: 1.5rem 0 0; padding: 0.45rem 0.1rem; border-top: 4px double var(--ink); border-bottom: 1px solid var(--ink); font-size: var(--step--1); font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; }
+
+  /* Variant B: no tally or masthead; each month is a dot on the sheet's margin line, filled when open */
+  :global(:root[data-news-v='b']) .tally, :global(:root[data-news-v='b']) .masthead { display: none; }
+  :global(:root[data-news-v='b']) .month { position: relative; }
+  :global(:root[data-news-v='b']) .month::before { content: ''; position: absolute; top: 1.85rem; left: calc(-1 * var(--line-gap) - 6px); width: 14px; height: 14px; border-radius: 50%; border: 2.5px solid var(--notebook); background: #fff; box-sizing: border-box; z-index: 1; }
+  :global(:root[data-news-v='b']) .month:has(.disclosure[aria-expanded='true'])::before { background: var(--notebook); }
+  :global(:root[data-news-v='b']) .months::before { background-image: linear-gradient(to right, transparent calc(var(--pad-l) - var(--line-gap)), var(--notebook) calc(var(--pad-l) - var(--line-gap)) calc(var(--pad-l) - var(--line-gap) + 2px), transparent 0); }
+  @media (forced-colors: active) { .cal b, .cal small { color: CanvasText; } .month::before { border-color: CanvasText !important; } }
 </style>
