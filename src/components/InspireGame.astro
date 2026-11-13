@@ -1,6 +1,7 @@
 ---
 // Inspirations header game: hangman in reverse. Every inspiration the reader opens draws one more
-// part of a stick figure; at five he is done (static, no animation). Progress lives in this browser only.
+// part of a stick figure; at five he is done (static, no animation). Progress lives in this tab only
+// (sessionStorage): it is gone when the tab closes and never leaves the browser.
 // Shown only with JavaScript; the figure itself is decorative, the score line is real text.
 import fs from 'node:fs';
 const figure = fs.readFileSync('src/assets/inspire-figure.svg', 'utf8');
@@ -15,8 +16,8 @@ const figure = fs.readFileSync('src/assets/inspire-figure.svg', 'utf8');
   const cards = [...document.querySelectorAll<HTMLElement>('.inspire')];
   if (cards.length) {
     const KEY = 'inspired', GOAL = 5;
-    const read = (k: string) => { try { return localStorage.getItem(k); } catch { return null; } };
-    const write = (k: string, v: string | null) => { try { v === null ? localStorage.removeItem(k) : localStorage.setItem(k, v); } catch {} };
+    const read = (k: string) => { try { return sessionStorage.getItem(k); } catch { return null; } };
+    const write = (k: string, v: string | null) => { try { v === null ? sessionStorage.removeItem(k) : sessionStorage.setItem(k, v); } catch {} };
     let opened: string[] = [];
     try { opened = JSON.parse(read(KEY) || '[]'); } catch {}
 
