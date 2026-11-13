@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import { getIssues, plainText, formatDateLong } from '../lib/issues.js';
+import NewsBingo from '../components/NewsBingo.astro';
 
 // Every story, dated by its original publication date (or the issue date when that is unknown),
 // grouped by month, newest month and newest story first.
@@ -32,6 +33,7 @@ const doodle = (key) => MONTH_DOODLES[key] && fs.readFileSync(`public/images/fig
     <p class="lead">News I found and commented on each week: laws, enforcement, research and products from around the world. Grouped by the month each story was first published.</p>
 
     </div>
+    <NewsBingo />
     <div class="sheet months">
     <div class="tools"><button type="button" class="toggle-all" hidden>Expand all months</button></div>
 
