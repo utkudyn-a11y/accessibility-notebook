@@ -8,10 +8,13 @@ const hid = `issue-card-${issue.number}`;
 const w = webp(issue.cover);
 // Displayed widths (measured): large card is full width below 56rem, then about half (max 35rem);
 // small cards are 1–3 per row, at most about 23rem.
+// Phones get the square, text-free crop of a small card's cover drawing (scripts/cover-squares.py)
+const square = `/images/squares/notes-${String(issue.number).padStart(2, '0')}-320.webp`;
 const sizes = big ? '(min-width: 56rem) min(47vw, 35rem), calc(100vw - 2rem)' : '(min-width: 72rem) 23rem, (min-width: 34rem) 45vw, calc(100vw - 2rem)';
 ---
 <article class:list={['issue-card', { big }]} aria-labelledby={hid}>
   <picture>
+    {!big && <source media="(max-width: 40rem)" type="image/webp" srcset={square} />}
     {w && <source type="image/webp" srcset={w.srcset} sizes={sizes} />}
     <img src={issue.cover} alt="" width={w?.width ?? 1280} height={w?.height ?? 720} loading={big ? 'eager' : 'lazy'} fetchpriority={big ? 'high' : undefined} decoding="async" />
   </picture>
@@ -48,6 +51,12 @@ const sizes = big ? '(min-width: 56rem) min(47vw, 35rem), calc(100vw - 2rem)' : 
   .big .title a:hover { text-decoration: underline; text-decoration-thickness: 0.08em; }
   .big .desc { font-size: var(--step-0); max-width: 60ch; margin: 0 0 0.8rem; }
   .big .album { margin: 0; color: var(--ink-soft); }
+  @media (max-width: 40rem) {
+    /* phones: a small card is one compact row, square drawing beside the date and title */
+    .issue-card:not(.big) { grid-template-columns: 5.5rem minmax(0, 1fr); gap: 0.9rem; align-items: center; }
+    .issue-card:not(.big) img { aspect-ratio: 1; width: 5.5rem; height: auto; object-fit: cover; }
+    .big .title { font-size: var(--step-1); }
+  }
   @media (min-width: 56rem) {
     .big { grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); }
     /* Show the whole cover even when a long title makes the text column taller; the bands match the cover purple */

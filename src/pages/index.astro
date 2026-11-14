@@ -45,7 +45,15 @@ const previous = rest.slice(0, 3);
     <section aria-labelledby="ai-title" class="ai-policy reading">
       <span class="fig note-card"><img src="/images/figures/handshake.svg" alt="" width="463" height="555" /></span>
       <h2 id="ai-title" class="chalk">AI Policy</h2>
-      <div class="prose" set:html={render(aiPolicy)} />
+      <div class="prose full" set:html={render(aiPolicy)} />
+      {/* phones: the commitment first, the whole policy one tap away */}
+      <div class="prose short">
+        <p>{aiPolicy.trim().split(/\n\s*\n/).at(-1)}</p>
+        <details>
+          <summary>Read the full AI policy</summary>
+          <div set:html={render(aiPolicy)} />
+        </details>
+      </div>
     </section>
     </div>
   </div>
@@ -61,6 +69,13 @@ const previous = rest.slice(0, 3);
   .ai-policy { margin-top: 3rem; }
   .ai-policy { display: flow-root; }
   .ai-policy h2 { font-size: var(--step-1); display: flow-root; }
+  .ai-policy .short { display: none; }
+  @media (max-width: 40rem) {
+    .ai-policy .full { display: none; }
+    .ai-policy .short { display: block; }
+    .previous { gap: 1rem; }
+  }
+  .ai-policy summary { cursor: pointer; font-weight: 800; color: var(--notebook); padding: 0.6rem 0; }
   .ai-policy .fig { float: right; width: 10rem; margin: 0.5rem 0.5rem 1rem 2rem; }
   @media (max-width: 40rem) { .ai-policy .fig { width: 6.5rem; margin: 0.25rem 0.25rem 0.75rem 1rem; padding: 0.6rem 0.5rem 0.5rem; } }
 </style>
