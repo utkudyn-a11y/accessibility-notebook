@@ -1,0 +1,97 @@
+---
+// Home page "What can you do on Accessibility Notebook?": a self-declared checklist of the site's features.
+// Nothing is tracked: the reader ticks what they did, and a stick figure with a message answers the count.
+// Ticks are kept for this tab only (sessionStorage). Each task links to the feature.
+const { latestUrl } = Astro.props;
+const TASKS = [
+  { id: 'subscribe', href: '#subscribe-title', text: 'I subscribed to the newsletter.' },
+  { id: 'album', href: '#spin-title', text: 'I listened to an album while reading.' },
+  { id: 'vote', href: '#dc-title', text: 'I voted on 3 questions in the Discussion Corner.' },
+  { id: 'comment', href: `${latestUrl}#comments`, text: 'I left a comment on an issue.' },
+  { id: 'stickperson', href: '/inspirations/', text: 'I completed the stickperson in Inspirations.' },
+  { id: 'bingo', href: '/news/', text: 'I got bingo on the News page.' },
+  { id: 'card', href: '/take-action/', text: 'I made my Take Action card.' },
+];
+// one level per count of ticks: figure, its size, its text alternative and the message
+const LEVELS = [
+  ['hb0', 621, 545, 'A stickperson sits on a box, waiting.', 'Pick one. Any one.'],
+  ['hb1', 621, 581, 'A stickperson waves hello.', 'Thank you, keep going!'],
+  ['hb2', 621, 522, 'Two stickpeople shake hands; one scratches their head shyly.', 'We’re slowly getting to know each other.'],
+  ['hb2', 621, 522, 'Two stickpeople shake hands; one scratches their head shyly.', 'We’re slowly getting to know each other.'],
+  ['hb4', 621, 487, 'A relaxed stickperson holds a steaming coffee mug.', 'You’re one of the regulars now.'],
+  ['hb5', 621, 591, 'Two stickpeople hold hands and cheer, a heart above them.', 'You’re my best friend.'],
+  ['hb6', 621, 487, 'Two stickpeople hold one open notebook together.', 'Best friends? We’re practically co-authors now.'],
+  ['hb7', 621, 552, 'A stickperson stares, surprised, at a mirror; the reflection is just as surprised.', 'Wait… are you me? Are you testing the site?'],
+];
+---
+<section class="todo" aria-labelledby="todo-title" data-levels={JSON.stringify(LEVELS)}>
+  <h2 id="todo-title" class="section-title chalk">What can you do on Accessibility Notebook?</h2>
+  <div class="grid">
+    <fieldset>
+      <legend>Tick what you have done. Nothing is checked or tracked; it’s just between us.</legend>
+      <ul>
+        {TASKS.map((t) => (
+          <li>
+            <input type="checkbox" id={`todo-${t.id}`} value={t.id} />
+            <label for={`todo-${t.id}`}>{t.text}</label>
+            <a href={t.href} class="go">Go <span class="visually-hidden">to: {t.text.replace(/^I /, '').replace(/\.$/, '')}</span><span aria-hidden="true">→</span></a>
+          </li>
+        ))}
+      </ul>
+    </fieldset>
+    <figure class="answer note-card">
+      <img src="/images/figures/hb0.svg" alt={LEVELS[0][3]} width="621" height="545" />
+      <figcaption>{LEVELS[0][4]}</figcaption>
+    </figure>
+  </div>
+  <p class="visually-hidden" role="status"></p>
+</section>
+
+<script>
+  const box = document.querySelector<HTMLElement>('.todo');
+  if (box) {
+    const KEY = 'todo';
+    const levels: [string, number, number, string, string][] = JSON.parse(box.dataset.levels!);
+    const boxes = [...box.querySelectorAll<HTMLInputElement>('input[type=checkbox]')];
+    const img = box.querySelector<HTMLImageElement>('.answer img')!;
+    const msg = box.querySelector<HTMLElement>('.answer figcaption')!;
+    const status = box.querySelector<HTMLElement>('[role=status]')!;
+    let saved: string[] = [];
+    try { saved = JSON.parse(sessionStorage.getItem(KEY) || '[]'); } catch {}
+    for (const b of boxes) b.checked = saved.includes(b.value);
+    // preload every figure so a change never shows a gap
+    for (const [name] of levels) new Image().src = `/images/figures/${name}.svg`;
+    const show = (speak: boolean) => {
+      const done = boxes.filter((b) => b.checked);
+      const [name, w, h, alt, text] = levels[Math.min(done.length, levels.length - 1)];
+      img.src = `/images/figures/${name}.svg`; img.width = w; img.height = h; img.alt = alt;
+      msg.textContent = text;
+      box.dataset.level = String(done.length);
+      try { sessionStorage.setItem(KEY, JSON.stringify(done.map((b) => b.value))); } catch {}
+      if (speak) { status.textContent = ''; setTimeout(() => { status.textContent = `${done.length} of ${boxes.length} ticked. ${text}`; }, 150); }
+    };
+    show(false);
+    for (const b of boxes) b.addEventListener('change', () => show(true));
+  }
+</script>
+
+<style>
+  .todo .section-title { font-size: var(--step-1); margin: 0 0 1rem; }
+  .grid { display: grid; grid-template-columns: minmax(0, 1fr) 15rem; gap: 2rem; align-items: start; }
+  fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
+  legend { padding: 0; margin-bottom: 0.75rem; color: var(--ink-soft); }
+  ul { list-style: none; margin: 0; padding: 0; }
+  li { display: flex; align-items: center; gap: 0.75rem; margin: 0; padding: 0.35rem 0; border-bottom: 1px dashed rgb(29 6 75 / 0.25); }
+  li:last-child { border-bottom: 0; }
+  input[type=checkbox] { flex: none; width: 1.5rem; height: 1.5rem; margin: 0; accent-color: var(--notebook); cursor: pointer; }
+  label { flex: 1; min-height: 44px; display: flex; align-items: center; font-weight: 700; cursor: pointer; }
+  .go { flex: none; display: inline-flex; align-items: center; gap: 0.25rem; min-height: 44px; min-width: 44px; padding: 0 0.5rem; font-weight: 800; color: var(--notebook); }
+  .answer { margin: 0; text-align: center; background: #fff; }
+  .answer img { display: block; width: 100%; height: auto; }
+  .answer figcaption { margin-top: 0.5rem; font-weight: 800; color: var(--notebook); line-height: 1.3; }
+  @media (max-width: 48rem) {
+    .grid { grid-template-columns: minmax(0, 1fr); }
+    .answer { order: -1; max-width: 13rem; justify-self: center; }
+  }
+  @media (forced-colors: active) { li { border-color: CanvasText; } }
+</style>

@@ -5,6 +5,7 @@ import Subscribe from '../components/Subscribe.astro';
 import SpinAlbum from '../components/SpinAlbum.astro';
 import DiscussionCorner from '../components/DiscussionCorner.astro';
 import OneMinute from '../components/OneMinute.astro';
+import HomeChecklist from '../components/HomeChecklist.astro';
 import { getIssues, render } from '../lib/issues.js';
 import aiPolicy from '../content/site/ai-policy.md?raw';
 
@@ -31,6 +32,8 @@ const previous = rest.slice(0, 3);
       <p><a href="/notes/">All issues</a></p>
     </section>
     </div>
+
+    <div class="sheet sheet--mint"><HomeChecklist latestUrl={latest.url} /></div>
 
     <div class="sheet"><SpinAlbum /></div>
 
