@@ -4,13 +4,13 @@
 // Ticks are kept for this tab only (sessionStorage). Each task links to the feature.
 const { latestUrl } = Astro.props;
 const TASKS = [
-  { id: 'subscribe', href: '#subscribe-title', text: 'I subscribed to the newsletter.' },
-  { id: 'album', href: '#spin-title', text: 'I listened to an album while reading.' },
-  { id: 'vote', href: '#dc-title', text: 'I voted on 3 questions in the Discussion Corner.' },
-  { id: 'comment', href: `${latestUrl}#comments`, text: 'I left a comment on an issue.' },
-  { id: 'stickperson', href: '/inspirations/', text: 'I completed the stickperson in Inspirations.' },
-  { id: 'bingo', href: '/news/', text: 'I got bingo on the News page.' },
-  { id: 'card', href: '/take-action/', text: 'I made my Take Action card.' },
+  { id: 'subscribe', go: 'the newsletter sign-up', href: '#subscribe-title', text: 'I subscribed to the newsletter.' },
+  { id: 'album', go: 'Listen While Reading', href: '#spin-title', text: 'I listened to an album while reading.' },
+  { id: 'vote', go: 'the Discussion Corner', href: '#dc-title', text: 'I voted on 3 questions in the Discussion Corner.' },
+  { id: 'comment', go: 'the comments of the latest issue', href: `${latestUrl}#comments`, text: 'I left a comment on an issue.' },
+  { id: 'stickperson', go: 'Inspirations', href: '/inspirations/', text: 'I completed the stickperson in Inspirations.' },
+  { id: 'bingo', go: 'the News page', href: '/news/', text: 'I got bingo on the News page.' },
+  { id: 'card', go: 'Take Action', href: '/take-action/', text: 'I made my Take Action card.' },
 ];
 // one level per count of ticks: figure, its size, its text alternative and the message
 const LEVELS = [
@@ -34,7 +34,7 @@ const LEVELS = [
           <li>
             <input type="checkbox" id={`todo-${t.id}`} value={t.id} />
             <label for={`todo-${t.id}`}>{t.text}</label>
-            <a href={t.href} class="go">Go <span class="visually-hidden">to: {t.text.replace(/^I /, '').replace(/\.$/, '')}</span><span aria-hidden="true">→</span></a>
+            <a href={t.href} class="go">Go<span class="visually-hidden"> to {t.go}</span> <span aria-hidden="true">→</span></a>
           </li>
         ))}
       </ul>
