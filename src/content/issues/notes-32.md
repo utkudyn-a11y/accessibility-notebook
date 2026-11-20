@@ -1,7 +1,7 @@
 ---
 title: "Notes # 32: Claude Explains How This Site Was Born Accessible"
 number: 32
-date: "2026-11-22"
+date: "2026-11-21"
 description: "Claude explains how this vibe-coded website was born accessible, plus the NHS App's accessibility gaps, disability-inclusive AI in public services, ACCESSIBILITY.md on GitHub, audits and UX dark patterns."
 cover: "/images/notes-32-cover.jpg"
 album: {"artist": "THAO", "title": "Show Me", "url": "https://open.spotify.com/album/4UK9YJHwdfEikmgEKlawbu"}
