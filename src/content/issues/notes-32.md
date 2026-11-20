@@ -1,5 +1,5 @@
 ---
-title: "Notes # 32: How A Vibe-Coded Website Was Born Accessible"
+title: "Notes # 32: Claude Explains How This Site Was Born Accessible"
 number: 32
 date: "2026-11-22"
 description: "Claude explains how this vibe-coded website was born accessible, plus the NHS App's accessibility gaps, disability-inclusive AI in public services, ACCESSIBILITY.md on GitHub, audits and UX dark patterns."
