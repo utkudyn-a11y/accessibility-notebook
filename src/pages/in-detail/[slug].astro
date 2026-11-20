@@ -9,6 +9,9 @@ export function getStaticPaths() {
 }
 const { a } = Astro.props;
 const description = plainText(a.markdown, 155);
+// On the issue page the article sits under an h2, so its subheadings start at h3. Here the
+// title is the h1, so move every subheading up one level to keep the outline without gaps.
+const html = render(a.markdown).replace(/<(\/?)h([3-6])\b/g, (_m, slash, n) => `<${slash}h${Number(n) - 1}`);
 ---
 <Base title={a.title} description={description} image={a.issue.cover} type="article"
       published={`${a.issue.date}T09:00:00+03:00`}
@@ -21,7 +24,7 @@ const description = plainText(a.markdown, 155);
       <p class="meta">
         <time datetime={a.issue.date}>{formatDate(a.issue.date)}</time>, from <a href={a.issue.url}>Notes # {a.issue.number}</a>
       </p>
-      <div class="prose" set:html={render(a.markdown)} />
+      <div class="prose" set:html={html} />
       <p class="discuss"><a href={`${a.issue.url}#comments`}>Comments on Notes # {a.issue.number}</a></p>
       <Subscribe />
     </div>

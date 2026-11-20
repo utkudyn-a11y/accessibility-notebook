@@ -21,4 +21,11 @@ export const SYNONYMS = [
   ['nca', 'national communications authority'],
   ['nfc', 'near field communication'],
   ['ict', 'information and communication technology'],
+  ['nhs', 'national health service'],
+  ['rnib', 'royal national institute of blind people'],
+  ['g3ict', 'global initiative for inclusive information and communication technologies'],
+  ['un', 'united nations'],
+  ['ux', 'user experience'],
+  ['aria', 'accessible rich internet applications'],
+  ['nvda', 'nonvisual desktop access'],
 ];
