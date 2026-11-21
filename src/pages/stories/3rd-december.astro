@@ -282,6 +282,8 @@ import Base from '../../layouts/Base.astro';
     s.stats.impact += fx.impact || 0;
     s.stats.penalty -= fx.score || 0;
   };
+  // every choice shows what it costs, because the budget matters in this story
+  const costText = (c: Choice) => (c.fx.money ? `Costs ${money(-c.fx.money)}` : 'No cost');
   const pts = (n: number) => (Math.abs(n) === 1 ? 'point' : 'points');
   const totals = (s: State) => `You now have ${money(s.stats.money)}, ${num(s.stats.marketing)} marketing ${pts(s.stats.marketing)} and ${num(s.stats.impact)} impact ${pts(s.stats.impact)}.`;
   // one polite status line: what changed and where the stats stand (spoken after the new heading)
@@ -317,7 +319,7 @@ import Base from '../../layouts/Base.astro';
       const st = STEPS[s.step];
       html = `<p class="count" aria-hidden="true">Agenda item ${s.step + 1} of ${N}</p><h2 tabindex="-1"><span class="visually-hidden">Agenda item ${s.step + 1} of ${N}: </span>${esc(st.title)}</h2>
         <div class="scene"><img class="sfig" src="/images/figures/${st.fig}.svg" alt="" /><p>${esc(st.scene)}</p></div>
-        <div class="choices">${st.choices.map((c, i) => `<button type="button" class="choice" data-pick="${i}">${esc(c.label)}</button>`).join('')}</div>`;
+        <div class="choices">${st.choices.map((c, i) => `<button type="button" class="choice" data-pick="${i}">${esc(c.label)}<span class="cost"><span class="visually-hidden">, </span>${costText(c)}</span></button>`).join('')}</div>`;
     } else if (s.phase === 'result') {
       const st = STEPS[s.step], c = st.choices[s.picks[s.step]], r = resultOf(s.picks, s.step);
       html = `<p class="count" aria-hidden="true">Agenda item ${s.step + 1} of ${N}</p><h2 tabindex="-1">You chose: ${esc(c.label)}</h2><p>${esc(r.text)}</p>
@@ -429,6 +431,7 @@ import Base from '../../layouts/Base.astro';
   .game .btn:hover { background: #fff; color: var(--notebook); }
   .game .choice:focus-visible, .game .btn:focus-visible { outline: 3px solid var(--notebook); outline-offset: 3px; }
   .game .fx { font-weight: 800; }
+  .game .choice .cost { display: block; margin-top: 0.15rem; font-size: var(--step--1); font-weight: 700; color: var(--ink-soft); }
   .game h1:focus { outline: none; }
   .game .intro-btns { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1rem; }
   .game .intro-btns .btn { margin-top: 0; }
