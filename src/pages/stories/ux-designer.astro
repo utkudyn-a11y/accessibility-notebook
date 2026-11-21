@@ -368,10 +368,16 @@ import Base from '../../layouts/Base.astro';
   .game .btn:hover { background: #fff; color: var(--notebook); }
   .game .choice:focus-visible, .game .btn:focus-visible { outline: 3px solid var(--notebook); outline-offset: 3px; }
   .game .fx { font-weight: 800; }
-  .game .scene { display: flex; align-items: center; gap: 1.25rem; }
+  .game .scene { display: flex; align-items: center; gap: 1.25rem; margin: 0.75rem 0 1rem; }
   .game .scene p { margin: 0; }
   .game .sfig { flex: none; width: 9rem; height: auto; }
-  @media (max-width: 30rem) { .game .scene { flex-direction: column; align-items: flex-start; } .game .sfig { width: 8rem; } }
+  @media (max-width: 30rem) {
+    .game .scene { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
+    .game .sfig { width: 8rem; }
+    .game .stats { gap: 0.25rem 1rem; padding: 0.6rem 0.8rem; font-size: 0.95rem; }
+    .game .share-btns { flex-direction: column; }
+    .game .share-btns .btn, .game .share-btns .choice { justify-content: center; text-align: center; }
+  }
   .game .share { margin-top: 1.75rem; padding-top: 1.25rem; border-top: 2px dashed var(--notebook); }
   .game .share h3 { margin: 0 0 0.75rem; font-size: 1.2rem; }
   .game .card-img { display: block; width: 100%; max-width: 26rem; height: auto; aspect-ratio: 1; border-radius: 8px; background: #2d0a72; }
