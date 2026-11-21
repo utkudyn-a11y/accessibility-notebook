@@ -11,7 +11,7 @@ import Base from '../../layouts/Base.astro';
   <div class="wrap page reading">
     <p class="game-back"><a href="/stories/">← All stories</a></p>
     <div class="sheet game">
-      <h1>UX Designer's Choice: The New Year Rush</h1>
+      <h1 tabindex="-1">UX Designer's Choice: The New Year Rush</h1>
 
       <noscript><p>This story needs JavaScript to play.</p></noscript>
 
@@ -20,7 +20,10 @@ import Base from '../../layouts/Base.astro';
         <p>New Year is six weeks away, and your online shop is getting a New Year design. You are its only UX designer.</p>
         <p>You start with a <strong>$20k design budget</strong>, <strong>5 inclusion points</strong> and <strong>5 career points</strong>.</p>
         <p>Make five decisions. Some bills come later.</p>
-        <button type="button" class="btn" data-start>Start the story</button>
+        <div class="intro-btns">
+          <button type="button" class="btn" data-continue hidden>Continue where you left off</button>
+          <button type="button" class="btn" data-start>Start the story</button>
+        </div>
       </div>
 
       <div class="play" hidden>
@@ -308,10 +311,23 @@ import Base from '../../layouts/Base.astro';
     else say(`Your score is ${num(ending(s).score)}. You can share your result below.`);
   }
 
+  // Coming back with the Back button (e.g. from a "Why?" link) or a reload: carry on where the reader was.
+  // Any other visit starts at the introduction; a story still in progress can be continued from there.
+  // A finished story is not kept: the next visit is a fresh start.
+  const continueBtn = document.querySelector<HTMLButtonElement>('[data-continue]')!;
+  const showIntro = (focus = false) => {
+    play.hidden = true; intro.hidden = false; game.innerHTML = '';
+    continueBtn.hidden = !state;
+    if (focus) (document.querySelector('.game h1') as HTMLElement).focus();
+  };
+  const navType = (performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined)?.type;
   let state = read();
-  if (state) render(state, false);
+  if (state && state.phase === 'end') { state = null; save(null); }
+  if (state && (navType === 'back_forward' || navType === 'reload')) render(state, false);
+  else showIntro();
 
   document.querySelector('[data-start]')!.addEventListener('click', () => { state = fresh(); save(state); render(state); });
+  continueBtn.addEventListener('click', () => { if (state) render(state); });
 
   game.addEventListener('click', (e) => {
     const t = (e.target as HTMLElement).closest('button');
@@ -337,7 +353,7 @@ import Base from '../../layouts/Base.astro';
       else if (state.phase === 'later' && state.later + 1 < laterScreens(state.picks).length) { state.later++; apply(state, laterScreens(state.picks)[state.later].fx); }
       else state.phase = 'end';
     } else if (t.hasAttribute('data-restart')) {
-      state = fresh();
+      state = null; save(null); showIntro(true); say('Back to the start of the story.'); return;
     }
     save(state); render(state);
   });
@@ -366,6 +382,10 @@ import Base from '../../layouts/Base.astro';
   .game .btn:hover { background: #fff; color: var(--notebook); }
   .game .choice:focus-visible, .game .btn:focus-visible { outline: 3px solid var(--notebook); outline-offset: 3px; }
   .game .fx { font-weight: 800; }
+  .game h1:focus { outline: none; }
+  .game .intro-btns { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1rem; }
+  .game .intro-btns .btn { margin-top: 0; }
+  .game .intro-btns .btn[hidden] { display: none; }
   .game .scene { display: flex; align-items: center; gap: 1.25rem; margin: 0.75rem 0 1rem; }
   .game .scene p { margin: 0; }
   .game .sfig { flex: none; width: 9rem; height: auto; }
