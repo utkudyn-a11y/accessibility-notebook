@@ -1,0 +1,458 @@
+---
+// Interactive story: What Can We Do On This 3rd December? Seven agenda items in a meeting room, each a
+// meaningful choice (costs money now) or an empty gesture (marketing now, hidden, costs impact later).
+// The budget can go below $0; every $1k over costs 10 points. After 3rd December: the empty gestures come
+// out, then up to four events. Score = Money + Impact × Marketing − 10 × Overspend; the ending depends on
+// the score (10 = what doing nothing would have left you with). Every result links to the issue behind it.
+// Progress lives in this tab only (sessionStorage), so a reader can open a "Why?" link and come back.
+// Accessibility: real buttons, stats as text, every change written out in words, focus moves to each new
+// heading (so screen readers read it), no timers and no animation.
+import Base from '../../layouts/Base.astro';
+---
+<Base title="What Can We Do On This 3rd December?" description="An interactive story. One week before 3rd December, the International Day of Persons with Disabilities, you are the accessibility lead in the meeting room. Doing something meaningful is harder than you think.">
+  <div class="wrap page reading">
+    <p class="game-back"><a href="/stories/">← All stories</a></p>
+    <div class="sheet game">
+      <h1 tabindex="-1">What Can We Do On This 3rd December?</h1>
+
+      <noscript><p>This story needs JavaScript to play.</p></noscript>
+
+      <div class="screen" data-screen="intro">
+        <img class="fig" src="/images/figures/st-dec3.svg" alt="" width="772" height="544" />
+        <p>3rd December is one week away. The CEO wants the company to “do something” for the International Day of Persons with Disabilities, and you are the accessibility lead in the room.</p>
+        <p>You start with a <strong>$10k budget</strong>, <strong>0 marketing points</strong> and <strong>0 impact points</strong>.</p>
+        <p>Seven items are on the agenda, and the budget isn’t enough for all of them. You can go over budget, but there may be consequences. Some promises come back later.</p>
+        <div class="intro-btns">
+          <button type="button" class="btn" data-continue hidden>Continue where you left off</button>
+          <button type="button" class="btn" data-start>Start the meeting</button>
+        </div>
+      </div>
+
+      <div class="play" hidden>
+        <h2 class="visually-hidden">Your stats</h2>
+        <dl class="stats">
+          <div><dt>Money</dt><dd data-stat="money">$10k</dd></div>
+          <div><dt>Marketing</dt><dd data-stat="marketing">0</dd></div>
+          <div><dt>Impact</dt><dd data-stat="impact">0</dd></div>
+        </dl>
+        <div class="screen" data-screen="game"></div>
+      </div>
+      <p class="visually-hidden" role="status" data-status></p>
+    </div>
+  </div>
+</Base>
+
+<script>
+  type Fx = { money?: number; marketing?: number; impact?: number; score?: number };
+  type Stats = { money: number; marketing: number; impact: number; penalty: number };
+  type Choice = { label: string; real: boolean; fx: Fx; result: string; why: string };
+  type Step = { fig: string; title: string; scene: string; choices: [Choice, Choice]; issue: number; anchor: string };
+
+  const M = (label: string, fx: Fx, result: string, why: string): Choice => ({ label, real: true, fx, result, why });
+  const E = (label: string, fx: Fx, result: string, why: string): Choice => ({ label, real: false, fx: { marketing: 2, ...fx }, result, why });
+
+  const STEPS: Step[] = [
+    {
+      fig: 'd3-headset', title: 'The big idea', issue: 30, anchor: 'inspiration-3',
+      scene: 'The marketing lead has found a startup with an AI headset that “describes the world” to blind people. “Let’s put it on a stand in the lobby on 3rd December. Great photos!”',
+      choices: [
+        E('Book the headset stand', { money: -2 }, 'The photos look great. No blind customer uses the headset, and your website still has broken headings.',
+          'A “disability dongle” is flashy, expensive and technically impressive, but it fails to solve the actual problem. It is designed to win awards, not to be used.'),
+        M('Spend the money on fixing your website’s accessibility', { money: -2, impact: 2 }, 'Nobody takes a photo of a heading. But blind customers can now find their way around your website.',
+          'Semantic HTML isn’t sexy, but it lets a blind user actually navigate a page.'),
+      ],
+    },
+    {
+      fig: 'd3-post', title: 'The social media post', issue: 9, anchor: 'news-3',
+      scene: 'The marketing lead wants a purple logo and a post that says “Happy 3rd December! We celebrate diversity.”',
+      choices: [
+        M('Say no to a simple post: start a pledge where everyone gives one hour to fix a small accessibility issue', { money: -2, marketing: 1, impact: 2 },
+          'The pledge announcement costs more than a simple post: it needs a proper design. But dozens of people pledge an hour. Alt text gets added, headings get fixed, and your post shows the results.',
+          'Equalize Digital asked people to pledge their time to improve accessibility in WordPress, because even one small fix, like adding alt text, fixing heading levels or improving keyboard navigation, can make a big difference.'),
+        E('Post the purple logo and the message', {}, 'Lots of likes. Nothing changes for anyone.',
+          'Awareness posts are easy. I prefer call-to-action campaigns, like Equalize Digital’s accessibility pledge for Global Accessibility Awareness Day.'),
+      ],
+    },
+    {
+      fig: 'd3-email', title: 'The invitation email', issue: 16, anchor: 'news-3',
+      scene: 'The events lead shows the invitation email for the company’s 3rd December webinar. It was made in a drag-and-drop email builder, and the whole email is one big image.',
+      choices: [
+        E('Send it as it is', { impact: -1 }, 'It looks beautiful. Screen reader users get an email with one image and nothing to read, and the sign-up button doesn’t work for them.',
+          '99.88% of the 376,348 emails analysed for the Email Markup Consortium’s 2026 report had serious or critical accessibility defects. One reason: email builders that put visual layout before semantics.'),
+        M('Rebuild it with real text, headings and a clear sign-up link', { money: -2, marketing: 1, impact: 2 }, 'It takes another day. Everyone can read who is speaking and how to join.',
+          'The same web accessibility standards apply to the inbox: real text, headings and semantic HTML, not one big image.'),
+      ],
+    },
+    {
+      fig: 'd3-webinar', title: 'The live webinar', issue: 14, anchor: 'news-1',
+      scene: 'The webinar is one hour long. The events lead says live captions and a sign language interpreter are expensive. “We can add subtitles to the recording later.”',
+      choices: [
+        E('Skip them and add subtitles to the recording later', { impact: -1 }, 'The webinar runs on time and under budget. Deaf viewers wait a week to find out what was said about them.',
+          'Live access is possible, even at a huge scale. The FIFA World Cup 2026 was a good example: it offered sign language interpretation for every match.'),
+        M('Book live captions and a sign language interpreter', { money: -3, marketing: 2, impact: 2 }, 'The most expensive item on the agenda. Deaf viewers follow the webinar live, like everyone else.',
+          'The FIFA World Cup 2026 offers sign language broadcasts for every match, so fans can follow the action live, wherever they are.'),
+      ],
+    },
+    {
+      fig: 'd3-stage', title: 'Involving disabled people', issue: 31, anchor: 'news-2',
+      scene: 'The CEO wants a disabled customer on stage to tell “an inspiring story”. The budget for speakers is zero.',
+      choices: [
+        M('Pay disabled users to test your website instead', { money: -2 }, '',
+          'Ghana’s NCA fixed the basic standards first, then tested its website with the disability community.'),
+        E('Invite a disabled customer to tell an inspiring story, unpaid', {}, 'The audience applauds. Your guest gave you an hour of their time for free.',
+          'Involving disabled people means giving them a real role, not a place in the applause. Ghana’s NCA didn’t ask for inspiring stories: it invited the disability community to test its website.'),
+      ],
+    },
+    {
+      fig: 'd3-press', title: 'The press release', issue: 29, anchor: 'news-2',
+      scene: 'The CEO wants one sentence in the press release: “Our website is now fully accessible.”',
+      choices: [
+        E('Keep the sentence', {}, 'It reads well. It is not true.',
+          'Out of 102 accessibility statements from EU online shops, only 25 listed known issues.'),
+        M('Publish an honest accessibility statement instead, with a date and the known issues', { money: -2, impact: 2 }, '',
+          'An accessibility statement should give disabled customers confidence: a date, a WCAG level and the known issues.'),
+      ],
+    },
+    {
+      fig: 'd3-pdf', title: 'The inclusion report', issue: 8, anchor: 'news-1',
+      scene: 'The company’s first inclusion report is ready as a PDF. It goes out with the press release tomorrow.',
+      choices: [
+        M('Make it a tagged, accessible PDF first', { money: -2, marketing: -1, impact: 2 }, 'It goes out a day late, so you miss 3rd December. But screen readers can tell its headings, lists and tables apart.',
+          'Tags give a PDF its structure, so assistive technologies know what is a list, a heading or a paragraph.'),
+        E('Send it out as it is', {}, 'It goes out on time. For a screen reader, the whole report is one long block of text.',
+          'Only 9.5% of public sector PDFs in Germany are accessible, and 37.4% have no tags at all, so screen readers can’t tell a heading from a paragraph.'),
+      ],
+    },
+  ];
+  const real = (p: number[], i: number) => p[i] !== undefined && STEPS[i].choices[p[i]].real;
+
+  // Items 5 and 6 remember earlier choices (item 1: the website; item 2: the pledge or the purple logo)
+  const resultOf = (p: number[], i: number): { text: string; fx: Fx } => {
+    const c = STEPS[i].choices[p[i]];
+    if (i === 4 && c.real) return real(p, 0)
+      ? { text: 'You fixed the website first, so the testers find real problems in real tasks, and you fix them. They tell their community about it.', fx: { money: -2, impact: 3, marketing: 1 } }
+      : { text: 'You booked the headset stand instead of fixing the website, so the testers hit basic barriers in the first five minutes. Useful, but finding broken headings should not have been their job.', fx: { money: -2, impact: 1 } };
+    if (i === 5 && c.real) return real(p, 1)
+      ? { text: 'People pledged their time, so the list of known issues is short, and the CEO is happy to share it.', fx: c.fx }
+      : { text: 'You posted the purple logo instead of starting the pledge, so the list of known issues is long, and the CEO is not happy.', fx: { ...c.fx, marketing: -1 } };
+    return { text: c.result, fx: c.fx };
+  };
+
+  const emptyCount = (p: number[]) => p.filter((x, i) => !STEPS[i].choices[x].real).length;
+  const realCount = (p: number[]) => STEPS.length - emptyCount(p);
+
+  type Later = { title: string; text: string; fx: Fx };
+  // money is needed for the over-budget event, so it is computed from the picks (after all items)
+  const moneyAfter = (p: number[]) => p.reduce((m, _, i) => m + (resultOf(p, i).fx.money || 0), START.money);
+  const laterScreens = (p: number[]): Later[] => {
+    const n = emptyCount(p);
+    const out: Later[] = [n
+      ? { title: 'The truth comes out: your empty gestures', fx: { impact: -2 * n },
+          text: `Every empty gesture comes out in the end: the headset nobody used, the purple logo, the claim that wasn’t true. People notice, and they remember. You have ${n} empty ${n === 1 ? 'gesture' : 'gestures'}: 2 impact points each.` }
+      : { title: 'The truth comes out', fx: {}, text: 'Nothing to hide. Everything you did on 3rd December still stands.' }];
+    if (n >= 4) {
+      const what = !real(p, 2) ? 'read their invitation' : !real(p, 3) ? 'follow their webinar' : 'read their inclusion report';
+      out.push({ title: 'The backlash', fx: { marketing: -3 },
+        text: `A disabled activist posts: “They celebrated 3rd December, but I couldn’t even ${what}.” The post is shared thousands of times.` });
+    }
+    if (!real(p, 5) || !real(p, 6)) out.push({ title: 'A blind journalist', fx: { marketing: -2 },
+      text: 'A blind journalist writes about your 3rd December.'
+        + (!real(p, 5) ? ' She checks the “fully accessible” claim and finds it isn’t true.' : '')
+        + (!real(p, 6) ? ' She can’t read your inclusion report.' : '') });
+    if (realCount(p) >= 5) out.push({ title: 'An invitation', fx: { marketing: 3 },
+      text: 'A disability organisation asks you to plan next year’s 3rd December together, and shares your work with its members.' });
+    const m = moneyAfter(p);
+    if (m < 0) out.push({ title: 'Over budget', fx: { score: 10 * m },
+      text: `The CEO and the marketing lead look at the numbers: “You went over budget. We are not happy about this.” You are ${money(-m)} over: 10 points for every $1k.` });
+    return out;
+  };
+
+  // Impact × Marketing, with two rules: both below 0 stays negative; Marketing 0 with real impact counts as × 1
+  const product = (i: number, m: number) => (i < 0 && m < 0 ? -(i * m) : i > 0 && m === 0 ? i : i * m);
+  const scoreOf = (s: Stats) => s.money + product(s.impact, s.marketing) - s.penalty;
+
+  type Ending = { title: string; text: string; fig: string; real: number; score: number };
+  const ending = (s: State): Ending => {
+    const n = realCount(s.picks), score = scoreOf(s.stats);
+    if (score >= 40) return { title: 'More than a day', fig: 'd3-more', real: n, score, text: '3rd December was the start, not the show. Disabled people noticed, and they came back.' };
+    if (score >= 10) return { title: 'A good start', fig: 'd3-start', real: n, score, text: 'Some of it was real, some of it was for the photos. Next year, a little less applause and a little more change?' };
+    return { title: 'Doing nothing would have been better', fig: 'd3-applause', real: n, score, text: 'You started with 10 points. If you had done nothing, you would still have 10. What you did cost more than it gave: it looked great on 3rd December, and on 4th December nothing had changed.' };
+  };
+  const FIG_ALT: Record<string, string> = {
+    'd3-more': 'a cheering stickperson next to a calendar full of ticks',
+    'd3-start': 'a stickperson walking towards stairs that lead to a flag',
+    'd3-applause': 'a sad stickperson sitting next to a deflated balloon',
+  };
+  const STORY = 'What Can We Do On This 3rd December?';
+  const altText = (e: Ending) => `My result in ${STORY}, an interactive story on Accessibility Notebook. ${e.title}, ${FIG_ALT[e.fig]}. Score: ${num(e.score)}. I made ${e.real} meaningful choices out of 7. Play at accessibilitynotebook.com/stories`;
+
+  // ---- Share card, drawn on a canvas (same look as the Take Action cards) ----
+  const FONT = '"Atkinson Hyperlegible Next", "Atkinson Hyperlegible", system-ui, sans-serif';
+  const loadImg = (src: string) => new Promise<HTMLImageElement>((ok, err) => { const i = new Image(); i.onload = () => ok(i); i.onerror = err; i.src = src; });
+  const whiteLogo = (im: HTMLImageElement, w: number) => {
+    const c = document.createElement('canvas'); const h = Math.round((im.height / im.width) * w);
+    c.width = w; c.height = h; const x = c.getContext('2d')!;
+    x.drawImage(im, 0, 0, w, h); x.globalCompositeOperation = 'source-in'; x.fillStyle = '#ffffff'; x.fillRect(0, 0, w, h);
+    return c;
+  };
+  // the figure's lines turn white and its filled shapes take the card's purple
+  const whiteFigure = async (name: string) => {
+    const svg = (await (await fetch(`/images/figures/${name}.svg`)).text())
+      .replaceAll('#2d0a72', '#ffffff').replaceAll('#fcfbff', '#2d0a72');
+    const url = URL.createObjectURL(new Blob([svg], { type: 'image/svg+xml' }));
+    try { return await loadImg(url); } finally { setTimeout(() => URL.revokeObjectURL(url), 1000); }
+  };
+  const wrap = (x: CanvasRenderingContext2D, text: string, maxW: number) => {
+    const lines: string[] = []; let line = '';
+    for (const w of text.split(' ')) { const t = line ? `${line} ${w}` : w; if (x.measureText(t).width > maxW && line) { lines.push(line); line = w; } else line = t; }
+    if (line) lines.push(line);
+    return lines;
+  };
+  const drawCard = async (e: Ending) => {
+    await Promise.all(['400 30px', '700 36px', '800 72px'].map((f) => document.fonts.load(`${f} ${FONT}`).catch(() => null)));
+    const [logo, fig] = await Promise.all([loadImg('/logo.png'), whiteFigure(e.fig)]);
+    const W = 1080, H = 1080, L = 80;
+    const c = document.createElement('canvas'); c.width = W; c.height = H;
+    const x = c.getContext('2d')!;
+    x.fillStyle = '#2d0a72'; x.fillRect(0, 0, W, H);
+    x.fillStyle = '#ffffff';
+    const lg = 66;
+    x.drawImage(whiteLogo(logo, lg), L, 80);
+    x.font = `800 34px ${FONT}`; x.textBaseline = 'middle'; x.fillText('Accessibility Notebook', L + lg + 20, 80 + lg / 2); x.textBaseline = 'alphabetic';
+    x.font = `700 32px ${FONT}`;
+    let y = 250;
+    for (const line of wrap(x, STORY, W - L * 2)) { x.fillText(line, L, y); y += 42; }
+    y += 50;
+    const long = e.title.length > 20;
+    x.font = `800 ${long ? 56 : 68}px ${FONT}`;
+    for (const line of wrap(x, e.title, long ? 620 : 560)) { x.fillText(line, L, y); y += long ? 64 : 76; }
+    y += 30;
+    x.font = `400 32px ${FONT}`; x.fillText('Score', L, y); y += 110;
+    x.font = `800 120px ${FONT}`; x.fillText(num(e.score), L, y); y += 70;
+    x.font = `700 34px ${FONT}`;
+    for (const line of wrap(x, `I made ${e.real} meaningful choices out of 7.`, 520)) { x.fillText(line, L, y); y += 46; }
+    // figure on the right
+    const fw = 360, fh = Math.round((fig.height / fig.width) * fw);
+    x.drawImage(fig, W - L - fw, 930 - fh, fw, fh);
+    x.font = `400 28px ${FONT}`;
+    const lead = 'Play at ';
+    x.fillText(lead, L, 1000);
+    const lw = x.measureText(lead).width;
+    x.font = `800 28px ${FONT}`; x.fillText('accessibilitynotebook.com/stories', L + lw, 1000);
+    return new Promise<Blob>((ok) => c.toBlob((b) => ok(b!), 'image/png'));
+  };
+  const FILE = 'my-3rd-december-result.png';
+  let cardBlob: Blob | null = null, cardUrl = '';
+  const showCard = async (s: State) => {
+    const e = ending(s);
+    cardBlob = await drawCard(e);
+    if (cardUrl) URL.revokeObjectURL(cardUrl);
+    cardUrl = URL.createObjectURL(cardBlob);
+    const img = game.querySelector<HTMLImageElement>('.card-img');
+    if (img) { img.src = cardUrl; img.alt = `Your result card. ${altText(e)}`; }
+    const file = new File([cardBlob], FILE, { type: 'image/png' });
+    const sh = game.querySelector<HTMLElement>('[data-share]');
+    if (sh && navigator.canShare?.({ files: [file] })) sh.hidden = false;
+  };
+
+  const START: Stats = { money: 10, marketing: 0, impact: 0, penalty: 0 };
+  const KEY = 'story-dec3';
+  type State = { step: number; phase: 'choose' | 'result' | 'later' | 'end'; later: number; stats: Stats; picks: number[] };
+  const fresh = (): State => ({ step: 0, phase: 'choose', later: 0, stats: { ...START }, picks: [] });
+  const read = (): State | null => { try { const s = JSON.parse(sessionStorage.getItem(KEY) || 'null'); return s && s.stats && 'impact' in s.stats ? s : null; } catch { return null; } };
+  const save = (s: State | null) => { try { s ? sessionStorage.setItem(KEY, JSON.stringify(s)) : sessionStorage.removeItem(KEY); } catch {} };
+
+  const intro = document.querySelector<HTMLElement>('[data-screen="intro"]')!;
+  const play = document.querySelector<HTMLElement>('.play')!;
+  const game = document.querySelector<HTMLElement>('[data-screen="game"]')!;
+  const esc = (t: string) => t.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+  const minus = (n: number) => (n < 0 ? '−' : '');
+  const money = (n: number) => `${minus(n)}$${Math.abs(n)}k`;
+  const num = (n: number) => `${minus(n)}${Math.abs(n)}`;
+  const sign = (n: number) => (n > 0 ? '+' : '−') + Math.abs(n);
+  const fxText = (fx: Fx) => [
+    fx.money ? `Money ${fx.money > 0 ? '+' : '−'}$${Math.abs(fx.money)}k` : '',
+    fx.marketing ? `Marketing ${sign(fx.marketing)}` : '',
+    fx.impact ? `Impact ${sign(fx.impact)}` : '',
+    fx.score ? `Score ${sign(fx.score)}` : '',
+  ].filter(Boolean).join(', ') || 'No change';
+  const apply = (s: State, fx: Fx) => {
+    s.stats.money += fx.money || 0;
+    s.stats.marketing += fx.marketing || 0;
+    s.stats.impact += fx.impact || 0;
+    s.stats.penalty -= fx.score || 0;
+  };
+  const pts = (n: number) => (Math.abs(n) === 1 ? 'point' : 'points');
+  const totals = (s: State) => `You now have ${money(s.stats.money)}, ${num(s.stats.marketing)} marketing ${pts(s.stats.marketing)} and ${num(s.stats.impact)} impact ${pts(s.stats.impact)}.`;
+  // one polite status line: what changed and where the stats stand (spoken after the new heading)
+  const status = document.querySelector<HTMLElement>('[data-status]')!;
+  const say = (text: string) => { status.textContent = ''; setTimeout(() => { status.textContent = text; }, 400); };
+  const link = (issue: number, anchor: string) => `<a href="/notes/${issue}/#${anchor}">Read it in Notes # ${issue}</a>`;
+
+  function showStats(s: State) {
+    (document.querySelector('[data-stat="money"]') as HTMLElement).textContent = money(s.stats.money);
+    (document.querySelector('[data-stat="marketing"]') as HTMLElement).textContent = num(s.stats.marketing);
+    (document.querySelector('[data-stat="impact"]') as HTMLElement).textContent = num(s.stats.impact);
+  }
+
+  // "6 + (8 × 9) − 30 = 48": the sum as the reader can check it
+  const scoreSum = (s: Stats) => {
+    const { money: m, marketing: mk, impact: im, penalty: pen } = s;
+    const prod = im > 0 && mk === 0 ? `(${num(im)} × 1)` : `(${num(im)} × ${num(mk)})`;
+    return `${num(m)} + ${prod}${pen ? ` − ${pen}` : ''}`;
+  };
+  const scoreNote = (s: Stats) => [
+    'Score = Money + Impact × Marketing',
+    s.penalty ? ', minus 10 points for every $1k over budget' : '',
+    '.',
+    s.impact < 0 && s.marketing < 0 ? ' When Impact and Marketing are both below 0, their product stays negative.' : '',
+    s.impact > 0 && s.marketing === 0 ? ' With 0 marketing, your impact still counts once.' : '',
+  ].join('');
+
+  function render(s: State, focus = true) {
+    intro.hidden = true; play.hidden = false; showStats(s);
+    const N = STEPS.length;
+    let html = '';
+    if (s.phase === 'choose') {
+      const st = STEPS[s.step];
+      html = `<p class="count" aria-hidden="true">Agenda item ${s.step + 1} of ${N}</p><h2 tabindex="-1"><span class="visually-hidden">Agenda item ${s.step + 1} of ${N}: </span>${esc(st.title)}</h2>
+        <div class="scene"><img class="sfig" src="/images/figures/${st.fig}.svg" alt="" /><p>${esc(st.scene)}</p></div>
+        <div class="choices">${st.choices.map((c, i) => `<button type="button" class="choice" data-pick="${i}">${esc(c.label)}</button>`).join('')}</div>`;
+    } else if (s.phase === 'result') {
+      const st = STEPS[s.step], c = st.choices[s.picks[s.step]], r = resultOf(s.picks, s.step);
+      html = `<p class="count" aria-hidden="true">Agenda item ${s.step + 1} of ${N}</p><h2 tabindex="-1">You chose: ${esc(c.label)}</h2><p>${esc(r.text)}</p>
+        <p class="fx">${esc(fxText(r.fx))}</p>
+        <aside class="why"><h3>Why?</h3><p>${esc(c.why)}</p><p>${link(st.issue, st.anchor)}</p></aside>
+        <button type="button" class="btn" data-next>${s.step + 1 < N ? 'Next item' : 'After 3rd December…'}</button>`;
+    } else if (s.phase === 'later') {
+      const screens = laterScreens(s.picks), ev = screens[s.later];
+      html = `<p class="count" aria-hidden="true">After 3rd December</p><h2 tabindex="-1"><span class="visually-hidden">After 3rd December: </span>${esc(ev.title)}</h2><p>${esc(ev.text)}</p>
+        <p class="fx">${esc(fxText(ev.fx))}</p>
+        <button type="button" class="btn" data-next>${s.later + 1 < screens.length ? 'Continue' : 'See how your story ends'}</button>`;
+    } else {
+      const e = ending(s);
+      html = `<h2 tabindex="-1">The end: ${esc(e.title)}</h2>
+        <div class="scene"><img class="sfig" src="/images/figures/${e.fig}.svg" alt="" /><p>${esc(e.text)}</p></div>
+        <p class="score">Your score: ${scoreSum(s.stats)} = <strong>${num(e.score)}</strong></p>
+        <p class="small">${scoreNote(s.stats)} You made ${e.real} meaningful choices out of ${N}.</p>
+        <section class="share" aria-labelledby="share-title">
+          <h3 id="share-title">Share your result</h3>
+          <img class="card-img" alt="" width="1080" height="1080" />
+          <div class="share-btns">
+            <button type="button" class="btn" data-download>Download image</button>
+            <button type="button" class="choice" data-share hidden>Share</button>
+            <button type="button" class="choice" data-copy>Copy alt text</button>
+          </div>
+          <p class="small">When you share the image, paste the alt text into its image description.</p>
+          <p class="small"><strong>Alt text:</strong> ${esc(altText(e))}</p>
+        </section>
+        <div class="choices end"><a class="btn" href="/take-action/">Take action</a><button type="button" class="choice" data-restart>Play again</button></div>`;
+    }
+    game.innerHTML = html;
+    if (s.phase === 'end') showCard(s);
+    if (!focus) return;
+    (game.querySelector('h2') as HTMLElement).focus();
+    if (s.phase === 'choose') say(s.step === 0 ? `The meeting has started. ${totals(s)}` : `Your last choice: ${fxText(resultOf(s.picks, s.step - 1).fx)}. ${totals(s)}`);
+    else if (s.phase === 'result') say(`${fxText(resultOf(s.picks, s.step).fx)}. ${totals(s)}`);
+    else if (s.phase === 'later') say(`${fxText(laterScreens(s.picks)[s.later].fx)}. ${totals(s)}`);
+    else say(`Your score is ${num(ending(s).score)}. You can share your result below.`);
+  }
+
+  // Coming back with the Back button (e.g. from a "Why?" link) or a reload: carry on where the reader was.
+  // Any other visit starts at the introduction; a story still in progress can be continued from there.
+  // A finished story is not kept: the next visit is a fresh start.
+  const continueBtn = document.querySelector<HTMLButtonElement>('[data-continue]')!;
+  const showIntro = (focus = false) => {
+    play.hidden = true; intro.hidden = false; game.innerHTML = '';
+    continueBtn.hidden = !state;
+    if (focus) (document.querySelector('.game h1') as HTMLElement).focus();
+  };
+  const navType = (performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined)?.type;
+  let state = read();
+  if (state && state.phase === 'end') { state = null; save(null); }
+  if (state && (navType === 'back_forward' || navType === 'reload')) render(state, false);
+  else showIntro();
+
+  document.querySelector('[data-start]')!.addEventListener('click', () => { state = fresh(); save(state); render(state); });
+  continueBtn.addEventListener('click', () => { if (state) render(state); });
+
+  game.addEventListener('click', (e) => {
+    const t = (e.target as HTMLElement).closest('button');
+    if (!t || !state) return;
+    if (t.hasAttribute('data-download') && cardUrl) {
+      const a = document.createElement('a'); a.href = cardUrl; a.download = FILE; a.click();
+      say('Your result card is downloading.'); return;
+    }
+    if (t.hasAttribute('data-share') && cardBlob) {
+      const file = new File([cardBlob], FILE, { type: 'image/png' });
+      navigator.share({ files: [file], text: altText(ending(state)) }).catch(() => {}); return;
+    }
+    if (t.hasAttribute('data-copy')) {
+      navigator.clipboard.writeText(altText(ending(state))).then(() => say('Alt text copied.'), () => say('Copying failed. Select the alt text below and copy it.')); return;
+    }
+    if (t.dataset.pick) {
+      state.picks[state.step] = Number(t.dataset.pick);
+      apply(state, resultOf(state.picks, state.step).fx);
+      state.phase = 'result';
+    } else if (t.hasAttribute('data-next')) {
+      if (state.phase === 'result' && state.step + 1 < STEPS.length) { state.step++; state.phase = 'choose'; }
+      else if (state.phase === 'result') { state.phase = 'later'; state.later = 0; apply(state, laterScreens(state.picks)[0].fx); }
+      else if (state.phase === 'later' && state.later + 1 < laterScreens(state.picks).length) { state.later++; apply(state, laterScreens(state.picks)[state.later].fx); }
+      else state.phase = 'end';
+    } else if (t.hasAttribute('data-restart')) {
+      state = null; save(null); showIntro(true); say('Back to the start of the story.'); return;
+    }
+    save(state); render(state);
+  });
+</script>
+
+<style is:global>
+  .page { padding-top: 2.5rem; }
+  .game-back { margin: 0 0 1rem; font-weight: 700; }
+  .game h2 { margin-top: 0.75rem; }
+  .game h2:focus { outline: none; }
+  .game h2:focus-visible { outline: 3px solid var(--notebook); outline-offset: 4px; }
+  .game .fig { display: block; width: 13rem; height: auto; margin: 0 0 1rem; }
+  .game .stats { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; margin: 0 0 1.25rem; padding: 0.75rem 1rem; border: 2px solid var(--notebook); border-radius: 8px; }
+  .game .stats div { display: flex; gap: 0.4rem; align-items: baseline; }
+  .game .stats dt { font-weight: 700; }
+  .game .stats dt::after { content: ':'; }
+  .game .stats dd { margin: 0; font-weight: 800; font-variant-numeric: tabular-nums; }
+  .game .count { margin: 0; font-size: 0.85rem; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; }
+  .game .choices { display: flex; flex-direction: column; gap: 0.75rem; margin-top: 1.25rem; }
+  .game .choice, .game .btn { min-height: 44px; padding: 0.6rem 1rem; border-radius: 6px; font: inherit; font-weight: 800; text-align: left; cursor: pointer; text-decoration: none; }
+  .game .choice { background: #fff; color: var(--notebook); border: 2px solid var(--notebook); }
+  .game .btn { display: inline-flex; align-items: center; justify-content: center; margin-top: 1rem; background: var(--notebook); color: #fff; border: 2px solid var(--notebook); }
+  .game .choices .btn { margin-top: 0; justify-content: flex-start; }
+  .game .choices.end .btn, .game .choices.end .choice { justify-content: center; text-align: center; }
+  .game .choice:hover { background: #f1ebfb; }
+  .game .btn:hover { background: #fff; color: var(--notebook); }
+  .game .choice:focus-visible, .game .btn:focus-visible { outline: 3px solid var(--notebook); outline-offset: 3px; }
+  .game .fx { font-weight: 800; }
+  .game h1:focus { outline: none; }
+  .game .intro-btns { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1rem; }
+  .game .intro-btns .btn { margin-top: 0; }
+  .game .intro-btns .btn[hidden] { display: none; }
+  .game .scene { display: flex; align-items: center; gap: 1.25rem; margin: 0.75rem 0 1rem; }
+  .game .scene p { margin: 0; }
+  .game .sfig { flex: none; width: 9rem; height: auto; }
+  @media (max-width: 30rem) {
+    .game .scene { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
+    .game .sfig { width: 8rem; }
+    .game .stats { gap: 0.25rem 1rem; padding: 0.6rem 0.8rem; font-size: 0.95rem; }
+    .game .share-btns { flex-direction: column; }
+    .game .share-btns .btn, .game .share-btns .choice { justify-content: center; text-align: center; }
+  }
+  .game .share { margin-top: 1.75rem; padding-top: 1.25rem; border-top: 2px dashed var(--notebook); }
+  .game .share h3 { margin: 0 0 0.75rem; font-size: 1.2rem; }
+  .game .card-img { display: block; width: 100%; max-width: 26rem; height: auto; aspect-ratio: 1; border-radius: 8px; background: #2d0a72; }
+  .game .share-btns { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1rem; }
+  .game .share-btns .btn { margin-top: 0; }
+  .game .share-btns .choice { display: inline-flex; align-items: center; }
+  .game .score { font-size: var(--step-1); }
+  .game .small { font-size: var(--step--1); color: var(--ink-soft); }
+  .game .why { margin-top: 1.25rem; padding: 0.75rem 1rem; border-left: 4px solid var(--notebook); background: #f6f2fd; }
+  .game .why h3 { margin: 0 0 0.25rem; font-size: 1rem; }
+  .game .why p { margin: 0.25rem 0; }
+  @media (forced-colors: active) { .game .why { border-left-color: CanvasText; background: Canvas; } .game .stats { border-color: CanvasText; } }
+</style>
