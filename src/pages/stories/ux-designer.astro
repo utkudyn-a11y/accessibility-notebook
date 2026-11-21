@@ -42,7 +42,7 @@ import Base from '../../layouts/Base.astro';
   type Stats = { money: number; inclusion: number; career: number };
   type Why = { issue: number; anchor: string; label: string; access: string; shortcut: string };
   type Choice = { label: string; access: boolean; fx: Fx; result: string };
-  type Step = { title: string; scene: (p: number[]) => string; choices: [Choice, Choice]; why: Why };
+  type Step = { fig: string; title: string; scene: (p: number[]) => string; choices: [Choice, Choice]; why: Why };
 
   const A = (label: string, fx: Fx, result: string): Choice => ({ label, access: true, fx, result });
   const S = (label: string, result: string): Choice => ({ label, access: false, fx: { inclusion: -1, career: 2 }, result });
@@ -50,7 +50,7 @@ import Base from '../../layouts/Base.astro';
 
   const STEPS: Step[] = [
     {
-      title: 'The New Year homepage',
+      fig: 'st-homepage', title: 'The New Year homepage',
       scene: () => 'The CEO wants the New Year homepage by Monday. An AI tool can generate one in minutes: a carousel, two pop-ups and three banners.',
       choices: [
         S('Generate it and ship it', 'The CEO loves your speed. The page is loud and crowded, but it’s live.'),
@@ -61,7 +61,7 @@ import Base from '../../layouts/Base.astro';
         access: 'Every UX designer should take the 75-year-old test: can a 75-year-old with low vision use this site successfully?' },
     },
     {
-      title: 'The focus outline',
+      fig: 'st-focus', title: 'The focus outline',
       scene: () => 'The developer building your design system says the focus outline looks ugly on the new buttons. “Can I just remove it?”',
       choices: [
         A('Keep it, and design a better-looking one together', { money: -2, inclusion: 2 }, 'You spend an afternoon with the developer. The new outline looks good, and the developer now asks you about accessibility first.'),
@@ -72,7 +72,7 @@ import Base from '../../layouts/Base.astro';
         access: 'A focus indicator can be visible and good-looking at the same time. Pope Tech’s guide shows how, and its “Common Pitfalls” section is the most useful part.' },
     },
     {
-      title: 'The New Year sale banner',
+      fig: 'st-banner', title: 'The New Year sale banner',
       scene: (p) => acc(p, 0)
         ? 'The marketing lead wants “New Year sale: 50% off” written on top of the hero photo.'
         : '“The homepage is so busy that nobody will notice the sale,” the marketing lead says. She wants “New Year sale: 50% off” written big, right on top of the hero photo.',
@@ -85,7 +85,7 @@ import Base from '../../layouts/Base.astro';
         access: 'When people ask me about text on images, my simplest advice is: use text on a plain background.' },
     },
     {
-      title: 'The checkout',
+      fig: 'st-checkout', title: 'The checkout',
       scene: (p) => 'The first week of the sale went well, and the product manager wants more. He asks for a pre-ticked “Add insurance” box at checkout and a cancellation process that takes five screens.'
         + (acc(p, 1) ? ' The developer is in the meeting too.' : ''),
       choices: [
@@ -97,7 +97,7 @@ import Base from '../../layouts/Base.astro';
         access: 'WCAG compliance does not mean inclusion. Dark patterns can pass WCAG and still take away some people’s independence.' },
     },
     {
-      title: 'Dark mode',
+      fig: 'st-darkmode', title: 'Dark mode',
       scene: () => 'Users keep asking for dark mode, and the CEO wants it live before New Year. You could invert all the colours and launch it today.',
       choices: [
         S('Invert the colours and launch', 'Dark mode is live today. Some icons vanish and some text is hard to read.'),
@@ -136,6 +136,90 @@ import Base from '../../layouts/Base.astro';
     if (accCount >= 4) out.push({ title: 'An invitation', fx: { career: 3 },
       text: 'A design conference invites you to talk about your accessible redesign. Your talk is the most shared of the day.' });
     return out;
+  };
+
+
+  const STORY_URL = 'https://accessibilitynotebook.com/stories/ux-designer/';
+  type Ending = { title: string; text: string; fig: string; acc: number; score: number };
+  const ending = (s: State): Ending => {
+    const n = s.picks.filter((x, i) => STEPS[i].choices[x].access).length;
+    const score = s.stats.money + s.stats.inclusion * s.stats.career;
+    if (n === 5) return { title: 'Accessibility champion', fig: 'st-champion', acc: n, score, text: 'Your career started slowly, but it grew on trust. Disabled customers can shop on their own, and they come back.' };
+    if (n >= 3) return { title: 'A thoughtful designer', fig: 'st-thoughtful', acc: n, score, text: 'You cut a few corners, but you cared when it mattered. Next time, maybe one more push back?' };
+    return { title: 'Fast climber, hard landing', fig: 'st-landing', acc: n, score, text: 'You climbed fast, but the shortcuts caught up with you. Accessibility debt always sends the bill later.' };
+  };
+  const FIG_ALT: Record<string, string> = {
+    'st-champion': 'a cheering stickperson next to a trophy',
+    'st-thoughtful': 'a stickperson thinking, with a tick and a cross in a thought bubble',
+    'st-landing': 'a dazed stickperson sitting at the bottom of the stairs',
+  };
+  const altText = (e: Ending) => `My result in UX Designer's Choice: The New Year Rush, an interactive story on Accessibility Notebook. ${e.title}, ${FIG_ALT[e.fig]}. Score: ${num(e.score)}. I chose accessibility in ${e.acc} of 5 decisions. Play at accessibilitynotebook.com/stories`;
+
+  // ---- Share card, drawn on a canvas (same look as the Take Action cards) ----
+  const FONT = '"Atkinson Hyperlegible Next", "Atkinson Hyperlegible", system-ui, sans-serif';
+  const loadImg = (src: string) => new Promise<HTMLImageElement>((ok, err) => { const i = new Image(); i.onload = () => ok(i); i.onerror = err; i.src = src; });
+  const whiteLogo = (im: HTMLImageElement, w: number) => {
+    const c = document.createElement('canvas'); const h = Math.round((im.height / im.width) * w);
+    c.width = w; c.height = h; const x = c.getContext('2d')!;
+    x.drawImage(im, 0, 0, w, h); x.globalCompositeOperation = 'source-in'; x.fillStyle = '#ffffff'; x.fillRect(0, 0, w, h);
+    return c;
+  };
+  // the figure's lines turn white and its filled shapes take the card's purple
+  const whiteFigure = async (name: string) => {
+    const svg = (await (await fetch(`/images/figures/${name}.svg`)).text())
+      .replaceAll('#2d0a72', '#ffffff').replaceAll('#fcfbff', '#2d0a72');
+    const url = URL.createObjectURL(new Blob([svg], { type: 'image/svg+xml' }));
+    try { return await loadImg(url); } finally { setTimeout(() => URL.revokeObjectURL(url), 1000); }
+  };
+  const wrap = (x: CanvasRenderingContext2D, text: string, maxW: number) => {
+    const lines: string[] = []; let line = '';
+    for (const w of text.split(' ')) { const t = line ? `${line} ${w}` : w; if (x.measureText(t).width > maxW && line) { lines.push(line); line = w; } else line = t; }
+    if (line) lines.push(line);
+    return lines;
+  };
+  const drawCard = async (e: Ending) => {
+    await Promise.all(['400 30px', '700 36px', '800 72px'].map((f) => document.fonts.load(`${f} ${FONT}`).catch(() => null)));
+    const [logo, fig] = await Promise.all([loadImg('/logo.png'), whiteFigure(e.fig)]);
+    const W = 1080, H = 1080, L = 80;
+    const c = document.createElement('canvas'); c.width = W; c.height = H;
+    const x = c.getContext('2d')!;
+    x.fillStyle = '#2d0a72'; x.fillRect(0, 0, W, H);
+    x.fillStyle = '#ffffff';
+    const lg = 66;
+    x.drawImage(whiteLogo(logo, lg), L, 80);
+    x.font = `800 34px ${FONT}`; x.textBaseline = 'middle'; x.fillText('Accessibility Notebook', L + lg + 20, 80 + lg / 2); x.textBaseline = 'alphabetic';
+    x.font = `700 32px ${FONT}`;
+    let y = 250;
+    for (const line of wrap(x, "UX Designer's Choice: The New Year Rush", W - L * 2)) { x.fillText(line, L, y); y += 42; }
+    y += 50;
+    x.font = `800 68px ${FONT}`;
+    for (const line of wrap(x, e.title, 560)) { x.fillText(line, L, y); y += 76; }
+    y += 30;
+    x.font = `400 32px ${FONT}`; x.fillText('Score', L, y); y += 110;
+    x.font = `800 120px ${FONT}`; x.fillText(num(e.score), L, y); y += 70;
+    x.font = `700 34px ${FONT}`;
+    for (const line of wrap(x, `I chose accessibility in ${e.acc} of 5 decisions.`, 520)) { x.fillText(line, L, y); y += 46; }
+    // figure on the right
+    const fw = 360, fh = Math.round((fig.height / fig.width) * fw);
+    x.drawImage(fig, W - L - fw, 930 - fh, fw, fh);
+    x.font = `400 28px ${FONT}`;
+    const lead = 'Play at ';
+    x.fillText(lead, L, 1000);
+    const lw = x.measureText(lead).width;
+    x.font = `800 28px ${FONT}`; x.fillText('accessibilitynotebook.com/stories', L + lw, 1000);
+    return new Promise<Blob>((ok) => c.toBlob((b) => ok(b!), 'image/png'));
+  };
+  let cardBlob: Blob | null = null, cardUrl = '';
+  const showCard = async (s: State) => {
+    const e = ending(s);
+    cardBlob = await drawCard(e);
+    if (cardUrl) URL.revokeObjectURL(cardUrl);
+    cardUrl = URL.createObjectURL(cardBlob);
+    const img = game.querySelector<HTMLImageElement>('.card-img');
+    if (img) { img.src = cardUrl; img.alt = `Your result card. ${altText(e)}`; }
+    const file = new File([cardBlob], 'my-ux-designers-choice-result.png', { type: 'image/png' });
+    const sh = game.querySelector<HTMLElement>('[data-share]');
+    if (sh && navigator.canShare?.({ files: [file] })) sh.hidden = false;
   };
 
   const START: Stats = { money: 20, inclusion: 5, career: 5 };
@@ -180,7 +264,8 @@ import Base from '../../layouts/Base.astro';
     let html = '';
     if (s.phase === 'choose') {
       const st = STEPS[s.step];
-      html = `<p class="count" aria-hidden="true">Decision ${s.step + 1} of ${STEPS.length}</p><h2 tabindex="-1"><span class="visually-hidden">Decision ${s.step + 1} of ${STEPS.length}: </span>${esc(st.title)}</h2><p>${esc(st.scene(s.picks))}</p>
+      html = `<p class="count" aria-hidden="true">Decision ${s.step + 1} of ${STEPS.length}</p><h2 tabindex="-1"><span class="visually-hidden">Decision ${s.step + 1} of ${STEPS.length}: </span>${esc(st.title)}</h2>
+        <div class="scene"><img class="sfig" src="/images/figures/${st.fig}.svg" alt="" /><p>${esc(st.scene(s.picks))}</p></div>
         <div class="choices">${st.choices.map((c, i) => `<button type="button" class="choice" data-pick="${i}">${esc(c.label)}</button>`).join('')}</div>`;
     } else if (s.phase === 'result') {
       const st = STEPS[s.step], c = st.choices[s.picks[s.step]], r = resultOf(s.picks, s.step);
@@ -195,26 +280,34 @@ import Base from '../../layouts/Base.astro';
         ${ev.like ? `<aside class="why"><h3>Like this case</h3><p>${esc(ev.like.text)}</p><p>${link(ev.like.issue, ev.like.anchor, ev.like.label)}</p></aside>` : ''}
         <button type="button" class="btn" data-next>${s.later + 1 < screens.length ? 'Continue' : 'See how your story ends'}</button>`;
     } else {
-      const accCount = s.picks.filter((x, i) => STEPS[i].choices[x].access).length;
-      const [title, text] = accCount === 5
-        ? ['Accessibility champion', 'Your career started slowly, but it grew on trust. Disabled customers can shop on their own, and they come back.']
-        : accCount >= 3
-        ? ['A thoughtful designer', 'You cut a few corners, but you cared when it mattered. Next time, maybe one more push back?']
-        : ['Fast climber, hard landing', 'You climbed fast, but the shortcuts caught up with you. Accessibility debt always sends the bill later.'];
+      const e = ending(s);
       const { money: m, inclusion: inc, career: car } = s.stats;
-      const score = m + inc * car;
-      html = `<h2 tabindex="-1">The end: ${title}</h2><p>${text}</p>
-        <p class="score">Your score: ${num(m)} + ${num(inc)} × ${num(car)} = <strong>${num(score)}</strong></p>
-        <p class="small">Score = Money + Inclusion × Career. You chose accessibility in ${accCount} of ${STEPS.length} decisions.</p>
+      html = `<h2 tabindex="-1">The end: ${e.title}</h2>
+        <div class="scene"><img class="sfig" src="/images/figures/${e.fig}.svg" alt="" /><p>${e.text}</p></div>
+        <p class="score">Your score: ${num(m)} + ${num(inc)} × ${num(car)} = <strong>${num(e.score)}</strong></p>
+        <p class="small">Score = Money + Inclusion × Career. You chose accessibility in ${e.acc} of ${STEPS.length} decisions.</p>
+        <section class="share" aria-labelledby="share-title">
+          <h3 id="share-title">Share your result</h3>
+          <img class="card-img" alt="" width="1080" height="1080" />
+          <div class="share-btns">
+            <button type="button" class="btn" data-download>Download image</button>
+            <button type="button" class="choice" data-share hidden>Share</button>
+            <a class="choice" href="https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(STORY_URL)}" target="_blank" rel="noopener">Post on LinkedIn<span class="visually-hidden"> (opens in a new tab)</span></a>
+            <button type="button" class="choice" data-copy>Copy alt text</button>
+          </div>
+          <p class="small">On LinkedIn, paste the alt text into the image description.</p>
+          <p class="small"><strong>Alt text:</strong> ${esc(altText(e))}</p>
+        </section>
         <div class="choices end"><a class="btn" href="/take-action/">Take action as a designer</a><button type="button" class="choice" data-restart>Play again</button></div>`;
     }
     game.innerHTML = html;
+    if (s.phase === 'end') showCard(s);
     if (!focus) return;
     (game.querySelector('h2') as HTMLElement).focus();
     if (s.phase === 'choose') say(s.step === 0 ? `The story has started. ${totals(s)}` : `Your last choice: ${fxText(resultOf(s.picks, s.step - 1).fx)}. ${totals(s)}`);
     else if (s.phase === 'result') say(`${fxText(resultOf(s.picks, s.step).fx)}. ${totals(s)}`);
     else if (s.phase === 'later') say(`${fxText(laterScreens(s.picks)[s.later].fx)}. ${totals(s)}`);
-    else say(`Your score is ${num(s.stats.money + s.stats.inclusion * s.stats.career)}.`);
+    else say(`Your score is ${num(ending(s).score)}. You can share your result below.`);
   }
 
   let state = read();
@@ -225,6 +318,17 @@ import Base from '../../layouts/Base.astro';
   game.addEventListener('click', (e) => {
     const t = (e.target as HTMLElement).closest('button');
     if (!t || !state) return;
+    if (t.hasAttribute('data-download') && cardUrl) {
+      const a = document.createElement('a'); a.href = cardUrl; a.download = 'my-ux-designers-choice-result.png'; a.click();
+      say('Your result card is downloading.'); return;
+    }
+    if (t.hasAttribute('data-share') && cardBlob) {
+      const file = new File([cardBlob], 'my-ux-designers-choice-result.png', { type: 'image/png' });
+      navigator.share({ files: [file], text: altText(ending(state)) }).catch(() => {}); return;
+    }
+    if (t.hasAttribute('data-copy')) {
+      navigator.clipboard.writeText(altText(ending(state))).then(() => say('Alt text copied.'), () => say('Copying failed. Select the alt text below and copy it.')); return;
+    }
     if (t.dataset.pick) {
       state.picks[state.step] = Number(t.dataset.pick);
       apply(state, resultOf(state.picks, state.step).fx);
@@ -264,6 +368,16 @@ import Base from '../../layouts/Base.astro';
   .game .btn:hover { background: #fff; color: var(--notebook); }
   .game .choice:focus-visible, .game .btn:focus-visible { outline: 3px solid var(--notebook); outline-offset: 3px; }
   .game .fx { font-weight: 800; }
+  .game .scene { display: flex; align-items: center; gap: 1.25rem; }
+  .game .scene p { margin: 0; }
+  .game .sfig { flex: none; width: 9rem; height: auto; }
+  @media (max-width: 30rem) { .game .scene { flex-direction: column; align-items: flex-start; } .game .sfig { width: 8rem; } }
+  .game .share { margin-top: 1.75rem; padding-top: 1.25rem; border-top: 2px dashed var(--notebook); }
+  .game .share h3 { margin: 0 0 0.75rem; font-size: 1.2rem; }
+  .game .card-img { display: block; width: 100%; max-width: 26rem; height: auto; aspect-ratio: 1; border-radius: 8px; background: #2d0a72; }
+  .game .share-btns { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1rem; }
+  .game .share-btns .btn { margin-top: 0; }
+  .game .share-btns .choice { display: inline-flex; align-items: center; }
   .game .score { font-size: var(--step-1); }
   .game .small { font-size: var(--step--1); color: var(--ink-soft); }
   .game .why { margin-top: 1.25rem; padding: 0.75rem 1rem; border-left: 4px solid var(--notebook); background: #f6f2fd; }
