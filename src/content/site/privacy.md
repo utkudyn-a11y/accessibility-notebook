@@ -11,6 +11,7 @@ Short version: no ads, no tracking, and no cookies for readers. Here is everythi
 - **“What can you do on Accessibility Notebook?” checklist (home page):** the boxes you ticked, for this tab only. Your ticks are only your word: nothing checks whether you did those things. They are gone when you close the tab and are never sent to me.
 - **News bingo:** which hunts you have finished, for this tab only. It is gone when you close the tab and is never sent to me.
 - **Inspirations game:** which inspirations you opened, for this tab only. It is gone when you close the tab and is never sent to me.
+- **Stories:** where you are in a story and your points, for this tab only, so you can open a link and come back. It is gone when you close the tab and is never sent to me.
 - **Paper sheets:** which pages you have already seen in this tab, so the sheets are thrown in only once. Gone when you close the tab.
 
 ## Visitor counts

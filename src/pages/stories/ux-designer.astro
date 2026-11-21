@@ -1,31 +1,34 @@
 ---
-// Interactive story: five decisions of a UX designer. Every choice changes three stats and links to the
-// piece of the archive behind it. One delayed consequence comes after the five decisions.
+// Interactive story: UX Designer's Choice. Five decisions, each changing three stats (money, inclusion,
+// career); shortcuts also add hidden accessibility debt that is revealed "six weeks later", followed by
+// up to three events. Score = Money + Inclusion × Career. Every result links to the issue behind it.
 // Progress lives in this tab only (sessionStorage), so a reader can open a "Why?" link and come back.
 // Accessibility: real buttons, stats as text, every change written out in words, focus moves to each new
 // heading (so screen readers read it), no timers and no animation.
 import Base from '../../layouts/Base.astro';
 ---
-<Base title="Five Decisions: A UX Designer's Story" description="An interactive story. You are a UX designer at an online shop: make five decisions and see what they cost you, today and later.">
+<Base title="UX Designer's Choice: The New Year Rush" description="An interactive story. You are the only UX designer at an online shop, six weeks before New Year. Make five decisions and see what they cost you, today and later.">
   <div class="wrap page reading">
-    <div class="sheet story">
-      <h1>Five Decisions: A UX Designer's Story</h1>
+    <p class="game-back"><a href="/stories/">← All stories</a></p>
+    <div class="sheet game">
+      <h1>UX Designer's Choice: The New Year Rush</h1>
 
       <noscript><p>This story needs JavaScript to play.</p></noscript>
 
       <div class="screen" data-screen="intro">
-        <img class="fig" src="/images/figures/role-design.svg" alt="" width="220" height="220" />
-        <p>You are the only UX designer at a growing online shop. You start with <strong>$100</strong>, <strong>10 respect points</strong> and <strong>10 career points</strong>.</p>
-        <p>Make five decisions. Every decision has a price. Some prices come later.</p>
+        <img class="fig" src="/images/figures/role-design.svg" alt="" width="571" height="485" />
+        <p>New Year is six weeks away, and your online shop is getting a New Year design. You are its only UX designer.</p>
+        <p>You start with a <strong>$20k design budget</strong>, <strong>5 inclusion points</strong> and <strong>5 career points</strong>.</p>
+        <p>Make five decisions. Some bills come later.</p>
         <button type="button" class="btn" data-start>Start the story</button>
       </div>
 
       <div class="play" hidden>
         <h2 class="visually-hidden">Your stats</h2>
         <dl class="stats">
-          <div><dt>Money</dt><dd data-stat="money">$100</dd></div>
-          <div><dt>Respect</dt><dd data-stat="respect">10</dd></div>
-          <div><dt>Career</dt><dd data-stat="career">10</dd></div>
+          <div><dt>Money</dt><dd data-stat="money">$20k</dd></div>
+          <div><dt>Inclusion</dt><dd data-stat="inclusion">5</dd></div>
+          <div><dt>Career</dt><dd data-stat="career">5</dd></div>
         </dl>
         <div class="screen" data-screen="game"></div>
       </div>
@@ -34,100 +37,137 @@ import Base from '../../layouts/Base.astro';
 </Base>
 
 <script>
-  type Fx = { money?: number; respect?: number; career?: number };
-  type Choice = { label: string; fx: Fx; result: string; access: boolean };
-  type Why = { issue: number; anchor: string; text: string };
-  type Step = { title: string; text: string; choices: [Choice, Choice]; why: Why };
+  type Fx = { money?: number; inclusion?: number; career?: number };
+  type Stats = { money: number; inclusion: number; career: number };
+  type Why = { issue: number; anchor: string; label: string; access: string; shortcut: string };
+  type Choice = { label: string; access: boolean; fx: Fx; result: string };
+  type Step = { title: string; scene: (p: number[]) => string; choices: [Choice, Choice]; why: Why };
+
+  const A = (label: string, fx: Fx, result: string): Choice => ({ label, access: true, fx, result });
+  const S = (label: string, result: string): Choice => ({ label, access: false, fx: { inclusion: -1, career: 2 }, result });
+  const acc = (p: number[], i: number) => p[i] !== undefined && STEPS[i].choices[p[i]].access;
 
   const STEPS: Step[] = [
     {
-      title: 'The Black Friday banner',
-      text: 'Marketing wants “Black Friday: 50% off” written on top of a busy product photo. They need it by tomorrow.',
+      title: 'The New Year homepage',
+      scene: () => 'The CEO wants the New Year homepage by Monday. An AI tool can generate one in minutes: a carousel, two pop-ups and three banners.',
       choices: [
-        { label: 'Put the text on the photo', fx: { career: 2, respect: -1 }, access: false,
-          result: 'Marketing loves it. But for partially sighted shoppers, the sale disappears into the photo.' },
-        { label: 'Put the text on a plain background next to the photo', fx: { money: -10, career: -1, respect: 2 }, access: true,
-          result: 'Marketing calls it “a bit boring” and you pay for an extra photo edit. But everyone can read the sale.' },
+        S('Generate it and ship it', 'The CEO loves your speed. The page is loud and crowded, but it’s live.'),
+        A('Simplify it and run the 75-year-old test', { money: -2, inclusion: 2, career: -1 }, 'You miss Monday by a day. The CEO sighs, but the page is calm and easy to follow.'),
       ],
-      why: { issue: 29, anchor: 'inspiration-2', text: 'As a partially sighted person, text on images is one of my biggest challenges. My simplest advice: use text on a plain background.' },
+      why: { issue: 8, anchor: 'inspiration-1', label: 'Notes # 8',
+        shortcut: 'The average homepage now has 1,437 elements, 22.5% more than the year before. AI tools learn from those crowded pages, so they make more of them.',
+        access: 'Every UX designer should take the 75-year-old test: can a 75-year-old with low vision use this site successfully?' },
     },
     {
-      title: 'The ugly focus outline',
-      text: 'A developer says the focus outline looks ugly on the new buttons. “Can I just remove it?”',
+      title: 'The focus outline',
+      scene: () => 'The developer building your design system says the focus outline looks ugly on the new buttons. “Can I just remove it?”',
       choices: [
-        { label: 'Keep it, and design a better-looking one', fx: { money: -10, respect: 2 }, access: true,
-          result: 'It takes you an afternoon, but the new outline looks good and everyone can see where they are.' },
-        { label: 'Sure, remove it', fx: { career: 1, respect: -2 }, access: false,
-          result: 'The buttons look cleaner. Keyboard users now lose track of where they are on the page.' }
+        A('Keep it, and design a better-looking one together', { money: -2, inclusion: 2 }, 'You spend an afternoon with the developer. The new outline looks good, and the developer now asks you about accessibility first.'),
+        S('Sure, remove it', 'The buttons look cleaner, and the developer ships faster. Keyboard users can no longer see where they are.'),
       ],
-      why: { issue: 5, anchor: 'inspiration-1', text: 'Keyboard users need to see where they are on the page. Pope Tech’s guide to accessible focus indicators shows how, and its “Common Pitfalls” section is the most useful part.' },
+      why: { issue: 5, anchor: 'inspiration-1', label: 'Notes # 5',
+        shortcut: 'Keyboard users need the focus indicator to see where they are on the page. Without it, they are lost.',
+        access: 'A focus indicator can be visible and good-looking at the same time. Pope Tech’s guide shows how, and its “Common Pitfalls” section is the most useful part.' },
     },
     {
-      title: 'The new homepage',
-      text: 'The CEO wants a new homepage by Monday. An AI tool can generate one in minutes: a carousel, two pop-ups and three banners.',
+      title: 'The New Year sale banner',
+      scene: (p) => acc(p, 0)
+        ? 'The marketing lead wants “New Year sale: 50% off” written on top of the hero photo.'
+        : '“The homepage is so busy that nobody will notice the sale,” the marketing lead says. She wants “New Year sale: 50% off” written big, right on top of the hero photo.',
       choices: [
-        { label: 'Generate it and ship it', fx: { money: 10, career: 2, respect: -1 }, access: false,
-          result: 'The CEO is impressed by your speed. The page is loud, crowded and hard to follow.' },
-        { label: 'Simplify it and run the 75-year-old test', fx: { career: -1, respect: 2 }, access: true,
-          result: 'You miss Monday by a day. The page is calm, and a 75-year-old with low vision could use it.' },
+        S('Put the text on the photo', 'The marketing lead is happy. For partially sighted shoppers, the sale disappears into the photo.'),
+        A('Put the text on a plain background next to the photo', { money: -2, inclusion: 2, career: -1 }, 'The marketing lead calls it “a bit boring”. But everyone can read the sale, and nobody misses it.'),
       ],
-      why: { issue: 8, anchor: 'inspiration-1', text: 'The average homepage now has 1,437 elements, 22.5% more than the year before. Every UX designer should ask: can a 75-year-old with low vision use this site successfully?' },
+      why: { issue: 29, anchor: 'inspiration-2', label: 'Notes # 29',
+        shortcut: 'As a partially sighted person, text on images is one of my biggest challenges.',
+        access: 'When people ask me about text on images, my simplest advice is: use text on a plain background.' },
     },
     {
       title: 'The checkout',
-      text: 'The product manager wants a pre-ticked “Add insurance” box at checkout, and a cancellation process that takes five screens. Sales would go up.',
+      scene: (p) => 'The first week of the sale went well, and the product manager wants more. He asks for a pre-ticked “Add insurance” box at checkout and a cancellation process that takes five screens.'
+        + (acc(p, 1) ? ' The developer is in the meeting too.' : ''),
       choices: [
-        { label: 'Push back and propose an honest checkout', fx: { career: -2, respect: 3 }, access: true,
-          result: 'The product manager is not happy. Customers can see what they are buying and cancel easily.' },
-        { label: 'Design it', fx: { money: 20, career: 3, respect: -3 }, access: false,
-          result: 'Sales go up and you get a bonus. Some customers buy insurance they never wanted.' }
+        A('Push back and propose an honest checkout', { money: -2, inclusion: 2 }, ''),
+        S('Design it', 'Sales go up, and the product manager praises you at the all-hands meeting. Some customers buy insurance they never wanted.'),
       ],
-      why: { issue: 32, anchor: 'inspiration-2', text: 'No WCAG success criterion prevents dark patterns like misleading checkboxes or painful cancellation processes. Yet they can block people with cognitive disabilities or attention issues, or make them take actions they never wanted.' },
+      why: { issue: 32, anchor: 'inspiration-2', label: 'Notes # 32',
+        shortcut: 'No WCAG success criterion prevents dark patterns like misleading checkboxes or painful cancellation processes. Yet they can block people with cognitive disabilities or attention issues, or make them take actions they never wanted.',
+        access: 'WCAG compliance does not mean inclusion. Dark patterns can pass WCAG and still take away some people’s independence.' },
     },
     {
       title: 'Dark mode',
-      text: 'Users keep asking for dark mode. You could invert all the colours and launch it today.',
+      scene: () => 'Users keep asking for dark mode, and the CEO wants it live before New Year. You could invert all the colours and launch it today.',
       choices: [
-        { label: 'Invert the colours and launch', fx: { career: 1, respect: -1 }, access: false,
-          result: 'Dark mode is live in a day. Some icons vanish and some text is hard to read.' },
-        { label: 'Go through a dark mode checklist first', fx: { money: -10, respect: 2 }, access: true,
-          result: 'It takes a week, but dark mode works for everyone who turns it on.' },
+        S('Invert the colours and launch', 'Dark mode is live today. Some icons vanish and some text is hard to read.'),
+        A('Go through a dark mode checklist first', { money: -2, inclusion: 2 }, 'It takes a week, but dark mode works for everyone who turns it on.'),
       ],
-      why: { issue: 31, anchor: 'inspiration-3', text: 'Russ Weakley’s dark mode checklist helps designers and developers: just answer “Yes” or “No” to each question.' },
+      why: { issue: 31, anchor: 'inspiration-3', label: 'Notes # 31',
+        shortcut: 'Inverted colours are not a dark mode. Russ Weakley’s practical checklist shows what to check before you launch one.',
+        access: 'Russ Weakley’s dark mode checklist works for designers and developers alike: just answer “Yes” or “No” to each question.' },
     },
   ];
 
-  const LATER_BAD = { title: 'Six weeks later: a letter', fx: { money: -60, career: -4 } as Fx,
-    text: 'A letter arrives from a law firm. A blind customer couldn’t finish checkout on your shop. The company settles, and your manager asks why nobody checked.' };
-  const LATER_GOOD = { title: 'Six weeks later: an email', fx: { money: 20, respect: 3 } as Fx,
-    text: 'A customer writes: “I’m blind, and yours is the first shop where I could check out by myself.” She tells her friends, and sales go up.' };
-  const LATER_WHY: Why = { issue: 29, anchor: 'news-3', text: 'Candycopia, a small candy shop, faced a five-figure settlement over its website’s ADA compliance. It had relied on third-party apps and a developer, and hadn’t invested much in its online presence.' };
+  // Decision 4's accessible choice depends on whether the developer is on your side (Decision 2)
+  const resultOf = (p: number[], i: number): { text: string; fx: Fx } => {
+    const c = STEPS[i].choices[p[i]];
+    if (i === 3 && c.access) {
+      return acc(p, 1)
+        ? { text: 'The developer backs you up: “Honest flows are easier to build, too.” The product manager agrees, and your team sees you lead.', fx: { ...c.fx, career: 1 } }
+        : { text: 'The product manager isn’t happy, but the checkout stays honest.', fx: { ...c.fx, career: -1 } };
+    }
+    return { text: c.result, fx: c.fx };
+  };
 
-  const START = { money: 100, respect: 10, career: 10 };
+  type Later = { title: string; text: string; fx: Fx; like?: { issue: number; anchor: string; label: string; text: string } };
+  const laterScreens = (p: number[]): Later[] => {
+    const debt = p.filter((x, i) => !STEPS[i].choices[x].access).length;
+    const accCount = STEPS.length - debt;
+    const out: Later[] = [debt
+      ? { title: 'The bill', fx: { money: -3 * debt },
+          text: `Every shortcut left an issue behind. You have ${debt} ${debt === 1 ? 'issue' : 'issues'} to fix now, and fixing them later costs more than doing it right: $3k each.` }
+      : { title: 'The bill', fx: {}, text: 'You left no accessibility debt behind. Nothing to fix.' }];
+    if (debt >= 3) out.push({ title: 'A letter', fx: { money: -6, career: -3 },
+      text: 'A letter arrives from a law firm. A disabled customer tried to buy her New Year gifts on your shop and couldn’t, because of the accessibility issues you left behind. The company settles, and your manager asks why nobody checked.',
+      like: { issue: 29, anchor: 'news-3', label: 'Notes # 29', text: 'Candycopia, a small candy shop, faced a five-figure settlement over its website’s ADA compliance. It had relied on third-party apps and a developer, and hadn’t invested much in its online presence.' } });
+    if (acc(p, 0) && acc(p, 2)) out.push({ title: 'An email', fx: { career: 2 },
+      text: 'A customer writes: “I’m partially sighted, and your New Year page is the first one I could shop without getting lost. Thank you for keeping it simple.” The CEO shares her email with the whole company.' });
+    if (accCount >= 4) out.push({ title: 'An invitation', fx: { career: 3 },
+      text: 'A design conference invites you to talk about your accessible redesign. Your talk is the most shared of the day.' });
+    return out;
+  };
+
+  const START: Stats = { money: 20, inclusion: 5, career: 5 };
   const KEY = 'story-ux';
-  type State = { step: number; phase: 'choose' | 'result' | 'later' | 'end'; stats: typeof START; picks: number[] };
-  const read = (): State | null => { try { return JSON.parse(sessionStorage.getItem(KEY) || 'null'); } catch { return null; } };
+  type State = { step: number; phase: 'choose' | 'result' | 'later' | 'end'; later: number; stats: Stats; picks: number[] };
+  const fresh = (): State => ({ step: 0, phase: 'choose', later: 0, stats: { ...START }, picks: [] });
+  const read = (): State | null => { try { const s = JSON.parse(sessionStorage.getItem(KEY) || 'null'); return s && s.stats && 'inclusion' in s.stats ? s : null; } catch { return null; } };
   const save = (s: State | null) => { try { s ? sessionStorage.setItem(KEY, JSON.stringify(s)) : sessionStorage.removeItem(KEY); } catch {} };
 
   const intro = document.querySelector<HTMLElement>('[data-screen="intro"]')!;
   const play = document.querySelector<HTMLElement>('.play')!;
   const game = document.querySelector<HTMLElement>('[data-screen="game"]')!;
   const esc = (t: string) => t.replace(/&/g, '&amp;').replace(/</g, '&lt;');
-  const money = (n: number) => (n < 0 ? '−$' : '$') + Math.abs(n);
+  const minus = (n: number) => (n < 0 ? '−' : '');
+  const money = (n: number) => `${minus(n)}$${Math.abs(n)}k`;
+  const num = (n: number) => `${minus(n)}${Math.abs(n)}`;
   const sign = (n: number) => (n > 0 ? '+' : '−') + Math.abs(n);
   const fxText = (fx: Fx) => [
-    fx.money ? `Money ${fx.money > 0 ? '+' : '−'}$${Math.abs(fx.money)}` : '',
-    fx.respect ? `Respect ${sign(fx.respect)}` : '',
+    fx.money ? `Money ${fx.money > 0 ? '+' : '−'}$${Math.abs(fx.money)}k` : '',
+    fx.inclusion ? `Inclusion ${sign(fx.inclusion)}` : '',
     fx.career ? `Career ${sign(fx.career)}` : '',
-  ].filter(Boolean).join(', ');
-  const apply = (s: State, fx: Fx) => { s.stats.money += fx.money || 0; s.stats.respect += fx.respect || 0; s.stats.career += fx.career || 0; };
-  const whyHtml = (w: Why) => `<aside class="why"><h3>Why?</h3><p>${esc(w.text)}</p><p><a href="/notes/${w.issue}/#${w.anchor}">Read it in Notes # ${w.issue}</a></p></aside>`;
-  const shortcuts = (s: State) => s.picks.filter((p, i) => !STEPS[i].choices[p].access).length;
+  ].filter(Boolean).join(', ') || 'No change';
+  const apply = (s: State, fx: Fx) => {
+    s.stats.money += fx.money || 0;
+    s.stats.inclusion = Math.max(0, s.stats.inclusion + (fx.inclusion || 0));
+    s.stats.career += fx.career || 0;
+  };
+  const link = (issue: number, anchor: string, label: string) => `<a href="/notes/${issue}/#${anchor}">Read it in ${label}</a>`;
 
   function showStats(s: State) {
     (document.querySelector('[data-stat="money"]') as HTMLElement).textContent = money(s.stats.money);
-    (document.querySelector('[data-stat="respect"]') as HTMLElement).textContent = String(s.stats.respect);
-    (document.querySelector('[data-stat="career"]') as HTMLElement).textContent = String(s.stats.career);
+    (document.querySelector('[data-stat="inclusion"]') as HTMLElement).textContent = num(s.stats.inclusion);
+    (document.querySelector('[data-stat="career"]') as HTMLElement).textContent = num(s.stats.career);
   }
 
   function render(s: State, focus = true) {
@@ -135,26 +175,32 @@ import Base from '../../layouts/Base.astro';
     let html = '';
     if (s.phase === 'choose') {
       const st = STEPS[s.step];
-      html = `<p class="count">Decision ${s.step + 1} of ${STEPS.length}</p><h2 tabindex="-1">${esc(st.title)}</h2><p>${esc(st.text)}</p>
+      html = `<p class="count">Decision ${s.step + 1} of ${STEPS.length}</p><h2 tabindex="-1">${esc(st.title)}</h2><p>${esc(st.scene(s.picks))}</p>
         <div class="choices">${st.choices.map((c, i) => `<button type="button" class="choice" data-pick="${i}">${esc(c.label)}</button>`).join('')}</div>`;
     } else if (s.phase === 'result') {
-      const st = STEPS[s.step], c = st.choices[s.picks[s.step]];
-      html = `<p class="count">Decision ${s.step + 1} of ${STEPS.length}</p><h2 tabindex="-1">You chose: ${esc(c.label)}</h2><p>${esc(c.result)}</p>
-        <p class="fx">${esc(fxText(c.fx))}</p>${whyHtml(st.why)}
-        <button type="button" class="btn" data-next>${s.step + 1 < STEPS.length ? 'Next decision' : 'Continue'}</button>`;
+      const st = STEPS[s.step], c = st.choices[s.picks[s.step]], r = resultOf(s.picks, s.step);
+      html = `<p class="count">Decision ${s.step + 1} of ${STEPS.length}</p><h2 tabindex="-1">You chose: ${esc(c.label)}</h2><p>${esc(r.text)}</p>
+        <p class="fx">${esc(fxText(r.fx))}</p>
+        <aside class="why"><h3>Why?</h3><p>${esc(c.access ? st.why.access : st.why.shortcut)}</p><p>${link(st.why.issue, st.why.anchor, st.why.label)}</p></aside>
+        <button type="button" class="btn" data-next>${s.step + 1 < STEPS.length ? 'Next decision' : 'Six weeks later…'}</button>`;
     } else if (s.phase === 'later') {
-      const ev = shortcuts(s) >= 3 ? LATER_BAD : LATER_GOOD;
-      html = `<h2 tabindex="-1">${esc(ev.title)}</h2><p>${esc(ev.text)}</p><p class="fx">${esc(fxText(ev.fx))}</p>${whyHtml(LATER_WHY)}
-        <button type="button" class="btn" data-next>See how your story ends</button>`;
+      const screens = laterScreens(s.picks), ev = screens[s.later];
+      html = `<p class="count">Six weeks later</p><h2 tabindex="-1">${esc(ev.title)}</h2><p>${esc(ev.text)}</p>
+        <p class="fx">${esc(fxText(ev.fx))}</p>
+        ${ev.like ? `<aside class="why"><h3>Like this case</h3><p>${esc(ev.like.text)}</p><p>${link(ev.like.issue, ev.like.anchor, ev.like.label)}</p></aside>` : ''}
+        <button type="button" class="btn" data-next>${s.later + 1 < screens.length ? 'Continue' : 'See how your story ends'}</button>`;
     } else {
-      const n = shortcuts(s);
-      const [title, text] = n === 0
-        ? ['Accessibility champion', 'Your career moved slowly, but people trust your work. Disabled customers can shop on their own, and they come back.']
-        : n < 3
+      const accCount = s.picks.filter((x, i) => STEPS[i].choices[x].access).length;
+      const [title, text] = accCount === 5
+        ? ['Accessibility champion', 'Your career started slowly, but it grew on trust. Disabled customers can shop on their own, and they come back.']
+        : accCount >= 3
         ? ['A thoughtful designer', 'You cut a few corners, but you cared when it mattered. Next time, maybe one more push back?']
         : ['Fast climber, hard landing', 'You climbed fast, but the shortcuts caught up with you. Accessibility debt always sends the bill later.'];
+      const { money: m, inclusion: inc, career: car } = s.stats;
+      const score = m + inc * car;
       html = `<h2 tabindex="-1">The end: ${title}</h2><p>${text}</p>
-        <p>You finished with ${money(s.stats.money)}, ${s.stats.respect} respect points and ${s.stats.career} career points. You chose accessibility in ${STEPS.length - n} of ${STEPS.length} decisions.</p>
+        <p class="score">Your score: ${num(m)} + ${num(inc)} × ${num(car)} = <strong>${num(score)}</strong></p>
+        <p class="small">Score = Money + Inclusion × Career. You chose accessibility in ${accCount} of ${STEPS.length} decisions.</p>
         <div class="choices"><a class="btn" href="/take-action/">Take action as a designer</a><button type="button" class="choice" data-restart>Play again</button></div>`;
     }
     game.innerHTML = html;
@@ -164,23 +210,22 @@ import Base from '../../layouts/Base.astro';
   let state = read();
   if (state) render(state, false);
 
-  document.querySelector('[data-start]')!.addEventListener('click', () => {
-    state = { step: 0, phase: 'choose', stats: { ...START }, picks: [] };
-    save(state); render(state);
-  });
+  document.querySelector('[data-start]')!.addEventListener('click', () => { state = fresh(); save(state); render(state); });
 
   game.addEventListener('click', (e) => {
     const t = (e.target as HTMLElement).closest('button');
     if (!t || !state) return;
     if (t.dataset.pick) {
-      const i = Number(t.dataset.pick);
-      state.picks[state.step] = i; apply(state, STEPS[state.step].choices[i].fx); state.phase = 'result';
+      state.picks[state.step] = Number(t.dataset.pick);
+      apply(state, resultOf(state.picks, state.step).fx);
+      state.phase = 'result';
     } else if (t.hasAttribute('data-next')) {
       if (state.phase === 'result' && state.step + 1 < STEPS.length) { state.step++; state.phase = 'choose'; }
-      else if (state.phase === 'result') { state.phase = 'later'; apply(state, shortcuts(state) >= 3 ? LATER_BAD.fx : LATER_GOOD.fx); }
+      else if (state.phase === 'result') { state.phase = 'later'; state.later = 0; apply(state, laterScreens(state.picks)[0].fx); }
+      else if (state.phase === 'later' && state.later + 1 < laterScreens(state.picks).length) { state.later++; apply(state, laterScreens(state.picks)[state.later].fx); }
       else state.phase = 'end';
     } else if (t.hasAttribute('data-restart')) {
-      state = { step: 0, phase: 'choose', stats: { ...START }, picks: [] };
+      state = fresh();
     }
     save(state); render(state);
   });
@@ -188,27 +233,30 @@ import Base from '../../layouts/Base.astro';
 
 <style is:global>
   .page { padding-top: 2.5rem; }
-  .story h2 { margin-top: 0.75rem; }
-  .story h2:focus { outline: none; }
-  .story h2:focus-visible { outline: 3px solid var(--notebook); outline-offset: 4px; }
-  .story .fig { display: block; width: 11rem; height: auto; margin: 0 0 1rem; }
-  .story .stats { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; margin: 0 0 1.25rem; padding: 0.75rem 1rem; border: 2px solid var(--notebook); border-radius: 8px; }
-  .story .stats div { display: flex; gap: 0.4rem; align-items: baseline; }
-  .story .stats dt { font-weight: 700; }
-  .story .stats dt::after { content: ':'; }
-  .story .stats dd { margin: 0; font-weight: 800; font-variant-numeric: tabular-nums; }
-  .story .count { margin: 0; font-size: 0.85rem; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; }
-  .story .choices { display: flex; flex-direction: column; gap: 0.75rem; margin-top: 1.25rem; }
-  .story .choice, .story .btn { min-height: 44px; padding: 0.6rem 1rem; border-radius: 6px; font: inherit; font-weight: 800; text-align: left; cursor: pointer; text-decoration: none; }
-  .story .choice { background: #fff; color: var(--notebook); border: 2px solid var(--notebook); }
-  .story .btn { display: inline-flex; align-items: center; justify-content: center; margin-top: 1rem; background: var(--notebook); color: #fff; border: 2px solid var(--notebook); }
-  .story .choices .btn { margin-top: 0; }
-  .story .choice:hover { background: #f1ebfb; }
-  .story .btn:hover { background: #fff; color: var(--notebook); }
-  .story .choice:focus-visible, .story .btn:focus-visible { outline: 3px solid var(--notebook); outline-offset: 3px; }
-  .story .fx { font-weight: 800; }
-  .story .why { margin-top: 1.25rem; padding: 0.75rem 1rem; border-left: 4px solid var(--notebook); background: #f6f2fd; }
-  .story .why h3 { margin: 0 0 0.25rem; font-size: 1rem; }
-  .story .why p { margin: 0.25rem 0; }
-  @media (forced-colors: active) { .story .why { border-left-color: CanvasText; background: Canvas; } .story .stats { border-color: CanvasText; } }
+  .game-back { margin: 0 0 1rem; font-weight: 700; }
+  .game h2 { margin-top: 0.75rem; }
+  .game h2:focus { outline: none; }
+  .game h2:focus-visible { outline: 3px solid var(--notebook); outline-offset: 4px; }
+  .game .fig { display: block; width: 13rem; height: auto; margin: 0 0 1rem; }
+  .game .stats { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; margin: 0 0 1.25rem; padding: 0.75rem 1rem; border: 2px solid var(--notebook); border-radius: 8px; }
+  .game .stats div { display: flex; gap: 0.4rem; align-items: baseline; }
+  .game .stats dt { font-weight: 700; }
+  .game .stats dt::after { content: ':'; }
+  .game .stats dd { margin: 0; font-weight: 800; font-variant-numeric: tabular-nums; }
+  .game .count { margin: 0; font-size: 0.85rem; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; }
+  .game .choices { display: flex; flex-direction: column; gap: 0.75rem; margin-top: 1.25rem; }
+  .game .choice, .game .btn { min-height: 44px; padding: 0.6rem 1rem; border-radius: 6px; font: inherit; font-weight: 800; text-align: left; cursor: pointer; text-decoration: none; }
+  .game .choice { background: #fff; color: var(--notebook); border: 2px solid var(--notebook); }
+  .game .btn { display: inline-flex; align-items: center; justify-content: center; margin-top: 1rem; background: var(--notebook); color: #fff; border: 2px solid var(--notebook); }
+  .game .choices .btn { margin-top: 0; justify-content: flex-start; }
+  .game .choice:hover { background: #f1ebfb; }
+  .game .btn:hover { background: #fff; color: var(--notebook); }
+  .game .choice:focus-visible, .game .btn:focus-visible { outline: 3px solid var(--notebook); outline-offset: 3px; }
+  .game .fx { font-weight: 800; }
+  .game .score { font-size: var(--step-1); }
+  .game .small { font-size: var(--step--1); color: var(--ink-soft); }
+  .game .why { margin-top: 1.25rem; padding: 0.75rem 1rem; border-left: 4px solid var(--notebook); background: #f6f2fd; }
+  .game .why h3 { margin: 0 0 0.25rem; font-size: 1rem; }
+  .game .why p { margin: 0.25rem 0; }
+  @media (forced-colors: active) { .game .why { border-left-color: CanvasText; background: Canvas; } .game .stats { border-color: CanvasText; } }
 </style>

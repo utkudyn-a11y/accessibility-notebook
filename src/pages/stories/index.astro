@@ -1,0 +1,72 @@
+---
+// Stories: short interactive stories, one per role. Only the ones with a page are links;
+// the rest show "Coming soon" and are plain text (nothing to focus or click).
+import Base from '../../layouts/Base.astro';
+const STORIES = [
+  { href: '/stories/ux-designer/', title: "UX Designer's Choice: The New Year Rush", fig: 'role-design', w: 571, h: 485,
+    text: 'You are the only UX designer at an online shop, six weeks before New Year. Make five decisions and see what they cost you, today and later.',
+    meta: '5 decisions · about 5 minutes' },
+  { title: "User's Journey", fig: 'map', w: 239, h: 485,
+    text: 'Shop, book and sign up as a disabled user, and see where the web stops you.' },
+  { title: "Developer's Choice", fig: 'role-dev', w: 490, h: 485,
+    text: 'Deadlines, frameworks and a pull request that "works on my machine".' },
+  { title: "Tester's Choice", fig: 'search', w: 200, h: 523,
+    text: 'Find the barriers before your users do, with not enough time to test everything.' },
+];
+---
+<Base title="Stories" description="Short interactive stories about accessibility at work. Make the decisions and see what they cost, today and later.">
+  <div class="wrap page">
+    <div class="sheet head">
+      <h1>Stories</h1>
+      <p class="lead reading">Short interactive stories about accessibility at work. You make the decisions; every one has a price, and every one links to the issue behind it.</p>
+    </div>
+    <div class="sheet">
+      <ul class="stories">
+        {STORIES.map((s, i) => (
+          <li>
+            <article class:list={['story', { soon: !s.href }]} aria-labelledby={`s-${i}`}>
+              <div class="art"><img src={`/images/figures/${s.fig}.svg`} alt="" width={s.w} height={s.h} loading={i < 2 ? 'eager' : 'lazy'} /></div>
+              <div class="text">
+                {s.href
+                  ? <h2 id={`s-${i}`}><a href={s.href}>{s.title}</a></h2>
+                  : <h2 id={`s-${i}`}>{s.title}</h2>}
+                <p class="desc">{s.text}</p>
+                {s.href ? <p class="meta">{s.meta}</p> : <p class="badge">Coming soon</p>}
+              </div>
+            </article>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</Base>
+<style>
+  .page { padding-top: 2.5rem; }
+  .lead { font-size: var(--step-1); line-height: 1.45; }
+  .stories { list-style: none; padding: 0; margin: 0; display: grid; gap: 1.5rem; grid-template-columns: minmax(0, 1fr); }
+  @media (min-width: 40.01rem) { .stories { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .stories li + li { margin-top: 0; }
+  .story { position: relative; height: 100%; display: flex; flex-direction: column; background: #fff; border: 2px solid var(--rule); border-radius: 10px; overflow: hidden; }
+  .story:not(.soon):hover { border-color: var(--notebook); }
+  .art { display: flex; align-items: center; justify-content: center; height: 12rem; padding: 1rem; background: #f6f2fd repeating-linear-gradient(to bottom, transparent 0 1.35rem, #ece6f9 1.35rem calc(1.35rem + 1px)); border-bottom: 2px solid var(--rule); }
+  .art img { max-height: 100%; width: auto; max-width: 100%; }
+  .soon .art img { opacity: 0.45; }
+  .text { padding: 1rem 1.15rem 1.2rem; }
+  .story h2 { font-size: 1.2rem; line-height: 1.3; margin: 0 0 0.5rem; }
+  .story h2 a { color: var(--ink); }
+  /* the whole card is the link's click area; the link text stays the heading */
+  .story h2 a::after { content: ''; position: absolute; inset: 0; }
+  .story h2 a:hover { color: var(--notebook); }
+  .story h2 a:focus-visible { outline: none; }
+  .story:has(h2 a:focus-visible) { outline: 3px solid var(--notebook); outline-offset: 3px; }
+  .desc { margin: 0; font-size: 1rem; }
+  .meta { margin: 0.6rem 0 0; font-size: var(--step--1); font-weight: 700; color: var(--ink-soft); }
+  .badge { display: inline-block; margin: 0.75rem 0 0; padding: 0.15rem 0.6rem; border: 2px solid var(--ink); border-radius: 999px; font-size: var(--step--1); font-weight: 800; }
+  .soon h2 { color: var(--ink-soft); }
+  @media (max-width: 40rem) { .art { height: 9rem; } }
+  @media (forced-colors: active) {
+    .story, .art { border-color: CanvasText; }
+    .art img { forced-color-adjust: none; background: #fff; }
+    .story:has(h2 a:focus-visible) { outline-color: Highlight; }
+  }
+</style>
