@@ -139,7 +139,6 @@ import Base from '../../layouts/Base.astro';
   };
 
 
-  const STORY_URL = 'https://accessibilitynotebook.com/stories/ux-designer/';
   type Ending = { title: string; text: string; fig: string; acc: number; score: number };
   const ending = (s: State): Ending => {
     const n = s.picks.filter((x, i) => STEPS[i].choices[x].access).length;
@@ -292,10 +291,9 @@ import Base from '../../layouts/Base.astro';
           <div class="share-btns">
             <button type="button" class="btn" data-download>Download image</button>
             <button type="button" class="choice" data-share hidden>Share</button>
-            <a class="choice" href="https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(STORY_URL)}" target="_blank" rel="noopener">Post on LinkedIn<span class="visually-hidden"> (opens in a new tab)</span></a>
             <button type="button" class="choice" data-copy>Copy alt text</button>
           </div>
-          <p class="small">On LinkedIn, paste the alt text into the image description.</p>
+          <p class="small">When you share the image, paste the alt text into its image description.</p>
           <p class="small"><strong>Alt text:</strong> ${esc(altText(e))}</p>
         </section>
         <div class="choices end"><a class="btn" href="/take-action/">Take action as a designer</a><button type="button" class="choice" data-restart>Play again</button></div>`;
