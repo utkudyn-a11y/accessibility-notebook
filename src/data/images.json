@@ -845,6 +845,24 @@
    ]
   ]
  },
+ "/images/stories-ux-designer-email.png": {
+  "width": 1200,
+  "height": 675,
+  "webp": [
+   [
+    "/images/webp/stories-ux-designer-email-480.webp",
+    480
+   ],
+   [
+    "/images/webp/stories-ux-designer-email-800.webp",
+    800
+   ],
+   [
+    "/images/webp/stories-ux-designer-email-1200.webp",
+    1200
+   ]
+  ]
+ },
  "/logo.png": {
   "width": 160,
   "height": 158,
