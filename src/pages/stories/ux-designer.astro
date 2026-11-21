@@ -32,6 +32,7 @@ import Base from '../../layouts/Base.astro';
         </dl>
         <div class="screen" data-screen="game"></div>
       </div>
+      <p class="visually-hidden" role="status" data-status></p>
     </div>
   </div>
 </Base>
@@ -162,6 +163,10 @@ import Base from '../../layouts/Base.astro';
     s.stats.inclusion = Math.max(0, s.stats.inclusion + (fx.inclusion || 0));
     s.stats.career += fx.career || 0;
   };
+  const totals = (s: State) => `You now have ${money(s.stats.money)}, ${num(s.stats.inclusion)} inclusion ${Math.abs(s.stats.inclusion) === 1 ? 'point' : 'points'} and ${num(s.stats.career)} career ${Math.abs(s.stats.career) === 1 ? 'point' : 'points'}.`;
+  // one polite status line: what changed and where the stats stand (spoken after the new heading)
+  const status = document.querySelector<HTMLElement>('[data-status]')!;
+  const say = (text: string) => { status.textContent = ''; setTimeout(() => { status.textContent = text; }, 400); };
   const link = (issue: number, anchor: string, label: string) => `<a href="/notes/${issue}/#${anchor}">Read it in ${label}</a>`;
 
   function showStats(s: State) {
@@ -175,17 +180,17 @@ import Base from '../../layouts/Base.astro';
     let html = '';
     if (s.phase === 'choose') {
       const st = STEPS[s.step];
-      html = `<p class="count">Decision ${s.step + 1} of ${STEPS.length}</p><h2 tabindex="-1">${esc(st.title)}</h2><p>${esc(st.scene(s.picks))}</p>
+      html = `<p class="count" aria-hidden="true">Decision ${s.step + 1} of ${STEPS.length}</p><h2 tabindex="-1"><span class="visually-hidden">Decision ${s.step + 1} of ${STEPS.length}: </span>${esc(st.title)}</h2><p>${esc(st.scene(s.picks))}</p>
         <div class="choices">${st.choices.map((c, i) => `<button type="button" class="choice" data-pick="${i}">${esc(c.label)}</button>`).join('')}</div>`;
     } else if (s.phase === 'result') {
       const st = STEPS[s.step], c = st.choices[s.picks[s.step]], r = resultOf(s.picks, s.step);
-      html = `<p class="count">Decision ${s.step + 1} of ${STEPS.length}</p><h2 tabindex="-1">You chose: ${esc(c.label)}</h2><p>${esc(r.text)}</p>
+      html = `<p class="count" aria-hidden="true">Decision ${s.step + 1} of ${STEPS.length}</p><h2 tabindex="-1">You chose: ${esc(c.label)}</h2><p>${esc(r.text)}</p>
         <p class="fx">${esc(fxText(r.fx))}</p>
         <aside class="why"><h3>Why?</h3><p>${esc(c.access ? st.why.access : st.why.shortcut)}</p><p>${link(st.why.issue, st.why.anchor, st.why.label)}</p></aside>
         <button type="button" class="btn" data-next>${s.step + 1 < STEPS.length ? 'Next decision' : 'Six weeks later…'}</button>`;
     } else if (s.phase === 'later') {
       const screens = laterScreens(s.picks), ev = screens[s.later];
-      html = `<p class="count">Six weeks later</p><h2 tabindex="-1">${esc(ev.title)}</h2><p>${esc(ev.text)}</p>
+      html = `<p class="count" aria-hidden="true">Six weeks later</p><h2 tabindex="-1"><span class="visually-hidden">Six weeks later: </span>${esc(ev.title)}</h2><p>${esc(ev.text)}</p>
         <p class="fx">${esc(fxText(ev.fx))}</p>
         ${ev.like ? `<aside class="why"><h3>Like this case</h3><p>${esc(ev.like.text)}</p><p>${link(ev.like.issue, ev.like.anchor, ev.like.label)}</p></aside>` : ''}
         <button type="button" class="btn" data-next>${s.later + 1 < screens.length ? 'Continue' : 'See how your story ends'}</button>`;
@@ -201,10 +206,15 @@ import Base from '../../layouts/Base.astro';
       html = `<h2 tabindex="-1">The end: ${title}</h2><p>${text}</p>
         <p class="score">Your score: ${num(m)} + ${num(inc)} × ${num(car)} = <strong>${num(score)}</strong></p>
         <p class="small">Score = Money + Inclusion × Career. You chose accessibility in ${accCount} of ${STEPS.length} decisions.</p>
-        <div class="choices"><a class="btn" href="/take-action/">Take action as a designer</a><button type="button" class="choice" data-restart>Play again</button></div>`;
+        <div class="choices end"><a class="btn" href="/take-action/">Take action as a designer</a><button type="button" class="choice" data-restart>Play again</button></div>`;
     }
     game.innerHTML = html;
-    if (focus) (game.querySelector('h2') as HTMLElement).focus();
+    if (!focus) return;
+    (game.querySelector('h2') as HTMLElement).focus();
+    if (s.phase === 'choose') say(s.step === 0 ? `The story has started. ${totals(s)}` : `Your last choice: ${fxText(resultOf(s.picks, s.step - 1).fx)}. ${totals(s)}`);
+    else if (s.phase === 'result') say(`${fxText(resultOf(s.picks, s.step).fx)}. ${totals(s)}`);
+    else if (s.phase === 'later') say(`${fxText(laterScreens(s.picks)[s.later].fx)}. ${totals(s)}`);
+    else say(`Your score is ${num(s.stats.money + s.stats.inclusion * s.stats.career)}.`);
   }
 
   let state = read();
@@ -249,6 +259,7 @@ import Base from '../../layouts/Base.astro';
   .game .choice { background: #fff; color: var(--notebook); border: 2px solid var(--notebook); }
   .game .btn { display: inline-flex; align-items: center; justify-content: center; margin-top: 1rem; background: var(--notebook); color: #fff; border: 2px solid var(--notebook); }
   .game .choices .btn { margin-top: 0; justify-content: flex-start; }
+  .game .choices.end .btn, .game .choices.end .choice { justify-content: center; text-align: center; }
   .game .choice:hover { background: #f1ebfb; }
   .game .btn:hover { background: #fff; color: var(--notebook); }
   .game .choice:focus-visible, .game .btn:focus-visible { outline: 3px solid var(--notebook); outline-offset: 3px; }
