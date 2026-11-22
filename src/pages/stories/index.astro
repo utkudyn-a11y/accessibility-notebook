@@ -1,6 +1,7 @@
 ---
 // Stories: short interactive stories, one per role. Only the ones with a page are links;
-// the rest show "Coming soon" and are plain text (nothing to focus or click).
+// the rest show "Coming soon" and are plain text (nothing to focus or click). Their heading says
+// ", coming soon" to screen readers, so the visible badge is hidden from them (said once, not twice).
 import Base from '../../layouts/Base.astro';
 const STORIES = [
   { href: '/stories/ux-designer/', title: "UX Designer's Choice: The New Year Rush", fig: 'role-design', w: 571, h: 485,
@@ -32,9 +33,9 @@ const STORIES = [
               <div class="text">
                 {s.href
                   ? <h2 id={`s-${i}`}><a href={s.href}>{s.title}</a></h2>
-                  : <h2 id={`s-${i}`}>{s.title}</h2>}
+                  : <h2 id={`s-${i}`}>{s.title}<span class="visually-hidden">, coming soon</span></h2>}
                 <p class="desc">{s.text}</p>
-                {s.href ? <p class="meta">{s.meta}</p> : <p class="badge">Coming soon</p>}
+                {s.href ? <p class="meta">{s.meta}</p> : <p class="badge" aria-hidden="true">Coming soon</p>}
               </div>
             </article>
           </li>
