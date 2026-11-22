@@ -142,15 +142,15 @@ import Base from '../../layouts/Base.astro';
   const realCount = (p: number[]) => STEPS.length - emptyCount(p);
 
   type Later = { title: string; text: string; fx: Fx; items?: string[] };
-  // what each empty gesture did, said when it comes out after 3rd December
+  // what each empty gesture does to a real person after 3rd December: the reason it costs impact
   const EMPTY_WHY = [
-    'The headset stand: no blind customer used it, and your website still had broken headings.',
-    'The purple logo post: lots of likes, but nothing changed for anyone.',
-    'The image-only invitation: screen reader users couldn’t read it or sign up.',
-    'No live captions or interpreter: Deaf viewers waited a week to find out what was said.',
-    'The unpaid inspiring story: a disabled guest gave their time for free, for applause.',
-    'The “fully accessible” claim: it wasn’t true.',
-    'The untagged PDF: for a screen reader, your report was one long block of text.',
+    'The headset stand: a blind customer sees the headset photos and decides to give your website a try. The broken headings stop her at checkout, and she tells her friends not to bother.',
+    'The purple logo post: a disabled customer sees it and trusts that you care. She comes to your website expecting it to work for her, and it doesn’t.',
+    'The image-only invitation: blind customers hear about the webinar from friends, after it’s over. They feel it wasn’t meant for them, and they stop opening your emails.',
+    'No live captions or interpreter: the subtitles arrive a week late, auto-generated and full of errors. The Deaf viewers’ questions never got asked.',
+    'The unpaid inspiring story: your guest’s story ends up in an ad campaign, still unpaid. Other disabled customers turn down your next invitation: they don’t want to be the next free inspiration.',
+    'The “fully accessible” claim: a disabled customer trusts it, tries to book, and gets stuck. She loses an afternoon, and the trust is gone.',
+    'The untagged PDF: a blind researcher wants to cite your inclusion report, but she can’t read it. The report about inclusion left her out.',
   ];
   // money is needed for the over-budget event, so it is computed from the picks (after all items)
   const moneyAfter = (p: number[]) => p.reduce((m, _, i) => m + (resultOf(p, i).fx.money || 0), START.money);
@@ -158,7 +158,7 @@ import Base from '../../layouts/Base.astro';
     const n = emptyCount(p);
     const out: Later[] = [n
       ? { title: 'The truth comes out: your empty gestures', fx: { impact: -2 * n },
-          text: `Every empty gesture comes out in the end. It looked like support, but it left disabled people out, and people notice. Each one costs 2 impact points. You made ${n} empty ${n === 1 ? 'gesture' : 'gestures'}:`,
+          text: `After 3rd December, the cameras are gone, but your empty gestures are still there, and they hurt real people. Each one costs 2 impact points. You made ${n} empty ${n === 1 ? 'gesture' : 'gestures'}:`,
           items: p.map((x, i) => (STEPS[i].choices[x].real ? '' : EMPTY_WHY[i])).filter(Boolean) }
       : { title: 'The truth comes out', fx: {}, text: 'Nothing to hide. Everything you did on 3rd December still stands.' }];
     if (n >= 4) {
