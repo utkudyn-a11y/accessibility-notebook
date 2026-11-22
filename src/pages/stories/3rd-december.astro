@@ -115,7 +115,7 @@ import Base from '../../layouts/Base.astro';
     },
     {
       fig: 'd3-pdf', title: 'The inclusion report', issue: 8, anchor: 'news-1',
-      scene: 'The company’s first inclusion report is ready as a PDF. It goes out with the press release tomorrow.',
+      scene: 'The company’s first inclusion report is ready as a PDF. It goes out with the press release on 3rd December.',
       choices: [
         M('Make it a tagged, accessible PDF first', { money: -2, marketing: -1, impact: 2 }, 'It goes out a day late, so you miss 3rd December. But screen readers can tell its headings, lists and tables apart.',
           'Tags give a PDF its structure, so assistive technologies know what is a list, a heading or a paragraph.'),
@@ -133,8 +133,8 @@ import Base from '../../layouts/Base.astro';
       ? { text: 'You fixed the website first, so the testers find real problems in real tasks, and you fix them. They tell their community about it.', fx: { money: -2, impact: 3, marketing: 1 } }
       : { text: 'You booked the headset stand instead of fixing the website, so the testers hit basic barriers in the first five minutes. Useful, but finding broken headings should not have been their job.', fx: { money: -2, impact: 1 } };
     if (i === 5 && c.real) return real(p, 0)
-      ? { text: 'You fixed the website first, so the list of known issues is short, and the CEO is happy to share it.', fx: c.fx }
-      : { text: 'You booked the headset stand instead of fixing the website, so the list of known issues is long, and the CEO is not happy.', fx: { ...c.fx, marketing: -1 } };
+      ? { text: 'An honest statement takes real effort: it needs its own web page, designed and built, so it costs $2k. You fixed the website first, so the list of known issues is short, and the CEO is happy to share it.', fx: c.fx }
+      : { text: 'An honest statement takes real effort: it needs its own web page, designed and built, so it costs $2k. You booked the headset stand instead of fixing the website, so the list of known issues is long, and the CEO is not happy.', fx: { ...c.fx, marketing: -1 } };
     return { text: c.result, fx: c.fx };
   };
 
@@ -162,9 +162,10 @@ import Base from '../../layouts/Base.astro';
           items: p.map((x, i) => (STEPS[i].choices[x].real ? '' : EMPTY_WHY[i])).filter(Boolean) }
       : { title: 'The truth comes out', fx: {}, text: 'Nothing to hide. Everything you did on 3rd December still stands.' }];
     if (n >= 4) {
-      const what = !real(p, 2) ? 'read their invitation' : !real(p, 3) ? 'follow their webinar' : 'read their inclusion report';
+      const what = !real(p, 2) ? 'couldn’t even read their invitation' : !real(p, 3) ? 'couldn’t even follow their webinar'
+        : !real(p, 6) ? 'couldn’t even read their inclusion report' : 'found their ‘fully accessible’ website didn’t work for me';
       out.push({ title: 'The backlash', fx: { marketing: -3 },
-        text: `A disabled activist posts: “They celebrated 3rd December, but I couldn’t even ${what}.” The post is shared thousands of times.` });
+        text: `A disabled activist posts: “They celebrated 3rd December, but I ${what}.” The post is shared thousands of times.` });
     }
     if (!real(p, 5) || !real(p, 6)) out.push({ title: 'A blind journalist', fx: { marketing: -2 },
       text: 'A blind journalist writes about your 3rd December.'
