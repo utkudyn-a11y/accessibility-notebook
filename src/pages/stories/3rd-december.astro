@@ -1,7 +1,7 @@
 ---
 // Interactive story: What Can We Do On This 3rd December? Seven agenda items in a meeting room, each a
 // meaningful choice (costs money now) or an empty gesture (marketing now, hidden, costs impact later).
-// The budget can go below $0; every $1k over costs 10 points. After 3rd December: the empty gestures come
+// The budget can go below $0; every $1k over costs 9 points. After 3rd December: the empty gestures come
 // out, then up to four events. Score = Money + Impact × Marketing − 10 × Overspend; the ending depends on
 // the score (10 = what doing nothing would have left you with). Every result links to the issue behind it.
 // Progress lives in this tab only (sessionStorage), so a reader can open a "Why?" link and come back.
@@ -162,8 +162,8 @@ import Base from '../../layouts/Base.astro';
     if (realCount(p) >= 5) out.push({ title: 'An invitation', fx: { marketing: 3 },
       text: 'A disability organisation asks you to plan next year’s 3rd December together, and shares your work with its members.' });
     const m = moneyAfter(p);
-    if (m < 0) out.push({ title: 'Over budget', fx: { score: 10 * m },
-      text: `The CEO and the marketing lead look at the numbers: “You went over budget. We are not happy about this.” You are ${money(-m)} over: 10 points for every $1k.` });
+    if (m < 0) out.push({ title: 'Over budget', fx: { score: 9 * m },
+      text: `The CEO and the marketing lead look at the numbers: “You went over budget. We are not happy about this.” You are ${money(-m)} over: 9 points for every $1k.` });
     return out;
   };
 
@@ -178,13 +178,19 @@ import Base from '../../layouts/Base.astro';
     if (score >= 10) return { title: 'A good start', fig: 'd3-start', real: n, score, text: 'Some of it was real, some of it was for the photos. Next year, a little less applause and a little more change?' };
     return { title: 'Doing nothing would have been better', fig: 'd3-applause', real: n, score, text: 'You started with 10 points. If you had done nothing, you would still have 10. What you did cost more than it gave: it looked great on 3rd December, and on 4th December nothing had changed.' };
   };
+  const MAX = 60; // the best path: five meaningful choices and $1k over budget
+  const TIERS = ['More than a day', 'A good start', 'Doing nothing would have been better'];
+  // every ending, as information; the reader's own one stands out (border, fill, bold and a "Your ending" label)
+  const tiersHtml = (mine: string) => `<section class="tiers" aria-labelledby="tiers-title"><h3 id="tiers-title">All endings</h3><ul>${TIERS.map((t) => t === mine
+    ? `<li class="mine">${t} <span class="tag">Your ending</span></li>` : `<li>${t}</li>`).join('')}</ul></section>`;
+  const outOf = `<span class="max"><span aria-hidden="true"> / </span><span class="visually-hidden"> out of </span>${MAX}</span>`;
   const FIG_ALT: Record<string, string> = {
     'd3-more': 'a cheering stickperson next to a calendar full of ticks',
     'd3-start': 'a stickperson walking towards stairs that lead to a flag',
     'd3-applause': 'a sad stickperson sitting alone on a box',
   };
   const STORY = 'What Can We Do On This 3rd December?';
-  const altText = (e: Ending) => `My result in ${STORY}, an interactive story on Accessibility Notebook. ${e.title}, ${FIG_ALT[e.fig]}. Score: ${num(e.score)}. I made ${e.real} meaningful choices out of 7. Play at accessibilitynotebook.com/stories`;
+  const altText = (e: Ending) => `My result in ${STORY}, an interactive story on Accessibility Notebook. ${e.title}, ${FIG_ALT[e.fig]}. Score: ${num(e.score)} out of ${MAX}. I made ${e.real} meaningful choices out of 7. Play at accessibilitynotebook.com/stories`;
 
   // ---- Share card, drawn on a canvas (same look as the Take Action cards) ----
   const FONT = '"Atkinson Hyperlegible Next", "Atkinson Hyperlegible", system-ui, sans-serif';
@@ -228,7 +234,9 @@ import Base from '../../layouts/Base.astro';
     for (const line of wrap(x, e.title, long ? 620 : 560)) { x.fillText(line, L, y); y += long ? 64 : 76; }
     y += 30;
     x.font = `400 32px ${FONT}`; x.fillText('Score', L, y); y += 110;
-    x.font = `800 120px ${FONT}`; x.fillText(num(e.score), L, y); y += 70;
+    x.font = `800 120px ${FONT}`; x.fillText(num(e.score), L, y);
+    const sw = x.measureText(num(e.score)).width;
+    x.font = `400 56px ${FONT}`; x.fillText(`/${MAX}`, L + sw + 10, y); y += 70;
     x.font = `700 34px ${FONT}`;
     for (const line of wrap(x, `I made ${e.real} meaningful choices out of 7.`, 520)) { x.fillText(line, L, y); y += 46; }
     // figure on the right
@@ -305,7 +313,7 @@ import Base from '../../layouts/Base.astro';
   };
   const scoreNote = (s: Stats) => [
     'Score = Money + Impact × Marketing',
-    s.penalty ? ', minus 10 points for every $1k over budget' : '',
+    s.penalty ? ', minus 9 points for every $1k over budget' : '',
     '.',
     s.impact < 0 && s.marketing < 0 ? ' When Impact and Marketing are both below 0, their product stays negative.' : '',
     s.impact > 0 && s.marketing === 0 ? ' With 0 marketing, your impact still counts once.' : '',
@@ -335,8 +343,9 @@ import Base from '../../layouts/Base.astro';
       const e = ending(s);
       html = `<h2 tabindex="-1">The end: ${esc(e.title)}</h2>
         <div class="scene"><img class="sfig" src="/images/figures/${e.fig}.svg" alt="" /><p>${esc(e.text)}</p></div>
-        <p class="score">Your score: ${scoreSum(s.stats)} = <strong>${num(e.score)}</strong></p>
+        <p class="score">Your score: ${scoreSum(s.stats)} = <strong>${num(e.score)}</strong>${outOf}</p>
         <p class="small">${scoreNote(s.stats)} You made ${e.real} meaningful choices out of ${N}.</p>
+        ${tiersHtml(e.title)}
         <section class="share" aria-labelledby="share-title">
           <h3 id="share-title">Share your result</h3>
           <img class="card-img" alt="" width="1080" height="1080" />
@@ -357,7 +366,7 @@ import Base from '../../layouts/Base.astro';
     if (s.phase === 'choose') say(s.step === 0 ? `The meeting has started. ${totals(s)}` : `Your last choice: ${fxText(resultOf(s.picks, s.step - 1).fx)}. ${totals(s)}`);
     else if (s.phase === 'result') say(`${fxText(resultOf(s.picks, s.step).fx)}. ${totals(s)}`);
     else if (s.phase === 'later') say(`${fxText(laterScreens(s.picks)[s.later].fx)}. ${totals(s)}`);
-    else say(`Your score is ${num(ending(s).score)}. You can share your result below.`);
+    else say(`Your score is ${num(ending(s).score)} out of ${MAX}. You can share your result below.`);
   }
 
   // Coming back with the Back button (e.g. from a "Why?" link) or a reload: carry on where the reader was.
@@ -454,6 +463,13 @@ import Base from '../../layouts/Base.astro';
   .game .share-btns .choice { display: inline-flex; align-items: center; }
   .game .score { font-size: var(--step-1); }
   .game .small { font-size: var(--step--1); color: var(--ink-soft); }
+  .game .score .max { font-size: 0.75em; font-weight: 400; }
+  .game .tiers h3 { margin: 1.25rem 0 0.5rem; font-size: 1rem; }
+  .game .tiers ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.4rem; }
+  .game .tiers li { padding: 0.45rem 0.75rem; border: 1px solid #d8d0ea; border-radius: 6px; color: var(--ink-soft); }
+  .game .tiers li.mine { border: 3px solid var(--notebook); background: #f6f2fd; color: var(--ink); font-weight: 800; }
+  .game .tiers .tag { display: inline-block; margin-left: 0.5rem; padding: 0 0.5rem; border-radius: 999px; background: var(--notebook); color: #fff; font-size: var(--step--1); font-weight: 700; }
+  @media (forced-colors: active) { .game .tiers li.mine { border-color: CanvasText; } .game .tiers .tag { border: 1px solid CanvasText; } }
   .game .why { margin-top: 1.25rem; padding: 0.75rem 1rem; border-left: 4px solid var(--notebook); background: #f6f2fd; }
   .game .why h3 { margin: 0 0 0.25rem; font-size: 1rem; }
   .game .why p { margin: 0.25rem 0; }

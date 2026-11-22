@@ -18,7 +18,7 @@ import Base from '../../layouts/Base.astro';
       <div class="screen" data-screen="intro">
         <img class="fig" src="/images/figures/role-design.svg" alt="" width="571" height="485" />
         <p>New Year is six weeks away, and your online shop is getting a New Year design. You are its only UX designer.</p>
-        <p>You start with a <strong>$20k design budget</strong>, <strong>5 inclusion points</strong> and <strong>5 career points</strong>.</p>
+        <p>You start with a <strong>$25k design budget</strong>, <strong>5 inclusion points</strong> and <strong>5 career points</strong>.</p>
         <p>Make five decisions. Some bills come later.</p>
         <div class="intro-btns">
           <button type="button" class="btn" data-continue hidden>Continue where you left off</button>
@@ -29,7 +29,7 @@ import Base from '../../layouts/Base.astro';
       <div class="play" hidden>
         <h2 class="visually-hidden">Your stats</h2>
         <dl class="stats">
-          <div><dt>Money</dt><dd data-stat="money">$20k</dd></div>
+          <div><dt>Money</dt><dd data-stat="money">$25k</dd></div>
           <div><dt>Inclusion</dt><dd data-stat="inclusion">5</dd></div>
           <div><dt>Career</dt><dd data-stat="career">5</dd></div>
         </dl>
@@ -150,12 +150,18 @@ import Base from '../../layouts/Base.astro';
     if (n >= 3) return { title: 'A thoughtful designer', fig: 'st-thoughtful', acc: n, score, text: 'You cut a few corners, but you cared when it mattered. Next time, maybe one more push back?' };
     return { title: 'Fast climber, hard landing', fig: 'st-landing', acc: n, score, text: 'You climbed fast, but the shortcuts caught up with you. Accessibility debt always sends the bill later.' };
   };
+  const MAX = 150; // the best path: five accessible decisions
+  const TIERS = ['Accessibility champion', 'A thoughtful designer', 'Fast climber, hard landing'];
+  // every ending, as information; the reader's own one stands out (border, fill, bold and a "Your ending" label)
+  const tiersHtml = (mine: string) => `<section class="tiers" aria-labelledby="tiers-title"><h3 id="tiers-title">All endings</h3><ul>${TIERS.map((t) => t === mine
+    ? `<li class="mine">${t} <span class="tag">Your ending</span></li>` : `<li>${t}</li>`).join('')}</ul></section>`;
+  const outOf = `<span class="max"><span aria-hidden="true"> / </span><span class="visually-hidden"> out of </span>${MAX}</span>`;
   const FIG_ALT: Record<string, string> = {
     'st-champion': 'a cheering stickperson next to a trophy',
     'st-thoughtful': 'a stickperson thinking, with a tick and a cross in a thought bubble',
     'st-landing': 'a dazed stickperson sitting at the bottom of the stairs',
   };
-  const altText = (e: Ending) => `My result in UX Designer's Choice: The New Year Rush, an interactive story on Accessibility Notebook. ${e.title}, ${FIG_ALT[e.fig]}. Score: ${num(e.score)}. I chose accessibility in ${e.acc} of 5 decisions. Play at accessibilitynotebook.com/stories`;
+  const altText = (e: Ending) => `My result in UX Designer's Choice: The New Year Rush, an interactive story on Accessibility Notebook. ${e.title}, ${FIG_ALT[e.fig]}. Score: ${num(e.score)} out of ${MAX}. I chose accessibility in ${e.acc} of 5 decisions. Play at accessibilitynotebook.com/stories`;
 
   // ---- Share card, drawn on a canvas (same look as the Take Action cards) ----
   const FONT = '"Atkinson Hyperlegible Next", "Atkinson Hyperlegible", system-ui, sans-serif';
@@ -198,7 +204,9 @@ import Base from '../../layouts/Base.astro';
     for (const line of wrap(x, e.title, 560)) { x.fillText(line, L, y); y += 76; }
     y += 30;
     x.font = `400 32px ${FONT}`; x.fillText('Score', L, y); y += 110;
-    x.font = `800 120px ${FONT}`; x.fillText(num(e.score), L, y); y += 70;
+    x.font = `800 120px ${FONT}`; x.fillText(num(e.score), L, y);
+    const sw = x.measureText(num(e.score)).width;
+    x.font = `400 56px ${FONT}`; x.fillText(`/${MAX}`, L + sw + 10, y); y += 70;
     x.font = `700 34px ${FONT}`;
     for (const line of wrap(x, `I chose accessibility in ${e.acc} of 5 decisions.`, 520)) { x.fillText(line, L, y); y += 46; }
     // figure on the right
@@ -224,7 +232,7 @@ import Base from '../../layouts/Base.astro';
     if (sh && navigator.canShare?.({ files: [file] })) sh.hidden = false;
   };
 
-  const START: Stats = { money: 20, inclusion: 5, career: 5 };
+  const START: Stats = { money: 25, inclusion: 5, career: 5 };
   const KEY = 'story-ux';
   type State = { step: number; phase: 'choose' | 'result' | 'later' | 'end'; later: number; stats: Stats; picks: number[] };
   const fresh = (): State => ({ step: 0, phase: 'choose', later: 0, stats: { ...START }, picks: [] });
@@ -286,8 +294,9 @@ import Base from '../../layouts/Base.astro';
       const { money: m, inclusion: inc, career: car } = s.stats;
       html = `<h2 tabindex="-1">The end: ${e.title}</h2>
         <div class="scene"><img class="sfig" src="/images/figures/${e.fig}.svg" alt="" /><p>${e.text}</p></div>
-        <p class="score">Your score: ${num(m)} + ${num(inc)} × ${num(car)} = <strong>${num(e.score)}</strong></p>
+        <p class="score">Your score: ${num(m)} + ${num(inc)} × ${num(car)} = <strong>${num(e.score)}</strong>${outOf}</p>
         <p class="small">Score = Money + Inclusion × Career. You chose accessibility in ${e.acc} of ${STEPS.length} decisions.</p>
+        ${tiersHtml(e.title)}
         <section class="share" aria-labelledby="share-title">
           <h3 id="share-title">Share your result</h3>
           <img class="card-img" alt="" width="1080" height="1080" />
@@ -308,7 +317,7 @@ import Base from '../../layouts/Base.astro';
     if (s.phase === 'choose') say(s.step === 0 ? `The story has started. ${totals(s)}` : `Your last choice: ${fxText(resultOf(s.picks, s.step - 1).fx)}. ${totals(s)}`);
     else if (s.phase === 'result') say(`${fxText(resultOf(s.picks, s.step).fx)}. ${totals(s)}`);
     else if (s.phase === 'later') say(`${fxText(laterScreens(s.picks)[s.later].fx)}. ${totals(s)}`);
-    else say(`Your score is ${num(ending(s).score)}. You can share your result below.`);
+    else say(`Your score is ${num(ending(s).score)} out of ${MAX}. You can share your result below.`);
   }
 
   // Coming back with the Back button (e.g. from a "Why?" link) or a reload: carry on where the reader was.
@@ -404,6 +413,13 @@ import Base from '../../layouts/Base.astro';
   .game .share-btns .choice { display: inline-flex; align-items: center; }
   .game .score { font-size: var(--step-1); }
   .game .small { font-size: var(--step--1); color: var(--ink-soft); }
+  .game .score .max { font-size: 0.75em; font-weight: 400; }
+  .game .tiers h3 { margin: 1.25rem 0 0.5rem; font-size: 1rem; }
+  .game .tiers ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.4rem; }
+  .game .tiers li { padding: 0.45rem 0.75rem; border: 1px solid #d8d0ea; border-radius: 6px; color: var(--ink-soft); }
+  .game .tiers li.mine { border: 3px solid var(--notebook); background: #f6f2fd; color: var(--ink); font-weight: 800; }
+  .game .tiers .tag { display: inline-block; margin-left: 0.5rem; padding: 0 0.5rem; border-radius: 999px; background: var(--notebook); color: #fff; font-size: var(--step--1); font-weight: 700; }
+  @media (forced-colors: active) { .game .tiers li.mine { border-color: CanvasText; } .game .tiers .tag { border: 1px solid CanvasText; } }
   .game .why { margin-top: 1.25rem; padding: 0.75rem 1rem; border-left: 4px solid var(--notebook); background: #f6f2fd; }
   .game .why h3 { margin: 0 0 0.25rem; font-size: 1rem; }
   .game .why p { margin: 0.25rem 0; }
