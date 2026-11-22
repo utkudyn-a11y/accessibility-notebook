@@ -77,7 +77,7 @@ import Base from '../../layouts/Base.astro';
       fig: 'd3-email', title: 'The invitation email', issue: 16, anchor: 'news-3',
       scene: 'The events lead shows the invitation email for the company’s 3rd December webinar. It was made in a drag-and-drop email builder, and the whole email is one big image.',
       choices: [
-        E('Send it as it is', { impact: -1 }, 'It looks beautiful. Screen reader users get an email with one image and nothing to read, and the sign-up button doesn’t work for them.',
+        E('Send it as it is', {}, 'It looks beautiful. Screen reader users get an email with one image and nothing to read, and the sign-up button doesn’t work for them.',
           '99.88% of the 376,348 emails analysed for the Email Markup Consortium’s 2026 report had serious or critical accessibility defects. One reason: email builders that put visual layout before semantics.'),
         M('Rebuild it with real text, headings and a clear sign-up link', { money: -2, marketing: 1, impact: 2 }, 'It takes another day. Everyone can read who is speaking and how to join.',
           'The same web accessibility standards apply to the inbox: real text, headings and semantic HTML, not one big image.'),
@@ -87,7 +87,7 @@ import Base from '../../layouts/Base.astro';
       fig: 'd3-webinar', title: 'The live webinar', issue: 14, anchor: 'news-1',
       scene: 'The webinar is one hour long. The events lead says live captions and a sign language interpreter are expensive. “We can add subtitles to the recording later.”',
       choices: [
-        E('Skip them and add subtitles to the recording later', { impact: -1 }, 'The webinar runs on time and under budget. Deaf viewers wait a week to find out what was said about them.',
+        E('Skip them and add subtitles to the recording later', {}, 'The webinar runs on time and under budget. Deaf viewers wait a week to find out what was said about them.',
           'Live access is possible, even at a huge scale. The FIFA World Cup 2026 was a good example: it offered sign language interpretation for every match.'),
         M('Book live captions and a sign language interpreter', { money: -3, marketing: 2, impact: 2 }, 'The most expensive item on the agenda. Deaf viewers follow the webinar live, like everyone else.',
           'The FIFA World Cup 2026 offers sign language broadcasts for every match, so fans can follow the action live, wherever they are.'),
@@ -141,14 +141,25 @@ import Base from '../../layouts/Base.astro';
   const emptyCount = (p: number[]) => p.filter((x, i) => !STEPS[i].choices[x].real).length;
   const realCount = (p: number[]) => STEPS.length - emptyCount(p);
 
-  type Later = { title: string; text: string; fx: Fx };
+  type Later = { title: string; text: string; fx: Fx; items?: string[] };
+  // what each empty gesture did, said when it comes out after 3rd December
+  const EMPTY_WHY = [
+    'The headset stand: no blind customer used it, and your website still had broken headings.',
+    'The purple logo post: lots of likes, but nothing changed for anyone.',
+    'The image-only invitation: screen reader users couldn’t read it or sign up.',
+    'No live captions or interpreter: Deaf viewers waited a week to find out what was said.',
+    'The unpaid inspiring story: a disabled guest gave their time for free, for applause.',
+    'The “fully accessible” claim: it wasn’t true.',
+    'The untagged PDF: for a screen reader, your report was one long block of text.',
+  ];
   // money is needed for the over-budget event, so it is computed from the picks (after all items)
   const moneyAfter = (p: number[]) => p.reduce((m, _, i) => m + (resultOf(p, i).fx.money || 0), START.money);
   const laterScreens = (p: number[]): Later[] => {
     const n = emptyCount(p);
     const out: Later[] = [n
       ? { title: 'The truth comes out: your empty gestures', fx: { impact: -2 * n },
-          text: `Every empty gesture comes out in the end: the headset nobody used, the purple logo, the claim that wasn’t true. People notice, and they remember. You have ${n} empty ${n === 1 ? 'gesture' : 'gestures'}: 2 impact points each.` }
+          text: `Every empty gesture comes out in the end. It looked like support, but it left disabled people out, and people notice. Each one costs 2 impact points. You made ${n} empty ${n === 1 ? 'gesture' : 'gestures'}:`,
+          items: p.map((x, i) => (STEPS[i].choices[x].real ? '' : EMPTY_WHY[i])).filter(Boolean) }
       : { title: 'The truth comes out', fx: {}, text: 'Nothing to hide. Everything you did on 3rd December still stands.' }];
     if (n >= 4) {
       const what = !real(p, 2) ? 'read their invitation' : !real(p, 3) ? 'follow their webinar' : 'read their inclusion report';
@@ -337,7 +348,7 @@ import Base from '../../layouts/Base.astro';
         <button type="button" class="btn" data-next>${s.step + 1 < N ? 'Next item' : 'After 3rd December…'}</button>`;
     } else if (s.phase === 'later') {
       const screens = laterScreens(s.picks), ev = screens[s.later];
-      html = `<p class="count" aria-hidden="true">After 3rd December</p><h2 tabindex="-1"><span class="visually-hidden">After 3rd December: </span>${esc(ev.title)}</h2><p>${esc(ev.text)}</p>
+      html = `<p class="count" aria-hidden="true">After 3rd December</p><h2 tabindex="-1"><span class="visually-hidden">After 3rd December: </span>${esc(ev.title)}</h2><p>${esc(ev.text)}</p>${ev.items ? `<ul class="empties">${ev.items.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>` : ''}
         <p class="fx">${esc(fxText(ev.fx))}</p>
         <button type="button" class="btn" data-next>${s.later + 1 < screens.length ? 'Continue' : 'See how your story ends'}</button>`;
     } else {
@@ -443,6 +454,7 @@ import Base from '../../layouts/Base.astro';
   .game .btn:hover { background: #fff; color: var(--notebook); }
   .game .choice:focus-visible, .game .btn:focus-visible { outline: 3px solid var(--notebook); outline-offset: 3px; }
   .game .fx { font-weight: 800; }
+  .game .empties { margin: 0.5rem 0 1rem; padding-left: 1.25rem; display: grid; gap: 0.35rem; }
   .game .choice .cost { display: block; margin-top: 0.15rem; font-size: var(--step--1); font-weight: 700; color: var(--ink-soft); }
   .game h1:focus { outline: none; }
   .game .intro-btns { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1rem; }
