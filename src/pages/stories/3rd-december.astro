@@ -66,8 +66,8 @@ import Base from '../../layouts/Base.astro';
       fig: 'd3-post', title: 'The social media post', issue: 9, anchor: 'news-3',
       scene: 'The marketing lead wants a purple logo and a post that says “Happy 3rd December! We celebrate diversity.”',
       choices: [
-        M('Say no to a simple post: start a pledge where everyone gives one hour to fix a small accessibility issue', { money: -2, marketing: 1, impact: 2 },
-          'The pledge announcement costs more than a simple post: it needs a proper design. But dozens of people pledge an hour. Alt text gets added, headings get fixed, and your post shows the results.',
+        M('Say no to a simple post: start a pledge where people give one hour to fix a small accessibility issue on their own websites', { money: -2, marketing: 1, impact: 2 },
+          'The pledge announcement costs more than a simple post: it needs a proper design. But dozens of people pledge an hour. Alt text gets added and headings get fixed on their own websites, and your post shows the results.',
           'Equalize Digital asked people to pledge their time to improve accessibility in WordPress, because even one small fix, like adding alt text, fixing heading levels or improving keyboard navigation, can make a big difference.'),
         E('Post the purple logo and the message', {}, 'Lots of likes. Nothing changes for anyone.',
           'Awareness posts are easy. I prefer call-to-action campaigns, like Equalize Digital’s accessibility pledge for Global Accessibility Awareness Day.'),
@@ -126,15 +126,15 @@ import Base from '../../layouts/Base.astro';
   ];
   const real = (p: number[], i: number) => p[i] !== undefined && STEPS[i].choices[p[i]].real;
 
-  // Items 5 and 6 remember earlier choices (item 1: the website; item 2: the pledge or the purple logo)
+  // Items 5 and 6 remember item 1 (fixing the website or booking the headset stand)
   const resultOf = (p: number[], i: number): { text: string; fx: Fx } => {
     const c = STEPS[i].choices[p[i]];
     if (i === 4 && c.real) return real(p, 0)
       ? { text: 'You fixed the website first, so the testers find real problems in real tasks, and you fix them. They tell their community about it.', fx: { money: -2, impact: 3, marketing: 1 } }
       : { text: 'You booked the headset stand instead of fixing the website, so the testers hit basic barriers in the first five minutes. Useful, but finding broken headings should not have been their job.', fx: { money: -2, impact: 1 } };
-    if (i === 5 && c.real) return real(p, 1)
-      ? { text: 'People pledged their time, so the list of known issues is short, and the CEO is happy to share it.', fx: c.fx }
-      : { text: 'You posted the purple logo instead of starting the pledge, so the list of known issues is long, and the CEO is not happy.', fx: { ...c.fx, marketing: -1 } };
+    if (i === 5 && c.real) return real(p, 0)
+      ? { text: 'You fixed the website first, so the list of known issues is short, and the CEO is happy to share it.', fx: c.fx }
+      : { text: 'You booked the headset stand instead of fixing the website, so the list of known issues is long, and the CEO is not happy.', fx: { ...c.fx, marketing: -1 } };
     return { text: c.result, fx: c.fx };
   };
 
