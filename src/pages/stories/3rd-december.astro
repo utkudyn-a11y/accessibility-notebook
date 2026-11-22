@@ -347,6 +347,7 @@ import Base from '../../layouts/Base.astro';
         <p class="score">Your score: ${scoreSum(s.stats)} = <strong>${num(e.score)}</strong>${outOf}</p>
         <p class="small">${scoreNote(s.stats)} You made ${e.real} meaningful choices out of ${N}.</p>
         ${e.real < N && e.score > ALL_MEANINGFUL ? `<aside class="why"><h3>A high score, but…</h3><p>Your score is high because you balanced the budget with accessibility needs. So yes, I know you compromised on accessibility along the way. Would you rather be inclusive, or get a high score? Your choice.</p></aside>` : ''}
+        ${e.real === N ? `<aside class="why"><h3>All seven, and still not the top score</h3><p>You put accessibility first in every choice, and you still didn’t get the highest score. That’s life… Putting inclusion first doesn’t always give you the top score. If you want to raise your score, play again.</p></aside>` : ''}
         ${tiersHtml(e.title)}
         <section class="share" aria-labelledby="share-title">
           <h3 id="share-title">Share your result</h3>
