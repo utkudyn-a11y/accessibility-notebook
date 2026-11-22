@@ -17,6 +17,8 @@ const {
   published,
   jsonLd,
   noindex = false,
+  // false on Easy Read pages: no thrown-in sheets and no page turn (Easy Read checklist rule L10)
+  motion = true,
 } = Astro.props;
 // No back-to-top button on issue and article pages, so it never covers the text being read
 const backToTop = type !== 'article' && !noindex;
@@ -34,7 +36,7 @@ const ld = jsonLd ?? {
 };
 ---
 <!doctype html>
-<html lang="en">
+<html lang="en" data-motion={motion ? undefined : 'none'}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -64,6 +66,7 @@ const ld = jsonLd ?? {
       // Runs in the head so the sheets never flash before the animation.
       (function () {
         try {
+          if (document.documentElement.dataset.motion === 'none') return;
           if (matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
           // Moving between pages of the site has its own page turn, so sheets are thrown only where a visit starts
           if (document.referrer && new URL(document.referrer).origin === location.origin) return;
@@ -87,6 +90,7 @@ const ld = jsonLd ?? {
     </main>
     <Footer />
     {backToTop && <BackToTop />}
+    {!motion && <style is:inline>@view-transition { navigation: none; }</style>}
     <script>
       // Sheets land as they scroll into view; the ones arriving together come one after another
       if (document.documentElement.classList.contains('throw-on')) {

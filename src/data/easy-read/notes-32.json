@@ -1,0 +1,73 @@
+{
+  "issue": 32,
+  "intro": [
+    { "icon": "c08", "lines": ["My name is Utku.", "I write the Accessibility Notebook.", "The Accessibility Notebook has news about accessibility."] },
+    { "icon": "c01", "lines": ["**Accessibility** means everyone can use something.", "This includes disabled people."] },
+    { "icon": "c10", "lines": ["This page is the Easy Read version of Notebook issue number 32.", "Issue number 32 came out on Saturday 21 November 2026.", "This page tells you the main things in the issue.", "It does not tell you everything."] },
+    { "icon": "c11", "lines": ["I want to test this page with real readers.", "Please tell me what is easy and what is hard to understand."], "link": { "href": "/notes/32/#comments", "text": "Tell me what you think" } }
+  ],
+  "sections": [
+    { "id": "website", "title": "My Website Is More Than A List Of Old Issues", "blocks": [
+      { "icon": "c03", "lines": ["Last month, I worked a lot on this website.", "I do not want a website with only text.", "So I added games and things you can do.", "For example, you can vote and choose actions."] },
+      { "icon": "c08", "lines": ["I want accessibility to be easy to read and fun.", "Soon there will be stories you can play.", "There will also be a place where you can try things."] },
+      { "icon": "c13", "lines": ["**AI** is a computer program.", "It can answer questions and describe pictures.", "**Claude** is an AI program.", "Claude wrote all the code for this website.", "I told Claude that accessibility was very important.", "Then I checked the website myself."], "link": { "href": "#interview", "text": "Read more: I Asked Claude 5 Questions" } }
+    ]},
+    { "id": "nhs", "title": "The NHS App Is Hard To Use For Many Blind People", "blocks": [
+      { "icon": "n10", "lines": ["The **NHS** is the health service in the United Kingdom.", "The NHS has an app for your phone.", "The government wants people to use the app for health services by 2028."] },
+      { "icon": "c07", "lines": ["A group for blind people asked blind people about the app.", "Very few said the app is fully accessible.", "Almost half of the people who use the app said it is hard to use."] },
+      { "icon": "c08", "lines": ["An app can be better than paper for blind people.", "For example, you can read your test results on your phone.", "But only if the app is accessible.", "Accessibility must come first."] },
+      { "source": { "href": "https://www.rnib.org.uk/news/report-finds-nhs-app-falls-short-on-accessibility/", "text": "Read the original news on RNIB" } }
+    ]},
+    { "id": "ai-government", "title": "AI In Government Services", "blocks": [
+      { "icon": "n11", "lines": ["Governments give services to people.", "For example, health services or help with money.", "Some governments now use AI for these services."] },
+      { "icon": "n04", "lines": ["**G3ict** is a group that works on accessible technology.", "G3ict wrote a report about AI in government services.", "There are 193 countries in the United Nations.", "G3ict found information from only 34 of them."] },
+      { "icon": "c07", "lines": ["G3ict found these problems:", "Governments do not include disabled people when they decide how to use AI.", "There is little proof that governments ask for accessible AI when they buy it.", "Governments rarely share checks that show if their AI is fair."] },
+      { "source": { "href": "https://g3ict.org/publication/closing-the-transparency-gap-disability-inclusive-and-ethical-ai-in-public-services", "text": "Read the original report on G3ict" } }
+    ]},
+    { "id": "github", "title": "A Place For Accessibility On GitHub", "blocks": [
+      { "icon": "c03", "lines": ["**GitHub** is a website.", "People use it to share computer code and work on it together."] },
+      { "icon": "n12", "lines": ["Projects on GitHub can now have a special file about accessibility.", "The file can tell you:"], "list": ["what the project does for accessibility", "how you can help", "what does not work yet", "how to tell the team about a problem"] },
+      { "icon": "c08", "lines": ["New projects on GitHub also get an accessibility label for problems.", "I think this is a good step.", "Accessibility becomes part of everyday work."] },
+      { "source": { "href": "https://github.blog/open-source/maintainers/accessibility-statements-now-have-a-home-on-github/", "text": "Read the original news on GitHub" } }
+    ]},
+    { "id": "articles", "title": "3 Articles I Like", "blocks": [
+      { "heading": "Article 1: Accessibility Checks Are Only A Start" },
+      { "icon": "c06", "lines": ["Many companies start with an accessibility check of their website or app.", "An accessibility check tells you where the problems are.", "But it does not tell you why the problems are there."] },
+      { "icon": "c08", "lines": ["Accessibility checks are useful.", "You can fix all the problems from an accessibility check.", "But new problems come with every new part of the website.", "So an accessibility check is only a start.", "Accessibility must be part of how you work every day."] },
+      { "source": { "href": "https://tab-able.co.uk/should-we-stop-saying-yes-to-audits/", "text": "Read article 1 on Tab-able" } },
+      { "heading": "Article 2: Websites That Trick You" },
+      { "icon": "n13", "lines": ["Some shopping websites trick you.", "For example:"], "list": ["It is very hard to stop paying every month.", "A tick box is confusing, so you choose the wrong thing.", "A price looks lower than it really is."] },
+      { "icon": "c05", "lines": ["**WCAG** are the rules for accessible websites.", "WCAG does not stop these tricks.", "But the tricks can be very hard for some people.", "For example, people who find it hard to focus or understand."] },
+      { "source": { "href": "https://ducat.money/blog/ecommerce-dark-patterns/", "text": "Read article 2 on Ducat" } },
+      { "vote": { "question": 1, "over": "What do you think?", "ask": "Who should stop websites that trick people?", "options": ["Rules for accessible websites", "Laws that protect shoppers", "The people who design websites"] } },
+      { "heading": "Article 3: A Song About A Chair That Climbs Stairs" },
+      { "icon": "n15", "lines": ["Joel Chapman made a song.", "The song is about a wheelchair that can climb stairs."] },
+      { "icon": "n14", "lines": ["The wheelchair costs a lot of money.", "You must pay for it yourself.", "You must also pay to fix it yourself.", "Many people think it is amazing."] },
+      { "icon": "c08", "lines": ["New technology can look great.", "But many disabled people cannot get it.", "Do not blame them for this."] },
+      { "source": { "href": "https://www.youtube.com/watch?v=TV0hWi1wtbw", "text": "Listen to the song on YouTube" } }
+    ]},
+    { "id": "interview", "title": "I Asked Claude 5 Questions", "blocks": [
+      { "icon": "c13", "lines": ["Claude wrote the code for this website.", "So I asked Claude how the website became accessible.", "Claude wrote most of the answers."] },
+      { "icon": "c03", "heading": "1. Why Was The Website Accessible From The Start?", "lines": ["Accessibility was a must from the first day.", "Claude used simple and correct code.", "A computer program checked every page before each update.", "If there was a problem, the update stopped.", "So I found only a few problems."] },
+      { "icon": "c16", "heading": "2. Would It Be Different On A Football Website?", "lines": ["The basic work would be the same.", "But on this website, accessibility is the main topic.", "So Claude thought more about real people.", "For example, the games tell screen reader users what happens.", "A **screen reader** is a program that reads the screen out loud."] },
+      { "icon": "c13", "lines": ["Claude learned something:", "Tell the AI who will use the website.", "For example: Some of my readers use a screen reader.", "Then the website gets better."] },
+      { "icon": "c06", "heading": "3. What Did The Computer Checks Miss?", "lines": ["Computer checks look at rules.", "They cannot tell you if a website is easy to use.", "I found 2 problems that the checks missed:"], "list": ["A screen reader did not read a message after you went to a new page.", "With high contrast on Windows, a black box was behind some text."] },
+      { "icon": "c12", "lines": ["**High contrast** is a setting on your computer.", "It shows very strong colours on the screen."] },
+      { "icon": "c13", "heading": "4. Do We Still Need People To Test?", "lines": ["Claude knows what we found.", "But Claude does not remember it in a new conversation.", "So we must write it down as a checklist.", "Claude cannot see a real phone or a real person.", "So yes, people must still test."] },
+      { "icon": "c05", "heading": "5. What Can You Do To Make An Accessible Website?", "lines": ["Claude gives this advice:"], "list": ["Write down which rules you follow, for example WCAG.", "Check every page before every update.", "Start with simple and correct code.", "Test every new part with a keyboard and a screen reader.", "Also test with high contrast, with bigger text and on a slow phone.", "Give every picture a text that says what is in it.", "Do not use only colour to show something."] },
+      { "icon": "c02", "lines": ["Test with disabled people early and often.", "No program can do this for you.", "Not even AI."] },
+      { "source": { "href": "/in-detail/interview-with-claude-how-accessibility-notebook-was-born-accessible/", "text": "Read the full interview" } }
+    ]},
+    { "id": "do", "title": "What Can You Do?", "blocks": [
+      { "icon": "n12", "lines": ["Do you make software on GitHub?", "Then you can make this promise:", "“I will add an accessibility file to our projects.”"] },
+      { "icon": "n13", "lines": ["Do you design websites?", "Then you can make this promise:", "“I will check our shopping pages for tricks.”"], "link": { "href": "/take-action/", "text": "Make a promise on the Take Action page", "notEasyRead": true } }
+    ]},
+    { "id": "feedback", "title": "Tell Me What You Think", "blocks": [
+      { "icon": "c11", "lines": ["I want to test this page with real readers.", "Please tell me what is easy and what is hard to understand."], "link": { "href": "/notes/32/#comments", "text": "Tell me what you think" } },
+      { "icon": "c10", "lines": ["Do you want to read more?"], "link": { "href": "/notes/32/", "text": "Read the full version of issue number 32", "notEasyRead": true } }
+    ]},
+    { "id": "about", "title": "About This Page", "menu": false, "blocks": [
+      { "icon": "c08", "lines": ["I wrote this page.", "An AI program helped me with the first version.", "I checked every sentence."] }
+    ]}
+  ]
+}

@@ -22,7 +22,7 @@ const votes = er.sections.flatMap((s) => s.blocks.filter((b) => b.vote).map((b) 
 })));
 ---
 <Base title={title} description={`The Easy Read version of Accessibility Notebook issue number ${n}. Simple words and pictures.`}
-      image={issue.cover} type="article" published={`${issue.date}T09:00:00+03:00`}>
+      image={issue.cover} type="article" published={`${issue.date}T09:00:00+03:00`} motion={false}>
   <link slot="head" rel="alternate" href={fullUrl} title={`Full version of Notes # ${n}`} />
   <article class="wrap er" aria-labelledby="er-title" data-votes={JSON.stringify(votes)}>
     <div class="sheet">
@@ -48,6 +48,7 @@ const votes = er.sections.flatMap((s) => s.blocks.filter((b) => b.vote).map((b) 
                 <span class="er-icon" set:html={easyReadIcon(b.icon)} />
                 <div class="er-text">
                   {b.lines.map((l) => <p set:html={easyLine(l)} />)}
+                  {b.list && <ul class="er-list">{b.list.map((l) => <li set:html={easyLine(l)} />)}</ul>}
                   {b.link && <p><a href={b.link.href}>{b.link.text}</a>{b.link.notEasyRead && ' (not in Easy Read)'}</p>}
                 </div>
               </div>
@@ -84,6 +85,7 @@ const votes = er.sections.flatMap((s) => s.blocks.filter((b) => b.vote).map((b) 
                 <div class="er-text">
                   {b.heading && <h3>{b.heading}</h3>}
                   {b.lines.map((l) => <p set:html={easyLine(l)} />)}
+                  {b.list && <ul class="er-list">{b.list.map((l) => <li set:html={easyLine(l)} />)}</ul>}
                   {b.link && <p><a href={b.link.href}>{b.link.text}</a>{b.link.notEasyRead && ' (not in Easy Read)'}</p>}
                 </div>
               </div>
@@ -129,6 +131,8 @@ const votes = er.sections.flatMap((s) => s.blocks.filter((b) => b.vote).map((b) 
   .er-text h3, .er-h3 { margin: 0 0 0.4em; font-size: var(--step-1); }
   .er-h3 { margin: 2rem 0 1rem; }
   .er-src { margin-top: -1rem; }
+  .er-list { margin: 0.2em 0 0.6em; padding-left: 1.4rem; }
+  .er-list li { font-size: 1.3125rem; line-height: 1.6; margin-bottom: 0.3em; }
   .er-intro { margin: 2rem 0 1.5rem; border: 2px solid var(--notebook); border-radius: 10px; background: #fff; }
   .er-intro summary { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 48px; padding: 1rem 1.2rem; cursor: pointer; list-style: none; border-radius: 8px; }
   .er-intro summary::-webkit-details-marker { display: none; }
@@ -136,7 +140,7 @@ const votes = er.sections.flatMap((s) => s.blocks.filter((b) => b.vote).map((b) 
   .er-intro-text { display: grid; gap: 0.2rem; }
   .er-intro-title { font-weight: 800; font-size: var(--step-1); line-height: 1.25; color: var(--ink); }
   .er-intro-hint { font-size: 1.3125rem; color: var(--ink); }
-  .er-chev { width: 2rem; height: 2rem; flex: none; color: var(--notebook); transition: transform 0.2s; }
+  .er-chev { width: 2rem; height: 2rem; flex: none; color: var(--notebook); }
   .er-intro[open] .er-chev { transform: rotate(180deg); }
   .er-intro[open] .er-intro-hint { display: none; }
   .er-intro[open] summary { border-bottom: 2px solid var(--rule); border-radius: 8px 8px 0 0; }
@@ -150,7 +154,7 @@ const votes = er.sections.flatMap((s) => s.blocks.filter((b) => b.vote).map((b) 
   @media (max-width: 30rem) {
     .er-row { grid-template-columns: 3rem 1fr; gap: 0.9rem; }
     .er-icon { width: 3rem; height: 3rem; }
-    .er-text p, .er-menu li { font-size: 1.1875rem; }
+    .er-text p, .er-menu li, .er-list li { font-size: 1.1875rem; }
   }
   @media (forced-colors: active) {
     .er-icon, .er-switch-icon, .er-chev { color: CanvasText; }

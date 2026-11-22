@@ -187,6 +187,43 @@ const ICONS = {
     d.line(50, 30, 80, 30); d.line(50, 44, 74, 44); d.line(50, 58, 78, 58);
     d.line(22, 76, 78, 76);
   },
+  // Added for Notes # 32
+  'c16-screen-reader': (d) => {
+    // A screen with sound coming out of it
+    d.rect(8, 18, 56, 42); d.line(36, 60, 36, 72); d.line(22, 72, 50, 72);
+    d.line(17, 32, 50, 32, { strokeWidth: 3 }); d.line(17, 42, 44, 42, { strokeWidth: 3 });
+    d.path('M72,30 Q80,39 72,48'); d.path('M80,22 Q93,39 80,56');
+  },
+  'n10-health-app': (d) => {
+    d.path('M34,8 H66 Q72,8 72,14 V86 Q72,92 66,92 H34 Q28,92 28,86 V14 Q28,8 34,8 Z');
+    d.line(50, 36, 50, 64, { strokeWidth: 6 }); d.line(36, 50, 64, 50, { strokeWidth: 6 });
+    d.circle(50, 82, 3);
+  },
+  'n11-government': (d) => {
+    d.poly([[12, 34], [50, 12], [88, 34], [12, 34]]);
+    d.line(24, 42, 24, 76); d.line(40, 42, 40, 76); d.line(60, 42, 60, 76); d.line(76, 42, 76, 76);
+    d.rect(10, 80, 80, 8);
+  },
+  'n12-code-file': (d) => {
+    d.rect(20, 8, 60, 84); d.line(30, 22, 62, 22, { strokeWidth: 3 });
+    d.poly([[42, 42], [31, 54], [42, 66]]); d.poly([[58, 42], [69, 54], [58, 66]]); d.line(54, 40, 46, 68, { strokeWidth: 3 });
+  },
+  'n13-trick': (d) => {
+    // A shopping cart with a fish hook above it
+    d.poly([[8, 30], [20, 30], [30, 66], [76, 66], [86, 40], [24, 40]]);
+    d.circle(36, 78, 5); d.circle(70, 78, 5);
+    d.line(56, 2, 56, 18, { strokeWidth: 3 }); d.path('M56,18 Q56,30 48,30 Q41,30 41,22', { strokeWidth: 3.6 });
+  },
+  'n14-stair-chair': (d) => {
+    // A wheelchair standing on top of a staircase
+    d.poly([[4, 94], [4, 82], [20, 82], [20, 70], [36, 70], [36, 58], [52, 58], [52, 46], [96, 46]]);
+    d.circle(74, 32, 12);
+    d.line(64, 24, 88, 24); d.line(64, 24, 64, 4); d.line(64, 4, 57, 4); d.line(88, 24, 92, 40);
+  },
+  'n15-song': (d) => {
+    d.ellipse(28, 74, 18, 13); d.ellipse(66, 66, 18, 13);
+    d.line(37, 72, 37, 22); d.line(75, 64, 75, 14); d.line(37, 22, 75, 14, { strokeWidth: 6 });
+  },
 };
 
 const OUT = 'src/assets/easy-read-icons';
