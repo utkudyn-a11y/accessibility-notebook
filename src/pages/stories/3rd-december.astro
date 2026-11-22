@@ -179,10 +179,10 @@ import Base from '../../layouts/Base.astro';
     return { title: 'Doing nothing would have been better', fig: 'd3-applause', real: n, score, text: 'You started with 10 points. If you had done nothing, you would still have 10. What you did cost more than it gave: it looked great on 3rd December, and on 4th December nothing had changed.' };
   };
   const MAX = 60; // the best path: five meaningful choices and $1k over budget
-  const TIERS = ['More than a day', 'A good start', 'Doing nothing would have been better'];
+  const TIERS = [['More than a day', 'd3-more'], ['A good start', 'd3-start'], ['Doing nothing would have been better', 'd3-applause']];
   // every ending, as information; the reader's own one stands out (border, fill, bold and a "Your ending" label)
-  const tiersHtml = (mine: string) => `<section class="tiers" aria-labelledby="tiers-title"><h3 id="tiers-title">All endings</h3><ul>${TIERS.map((t) => t === mine
-    ? `<li class="mine">${t} <span class="tag">Your ending</span></li>` : `<li>${t}</li>`).join('')}</ul></section>`;
+  const tiersHtml = (mine: string) => `<section class="tiers" aria-labelledby="tiers-title"><h3 id="tiers-title">All endings</h3><ul>${TIERS.map(([t, f]) =>
+    `<li${t === mine ? ' class="mine"' : ''}><img src="/images/figures/${f}.svg" alt="" /><span class="t">${t}</span>${t === mine ? '<span class="visually-hidden">, </span><span class="tag">Your ending</span>' : ''}</li>`).join('')}</ul></section>`;
   const outOf = `<span class="max"><span aria-hidden="true"> / </span><span class="visually-hidden"> out of </span>${MAX}</span>`;
   const FIG_ALT: Record<string, string> = {
     'd3-more': 'a cheering stickperson next to a calendar full of ticks',
@@ -465,10 +465,18 @@ import Base from '../../layouts/Base.astro';
   .game .small { font-size: var(--step--1); color: var(--ink-soft); }
   .game .score .max { font-size: 0.75em; font-weight: 400; }
   .game .tiers h3 { margin: 1.25rem 0 0.5rem; font-size: 1rem; }
-  .game .tiers ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.4rem; }
-  .game .tiers li { padding: 0.45rem 0.75rem; border: 1px solid #d8d0ea; border-radius: 6px; color: var(--ink-soft); }
-  .game .tiers li.mine { border: 3px solid var(--notebook); background: #f6f2fd; color: var(--ink); font-weight: 800; }
-  .game .tiers .tag { display: inline-block; margin-left: 0.5rem; padding: 0 0.5rem; border-radius: 999px; background: var(--notebook); color: #fff; font-size: var(--step--1); font-weight: 700; }
+  .game .tiers ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.6rem; }
+  .game .tiers li { display: flex; flex-direction: column; align-items: center; gap: 0.4rem; padding: 0.75rem 0.5rem; text-align: center; border: 3px solid #e4ddf2; border-radius: 8px; color: var(--ink-soft); font-size: var(--step--1); line-height: 1.3; }
+  .game .tiers li img { width: 100%; max-width: 8rem; height: 5.5rem; object-fit: contain; opacity: 0.45; }
+  .game .tiers li.mine { border-color: var(--notebook); background: #f6f2fd; color: var(--ink); font-weight: 800; }
+  .game .tiers li.mine img { opacity: 1; }
+  .game .tiers .tag { display: inline-block; padding: 0 0.5rem; border-radius: 999px; background: var(--notebook); color: #fff; font-weight: 700; }
+  @media (max-width: 34rem) {
+    .game .tiers ul { grid-template-columns: 1fr; }
+    .game .tiers li { flex-direction: row; flex-wrap: wrap; text-align: left; }
+    .game .tiers li img { width: 4.5rem; height: 3.5rem; }
+    .game .tiers li .t { flex: 1; }
+  }
   @media (forced-colors: active) { .game .tiers li.mine { border-color: CanvasText; } .game .tiers .tag { border: 1px solid CanvasText; } }
   .game .why { margin-top: 1.25rem; padding: 0.75rem 1rem; border-left: 4px solid var(--notebook); background: #f6f2fd; }
   .game .why h3 { margin: 0 0 0.25rem; font-size: 1rem; }
