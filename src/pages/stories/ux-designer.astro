@@ -104,7 +104,7 @@ import Base from '../../layouts/Base.astro';
       scene: () => 'Users keep asking for dark mode, and the CEO wants it live before New Year. You could invert all the colours and launch it today.',
       choices: [
         S('Invert the colours and launch', 'Dark mode is live today. Some icons vanish and some text is hard to read.'),
-        A('Go through a dark mode checklist first', { money: -2, inclusion: 2 }, 'It takes a week, but dark mode works for everyone who turns it on.'),
+        A('Go through a dark mode checklist first', { money: -2, inclusion: 2 }, 'It takes a week, but it’s still live before New Year, and it works for everyone who turns it on.'),
       ],
       why: { issue: 31, anchor: 'inspiration-3', label: 'Notes # 31',
         shortcut: 'Inverted colours are not a dark mode. Russ Weakley’s practical checklist shows what to check before you launch one.',
@@ -117,8 +117,8 @@ import Base from '../../layouts/Base.astro';
     const c = STEPS[i].choices[p[i]];
     if (i === 3 && c.access) {
       return acc(p, 1)
-        ? { text: 'The developer backs you up: “Honest flows are easier to build, too.” The product manager agrees, and your team sees you lead.', fx: { ...c.fx, career: 1 } }
-        : { text: 'The product manager isn’t happy, but the checkout stays honest.', fx: { ...c.fx, career: -1 } };
+        ? { text: 'Redesigning the flow and testing it with users takes time, so it costs $2k. The developer backs you up: “Honest flows are easier to build, too.” The product manager agrees, and your team sees you lead.', fx: { ...c.fx, career: 1 } }
+        : { text: 'Redesigning the flow and testing it with users takes time, so it costs $2k. The product manager isn’t happy, but the checkout stays honest.', fx: { ...c.fx, career: -1 } };
     }
     return { text: c.result, fx: c.fx };
   };
@@ -132,7 +132,7 @@ import Base from '../../layouts/Base.astro';
           text: `Every shortcut left an issue behind. You have ${debt} ${debt === 1 ? 'issue' : 'issues'} to fix now, and fixing them later costs more than doing it right: $3k each.` }
       : { title: 'The bill', fx: {}, text: 'You left no accessibility debt behind. Nothing to fix.' }];
     if (debt >= 3) out.push({ title: 'A letter', fx: { money: -6, career: -3 },
-      text: 'A letter arrives from a law firm. A disabled customer tried to buy her New Year gifts on your shop and couldn’t, because of the accessibility issues you left behind. The company settles, and your manager asks why nobody checked.',
+      text: 'A letter arrives from a law firm. Before you could fix the issues, a disabled customer tried to buy her New Year gifts on your shop and couldn’t. The company settles, and your manager asks why nobody checked.',
       like: { issue: 29, anchor: 'news-3', label: 'Notes # 29', text: 'Candycopia, a small candy shop, faced a five-figure settlement over its website’s ADA compliance. It had relied on third-party apps and a developer, and hadn’t invested much in its online presence.' } });
     if (acc(p, 0) && acc(p, 2)) out.push({ title: 'An email', fx: { career: 2 },
       text: 'A customer writes: “I’m partially sighted, and your New Year page is the first one I could shop without getting lost. Thank you for keeping it simple.” The CEO shares her email with the whole company.' });
