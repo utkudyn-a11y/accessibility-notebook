@@ -178,6 +178,7 @@ import Base from '../../layouts/Base.astro';
     if (score >= 10) return { title: 'A good start', fig: 'd3-start', real: n, score, text: 'Some of it was real, some of it was for the photos. Next year, a little less applause and a little more change?' };
     return { title: 'Doing nothing would have been better', fig: 'd3-applause', real: n, score, text: 'You started with 10 points. If you had done nothing, you would still have 10. What you did cost more than it gave: it looked great on 3rd December, and on 4th December nothing had changed.' };
   };
+  const ALL_MEANINGFUL = 55; // the score when all seven choices are meaningful; a few paths with fewer score higher
   const MAX = 60; // the best path: five meaningful choices and $1k over budget
   const TIERS = [['More than a day', 'd3-more'], ['A good start', 'd3-start'], ['Doing nothing would have been better', 'd3-applause']];
   // every ending, as information; the reader's own one stands out (border, fill, bold and a "Your ending" label)
@@ -345,6 +346,7 @@ import Base from '../../layouts/Base.astro';
         <div class="scene"><img class="sfig" src="/images/figures/${e.fig}.svg" alt="" /><p>${esc(e.text)}</p></div>
         <p class="score">Your score: ${scoreSum(s.stats)} = <strong>${num(e.score)}</strong>${outOf}</p>
         <p class="small">${scoreNote(s.stats)} You made ${e.real} meaningful choices out of ${N}.</p>
+        ${e.real < N && e.score > ALL_MEANINGFUL ? `<aside class="why"><h3>A high score, but…</h3><p>Your score is high because you balanced the budget with accessibility needs. So yes, I know you compromised on accessibility along the way. Would you rather be inclusive, or get a high score? Your choice.</p></aside>` : ''}
         ${tiersHtml(e.title)}
         <section class="share" aria-labelledby="share-title">
           <h3 id="share-title">Share your result</h3>
