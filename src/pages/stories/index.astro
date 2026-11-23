@@ -80,6 +80,8 @@ const STORIES = [
     padding: 0.2rem 0.7rem 0.2rem 0.4rem; background: #fff; border: 2px solid var(--notebook); border-radius: 999px;
     color: var(--notebook); font-size: var(--step--1); font-weight: 800; pointer-events: none; }
   .level svg { flex: none; }
+  /* leave the badge its own row above the drawing, so it never covers the stickperson */
+  .story:has(.level) .art { padding-top: 2.9rem; }
   @media (max-width: 40rem) { .art { height: 9rem; } }
   @media (forced-colors: active) {
     .story, .art { border-color: CanvasText; }
