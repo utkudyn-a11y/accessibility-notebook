@@ -8,7 +8,7 @@ import Base from '../../layouts/Base.astro';
 const FACES: Record<string, string> = {
   Easy: '<path d="M8.5 14.5q3.5 3 7 0"/>',
   Medium: '<path d="M8.5 15.5h7"/>',
-  Hard: '<path d="M8.5 16.5q3.5-3 7 0"/><path d="M16.8 5.6q1.4 2.1 0 3.1q-1.4-1 0-3.1z" fill="currentColor"/>',
+  Hard: '<path d="M8.5 16.5q3.5-3 7 0"/><path class="drop" d="M16.8 5.6q1.4 2.1 0 3.1q-1.4-1 0-3.1z" fill="#3a8fd6" stroke="#3a8fd6" stroke-width="0.8"/>',
 };
 const face = (level: string) => `<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9.5"/><circle cx="9" cy="10" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="10" r="1" fill="currentColor" stroke="none"/>${FACES[level]}</svg>`;
 const STORIES = [
@@ -82,11 +82,17 @@ const STORIES = [
   .level svg { flex: none; }
   /* leave the badge its own row above the drawing, so it never covers the stickperson */
   .story:has(.level) .art { padding-top: 2.9rem; }
+  @media (max-width: 40rem) {
+    .level { top: 0.5rem; left: 0.5rem; gap: 0.25rem; padding: 0.1rem 0.5rem 0.1rem 0.3rem; border-width: 1.5px; font-size: 0.8rem; }
+    .level svg { width: 16px; height: 16px; }
+    .story:has(.level) .art { padding-top: 2.1rem; }
+  }
   @media (max-width: 40rem) { .art { height: 9rem; } }
   @media (forced-colors: active) {
     .story, .art { border-color: CanvasText; }
     .art img { forced-color-adjust: none; background: #fff; }
     .story:has(h2 a:focus-visible) { outline-color: Highlight; }
     .level { border-color: CanvasText; color: CanvasText; background: Canvas; }
+    .level .drop { fill: CanvasText; stroke: CanvasText; }
   }
 </style>
