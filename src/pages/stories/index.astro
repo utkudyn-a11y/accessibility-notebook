@@ -3,13 +3,21 @@
 // the rest show "Coming soon" and are plain text (nothing to focus or click). Their heading says
 // ", coming soon" to screen readers, so the visible badge is hidden from them (said once, not twice).
 import Base from '../../layouts/Base.astro';
+// Difficulty: a stickperson face (smiling, straight-faced, sweating) next to the word, never the face alone.
+// It sits on the drawing, top left; in the reading order it comes right after the title.
+const FACES: Record<string, string> = {
+  Easy: '<path d="M8.5 14.5q3.5 3 7 0"/>',
+  Medium: '<path d="M8.5 15.5h7"/>',
+  Hard: '<path d="M8.5 16.5q3.5-3 7 0"/><path d="M16.8 5.6q1.4 2.1 0 3.1q-1.4-1 0-3.1z" fill="currentColor"/>',
+};
+const face = (level: string) => `<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9.5"/><circle cx="9" cy="10" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="10" r="1" fill="currentColor" stroke="none"/>${FACES[level]}</svg>`;
 const STORIES = [
   { href: '/stories/ux-designer/', title: "UX Designer's Choice: The New Year Rush", fig: 'role-design', w: 571, h: 485,
     text: 'You are the only UX designer at an online shop, six weeks before New Year. Make five decisions and see what they cost you, today and later.',
-    meta: '5 decisions · 32 different paths · about 5 minutes' },
+    meta: '5 decisions · 32 different paths · about 5 minutes', level: 'Easy' },
   { href: '/stories/3rd-december/', title: 'What Can We Do On This 3rd December?', fig: 'st-dec3', w: 772, h: 544,
     text: 'What can we do on 3rd December? Take a seat in the meeting room. Doing something meaningful is harder than you think.',
-    meta: '7 agenda items · 128 different paths · about 5 minutes' },
+    meta: '7 agenda items · 128 different paths · about 5 minutes', level: 'Medium' },
   { title: "A Beginner's Guide To Accessibility", fig: 'st-intern', w: 751, h: 495,
     text: 'An intern starts corporate life, pushing the company towards accessibility while trying to get hired. Can you climb the career ladder without giving up on yourself?' },
   { title: 'A Story of A Small Business', fig: 'st-shop', w: 772, h: 537,
@@ -34,6 +42,7 @@ const STORIES = [
                 {s.href
                   ? <h2 id={`s-${i}`}><a href={s.href}>{s.title}</a></h2>
                   : <h2 id={`s-${i}`}>{s.title}<span class="visually-hidden">, coming soon</span></h2>}
+                {s.level && <p class="level"><span class="visually-hidden">Difficulty: </span><Fragment set:html={face(s.level)} />{s.level}</p>}
                 <p class="desc">{s.text}</p>
                 {s.href ? <p class="meta">{s.meta}</p> : <p class="badge" aria-hidden="true">Coming soon</p>}
               </div>
@@ -67,10 +76,15 @@ const STORIES = [
   .meta { margin: 0.6rem 0 0; font-size: var(--step--1); font-weight: 700; color: var(--ink-soft); }
   .badge { display: inline-block; margin: 0.75rem 0 0; padding: 0.15rem 0.6rem; border: 2px solid var(--ink); border-radius: 999px; font-size: var(--step--1); font-weight: 800; }
   .soon h2 { color: var(--ink-soft); }
+  .level { position: absolute; top: 0.75rem; left: 0.75rem; z-index: 1; margin: 0; display: inline-flex; align-items: center; gap: 0.35rem;
+    padding: 0.2rem 0.7rem 0.2rem 0.4rem; background: #fff; border: 2px solid var(--notebook); border-radius: 999px;
+    color: var(--notebook); font-size: var(--step--1); font-weight: 800; pointer-events: none; }
+  .level svg { flex: none; }
   @media (max-width: 40rem) { .art { height: 9rem; } }
   @media (forced-colors: active) {
     .story, .art { border-color: CanvasText; }
     .art img { forced-color-adjust: none; background: #fff; }
     .story:has(h2 a:focus-visible) { outline-color: Highlight; }
+    .level { border-color: CanvasText; color: CanvasText; background: Canvas; }
   }
 </style>
