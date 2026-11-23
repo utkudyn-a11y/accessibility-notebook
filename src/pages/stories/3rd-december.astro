@@ -172,7 +172,8 @@ import Base from '../../layouts/Base.astro';
         + (!real(p, 5) ? ' She checks the “fully accessible” claim and finds it isn’t true.' : '')
         + (!real(p, 6) ? ' She can’t read your inclusion report.' : '') });
     if (realCount(p) >= 5) out.push({ title: 'An invitation', fx: { marketing: 3 },
-      text: 'A disability organisation asks you to plan next year’s 3rd December together, and shares your work with its members.' });
+      text: 'A disability organisation asks you to plan next year’s 3rd December together, and shares your work with its members.'
+        + (realCount(p) < STEPS.length ? ' You broke a few hearts along the way, but most of your decisions still mattered to disabled people.' : '') });
     const m = moneyAfter(p);
     if (m < 0) out.push({ title: 'Over budget', fx: { score: 9 * m },
       text: `The CEO and the marketing lead look at the numbers: “You went over budget. We are not happy about this.” You are ${money(-m)} over: 9 points for every $1k.` });
