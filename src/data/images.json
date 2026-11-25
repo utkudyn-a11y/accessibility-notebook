@@ -845,6 +845,24 @@
    ]
   ]
  },
+ "/images/notes-32-easy-read-email.png": {
+  "width": 1200,
+  "height": 1200,
+  "webp": [
+   [
+    "/images/webp/notes-32-easy-read-email-480.webp",
+    480
+   ],
+   [
+    "/images/webp/notes-32-easy-read-email-800.webp",
+    800
+   ],
+   [
+    "/images/webp/notes-32-easy-read-email-1200.webp",
+    1200
+   ]
+  ]
+ },
  "/images/stories-ux-designer-email.png": {
   "width": 1200,
   "height": 675,
